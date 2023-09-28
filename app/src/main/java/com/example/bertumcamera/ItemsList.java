@@ -28,11 +28,11 @@ public class ItemsList extends AppCompatActivity {
         Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref", MODE_APPEND);
-        SharedPreferences.Editor myEdit;
-        myEdit = sharedPreferences.edit();
-        myEdit.putInt("cntPhoto", 0);
-        myEdit.commit();
+        SharedPreferences sharedPreferences = getSharedPreferences("BertumTmpData", MODE_APPEND);
+        SharedPreferences.Editor ed;
+        ed = sharedPreferences.edit();
+        ed.putInt("cntPhoto", 0);
+        ed.commit();
 
         cntOrig = findViewById(R.id.cntOrig);
         cntNonOrig = findViewById(R.id.cntNonOrig);
@@ -81,7 +81,7 @@ public class ItemsList extends AppCompatActivity {
             public void onClick(View v){
                 // достаем сохраненные данные
                 Log.d("BERTUM---------------", "OnClick");
-                SharedPreferences getSharedPrefs = getSharedPreferences("MySharedPref", MODE_APPEND);
+                SharedPreferences getSharedPrefs = getSharedPreferences("BertumTmpData", MODE_APPEND);
                 int cartSum = getSharedPrefs.getInt("cartSum", 0); // get saved summ
                 int cartCnt = getSharedPrefs.getInt("cartCnt", 0); // get saved cnt
 
@@ -93,20 +93,20 @@ public class ItemsList extends AppCompatActivity {
                 sumRepairs.setText(String.valueOf(cartSumRepairs));
                 cntTotalItems.setText(String.valueOf(cartCntRepairs));
 
-                SharedPreferences sh = getSharedPreferences("MySharedPref",MODE_PRIVATE);
-                SharedPreferences.Editor edit1;
-                edit1 = sh.edit();
+                SharedPreferences sh = getSharedPreferences("BertumTmpData",MODE_PRIVATE);
+                SharedPreferences.Editor ed;
+                ed = sh.edit();
 
                 Random r = new Random();
                 low = 6000;
                 high = 18500;
                 cartSumRepairsWork = r.nextInt(high-low) + low;
                 sumRepairsWork.setText(String.valueOf(cartSumRepairsWork) );
-                edit1.putInt("cartRepairWork", cartSumRepairsWork);
+                ed.putInt("cartRepairWork", cartSumRepairsWork);
 
-                edit1.putInt("cartSum", cartSumRepairs);
-                edit1.putInt("cartCnt", cartCntRepairs);
-                edit1.commit();
+                ed.putInt("cartSum", cartSumRepairs);
+                ed.putInt("cartCnt", cartCntRepairs);
+                ed.commit();
 
                 Toast.makeText(ItemsList.this, "Деталь добавлна в корзину", Toast.LENGTH_SHORT).show();
             }
@@ -116,16 +116,12 @@ public class ItemsList extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        SharedPreferences sh = getSharedPreferences("MySharedPref", MODE_APPEND);
+        SharedPreferences sh = getSharedPreferences("BertumTmpData", MODE_APPEND);
         int b = sh.getInt("cartSum", 0);
-        Log.d("BERTUM---------------", "onResume");
-//        Log.d("BERTUM---------------b", String.valueOf(b));
         sumRepairs.setText(String.valueOf(b));
         int c = sh.getInt("cartRepairWork", 0);
-//        Log.d("BERTUM---------------c", String.valueOf(c));
         sumRepairsWork.setText(String.valueOf(c));
         int d = sh.getInt("cartCnt", 0);
-//        Log.d("BERTUM---------------d", String.valueOf(d));
         cntTotalItems.setText(String.valueOf(d));
     }
 
