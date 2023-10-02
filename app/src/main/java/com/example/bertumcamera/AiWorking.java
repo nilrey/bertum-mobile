@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -45,7 +46,7 @@ public class AiWorking extends AppCompatActivity {
 
     }
     private void postDataUsingVolley(final String photoId, final String photoBase64) {
-        String url = "http://h304809427.nichost.ru/api/get_photo.php";
+        String url = "http://h304809427.nichost.ru/api/get_segments.php";
         RequestQueue queue = Volley.newRequestQueue(AiWorking.this);
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -54,12 +55,12 @@ public class AiWorking extends AppCompatActivity {
                 responseTV.setText("Response from the API is :" + response); // comment for a while
                 Toast.makeText(AiWorking.this, "Фотография успешно отправлена", Toast.LENGTH_SHORT).show();
 
-                try {
-                    Thread.sleep(5000); // delay for 5 seс
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                startActivity(new Intent(AiWorking.this, ItemsList.class));
+//                try {
+//                    Thread.sleep(5000); // delay for 5 seс
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                startActivity(new Intent(AiWorking.this, ItemsList.class));
             }
         }, new Response.ErrorListener() {
             @Override
@@ -69,7 +70,7 @@ public class AiWorking extends AppCompatActivity {
                 responseTV.setVisibility(View.VISIBLE);
                 responseTV.setText(error.getMessage());
                 Toast.makeText(AiWorking.this, "Fail to get response..", Toast.LENGTH_SHORT).show();
-//                startActivity(new Intent(AiWorking.this, ItemsList.class));
+                startActivity(new Intent(AiWorking.this, ItemsList.class));
 
             }
         }) {
@@ -82,6 +83,9 @@ public class AiWorking extends AppCompatActivity {
                 return params;
             }
         };
+        DefaultRetryPolicy retryPolicy = new DefaultRetryPolicy(0, -1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        request.setRetryPolicy(retryPolicy);
+
         // post the data.
         queue.add(request);
     }
