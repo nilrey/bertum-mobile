@@ -7,7 +7,6 @@
     android:background="#FFFFFF"
     tools:context=".MainActivity">
 
-
     <ImageView
         android:id="@+id/ico_menu"
         android:layout_width="35dp"
@@ -39,68 +38,69 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ico_dtp2" />
 
-
-    <ImageButton
-        android:id="@+id/button"
+    <ImageView
+        android:id="@+id/m3d_car"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="0dp"
-        android:layout_x="34dp"
-        android:layout_y="212dp"
-        android:background="@android:color/transparent"
-        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vw_logo_full"
-        app:srcCompat="@drawable/block_grey_unit" />
-
-    <ImageButton
-        android:id="@+id/aiWorking"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_x="34dp"
-        android:layout_y="212dp"
-        android:background="@android:color/transparent"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vw_logo_full"
-        app:srcCompat="@drawable/ai_working" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5"
+        app:srcCompat="@drawable/m3d_car_real" />
 
 
     <ImageView
-        android:id="@+id/carOnMain"
-        android:layout_width="318dp"
-        android:layout_height="134dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/aiWorking"
-        app:srcCompat="@drawable/car_on_main" />
-
-    <TextView
-        android:id="@+id/idTVResponse"
-        android:layout_width="324dp"
-        android:layout_height="92dp"
-        android:layout_below="@+id/idBtnPostData2"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/carOnMain" />
-
-    <ProgressBar
-        android:id="@+id/idPBLoading"
+        android:id="@+id/m3d_detail_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:indeterminate="true"
-        android:visibility="gone" />
+        android:layout_marginStart="128dp"
+        android:layout_marginTop="63dp"
+        app:layout_constraintStart_toStartOf="@+id/m3d_car"
+        app:layout_constraintTop_toTopOf="@+id/m3d_car"
+        app:srcCompat="@drawable/m3d_real_detail_1" />
+
+    <ImageView
+        android:id="@+id/m3d_detail_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="127dp"
+        android:layout_marginTop="38dp"
+        app:layout_constraintStart_toStartOf="@+id/m3d_car"
+        app:layout_constraintTop_toTopOf="@+id/m3d_car"
+        app:srcCompat="@drawable/m3d_real_detail_2" />
+
+    <ImageView
+        android:id="@+id/imgGallery"
+        android:layout_width="206dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/m3d_car" />
+
+    <Button
+        android:id="@+id/btnGallery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        tools:layout_editor_absoluteX="162dp" />
+
+    <TextView
+        android:id="@+id/textBase64"
+        android:layout_width="337dp"
+        android:layout_height="70dp"
+        android:layout_marginTop="20dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgGallery" />
 
 
 </android.support.constraint.ConstraintLayout>

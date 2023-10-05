@@ -27,13 +27,16 @@ public class AiWorking extends AppCompatActivity {
     private TextView responseTV;
     String photoBase64;
     SharedPreferences sh;
-
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor ed;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        sh = getSharedPreferences("BertumTmpData", MODE_APPEND);
+        sh = getSharedPreferences("BertumTmpData", MODE_APPEND); //read
+        sharedPreferences = getSharedPreferences("BertumTmpData",MODE_PRIVATE); // write
+
 
         setContentView(R.layout.activity_ai_working);
         loadingPB = findViewById(R.id.idPBLoading);
@@ -51,16 +54,18 @@ public class AiWorking extends AppCompatActivity {
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                responseTV.setVisibility(View.VISIBLE);
+                //responseTV.setVisibility(View.VISIBLE);
                 responseTV.setText("Response from the API is :" + response); // comment for a while
-                Toast.makeText(AiWorking.this, "Фотография успешно отправлена", Toast.LENGTH_SHORT).show();
 
+                ed = sharedPreferences.edit();
+                ed.putString("jsonAiApi", response);
+                ed.commit();
 //                try {
 //                    Thread.sleep(5000); // delay for 5 seс
 //                } catch (InterruptedException e) {
 //                    e.printStackTrace();
 //                }
-//                startActivity(new Intent(AiWorking.this, ItemsList.class));
+                startActivity(new Intent(AiWorking.this, ItemsList.class));
             }
         }, new Response.ErrorListener() {
             @Override
@@ -70,7 +75,7 @@ public class AiWorking extends AppCompatActivity {
                 responseTV.setVisibility(View.VISIBLE);
                 responseTV.setText(error.getMessage());
                 Toast.makeText(AiWorking.this, "Fail to get response..", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(AiWorking.this, ItemsList.class));
+                //startActivity(new Intent(AiWorking.this, ItemsList.class));
 
             }
         }) {
@@ -85,6 +90,8 @@ public class AiWorking extends AppCompatActivity {
         };
         DefaultRetryPolicy retryPolicy = new DefaultRetryPolicy(0, -1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         request.setRetryPolicy(retryPolicy);
+
+        Toast.makeText(AiWorking.this, "Фотография успешно отправлена", Toast.LENGTH_SHORT).show();
 
         // post the data.
         queue.add(request);

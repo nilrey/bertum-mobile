@@ -182,7 +182,21 @@
             app:layout_constraintHorizontal_bias="0.493"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/vw_logo_full"
-            app:srcCompat="@drawable/search_result_1" />
+            app:srcCompat="@drawable/search_result_2" />
+
+        <TextView
+            android:id="@+id/titleDetail1"
+            android:layout_width="281dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="148dp"
+            android:text="titleDetail1"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/search_result_1"
+            app:layout_constraintTop_toTopOf="@+id/search_result_1"
+            app:lineHeight="26dp" />
 
         <Button
             android:id="@+id/cartPrice1"
@@ -218,11 +232,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.516"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/search_result_1"
-            app:srcCompat="@drawable/search_result_1" />
+            app:srcCompat="@drawable/search_result_2" />
+
+        <TextView
+            android:id="@+id/titleDetail2"
+            android:layout_width="281dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="148dp"
+            android:text="titleDetail2"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/search_result_2"
+            app:layout_constraintTop_toTopOf="@+id/search_result_2"
+            app:lineHeight="26dp" />
 
         <Button
             android:id="@+id/cartPrice2"
@@ -234,6 +263,7 @@
             android:text="В КОРЗИНУ"
             android:textColor="#FFFFFF"
             android:textSize="12sp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/search_result_2"
             app:layout_constraintTop_toTopOf="@+id/search_result_2" />
 
@@ -249,6 +279,7 @@
             android:textColor="#EF5350"
             android:textFontWeight="950"
             android:textSize="20sp"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/search_result_2"
             app:layout_constraintStart_toStartOf="@+id/search_result_2"
             app:layout_constraintTop_toTopOf="@+id/search_result_2" />
@@ -263,7 +294,21 @@
             app:layout_constraintStart_toStartOf="parent"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@+id/search_result_2"
-            app:srcCompat="@drawable/search_result_1" />
+            app:srcCompat="@drawable/search_result_2" />
+
+        <TextView
+            android:id="@+id/titleDetail3"
+            android:layout_width="281dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="148dp"
+            android:text="titleDetail1"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/search_result_3"
+            app:layout_constraintTop_toTopOf="@+id/search_result_3"
+            app:lineHeight="26dp" />
 
         <Button
             android:id="@+id/cartPrice3"
@@ -342,6 +387,18 @@
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="@+id/bottomPrices"
             app:layout_constraintTop_toTopOf="@+id/bottomPrices" />
+
+        <TextView
+            android:id="@+id/jsonOut"
+            android:layout_width="162dp"
+            android:layout_height="94dp"
+            android:layout_marginTop="84dp"
+            android:layout_marginEnd="20dp"
+            android:text="TextView"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

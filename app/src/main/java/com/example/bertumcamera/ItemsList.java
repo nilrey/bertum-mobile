@@ -9,14 +9,21 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Random;
 
 public class ItemsList extends AppCompatActivity {
+    private ImageView search_result_1, search_result_2, search_result_3;
     private TextView cntOrig, cntNonOrig, cntBU, cntDiscont, cntVariants,
-            cntTotalItems, sumRepairs, sumRepairsWork, tagPrice1;
+            cntTotalItems, sumRepairs, sumRepairsWork, tagPrice1, tagPrice2, tagPrice3,
+            titleDetail1, titleDetail2, titleDetail3, jsonOut;
     private int cnt, low, high, cartSumRepairs, cartSumRepairsWork, cartCntRepairs, cntAllVariants = 0;
 
     private Button cartPrice1,cartPrice2, cartPrice3;
@@ -44,9 +51,22 @@ public class ItemsList extends AppCompatActivity {
         sumRepairs = findViewById(R.id.sumRepairs);
         sumRepairsWork = findViewById(R.id.sumRepairsWork);
 
-
+        search_result_1 = findViewById(R.id.search_result_1);
         tagPrice1 = findViewById(R.id.tagPrice1);
         cartPrice1 = findViewById(R.id.cartPrice1);
+        titleDetail1 = findViewById(R.id.titleDetail1);
+
+        search_result_2 = findViewById(R.id.search_result_2);
+        tagPrice2 = findViewById(R.id.tagPrice2);
+        cartPrice2 = findViewById(R.id.cartPrice2);
+        titleDetail2 = findViewById(R.id.titleDetail2);
+
+        search_result_3 = findViewById(R.id.search_result_3);
+        tagPrice3 = findViewById(R.id.tagPrice3);
+        cartPrice3 = findViewById(R.id.cartPrice3);
+        titleDetail3 = findViewById(R.id.titleDetail3);
+        
+        jsonOut = findViewById(R.id.jsonOut);
 
         Random r = new Random();
         low = 1;
@@ -74,6 +94,7 @@ public class ItemsList extends AppCompatActivity {
         high = 5500;
         cnt = r.nextInt(high-low) + low;
         tagPrice1.setText(String.valueOf(cnt) );
+        
 
         // по клику
         cartPrice1.setOnClickListener(new View.OnClickListener(){
@@ -123,6 +144,70 @@ public class ItemsList extends AppCompatActivity {
         sumRepairsWork.setText(String.valueOf(c));
         int d = sh.getInt("cartCnt", 0);
         cntTotalItems.setText(String.valueOf(d));
+
+        String jsonAiApi = sh.getString("jsonAiApi", "no json");
+
+        jsonOut.setText(jsonAiApi);
+
+        try {
+            // get JSONObject from JSON file
+//            JSONObject obj = new JSONObject(loadJSONFromAsset());
+            JSONObject obj = new JSONObject(jsonAiApi);
+            // fetch JSONArray named users
+//            JSONArray arDetails = obj.getJSONArray("mask");
+            JSONObject objDetails = obj.getJSONObject("mask");
+            // implement for loop for getting users list data
+            for (int i = 0; i < objDetails.length(); i++) {
+                // create a JSONObject for fetching single user data
+                //JSONObject userDetail = objDetails.getJSONObject(i);
+
+                // fetch email and name and store it in arraylist
+//                personNames.add(userDetail.getString("name"));
+//                emailIds.add(userDetail.getString("email"));
+//                // create a object for getting contact data from JSONObject
+//                JSONObject contact = userDetail.getJSONObject("contact");
+//                // fetch mobile number and store it in arraylist
+//                mobileNumbers.add(contact.getString("mobile"));
+            }
+            //jsonOut.setText(String.valueOf(objDetails.length()));
+
+            JSONObject objects = new JSONObject (jsonAiApi);
+            JSONObject objDetails2 = objects.getJSONObject("mask");
+            JSONArray keys = objDetails2.names ();
+            for (int i = 0; i < keys.length (); ++i) {
+                String key = keys.getString (i);
+                //String titleDetail = objDetails2.getString (key); //.getString ("Part_Name");
+
+                JSONObject objDetail = objDetails2.getJSONObject(key);
+                String titleDetail = objDetail.getString ("Part_Name");
+
+                if(i==0){
+                    search_result_1.setVisibility(View.VISIBLE);
+                    titleDetail1.setVisibility(View.VISIBLE);
+                    tagPrice1.setVisibility(View.VISIBLE);
+                    cartPrice1.setVisibility(View.VISIBLE);
+                    titleDetail1.setText(titleDetail);
+                } else if (i == 1) {
+                    search_result_2.setVisibility(View.VISIBLE);
+                    titleDetail2.setVisibility(View.VISIBLE);
+                    tagPrice2.setVisibility(View.VISIBLE);
+                    cartPrice2.setVisibility(View.VISIBLE);
+                    titleDetail2.setText(titleDetail);
+                } else if (i == 2) {
+                    search_result_3.setVisibility(View.VISIBLE);
+                    titleDetail3.setVisibility(View.VISIBLE);
+                    tagPrice3.setVisibility(View.VISIBLE);
+                    cartPrice3.setVisibility(View.VISIBLE);
+                    titleDetail3.setText(titleDetail);
+                }
+
+
+            }
+
+        } catch (JSONException e) {
+            Log.d("BERTUM------JSONException", e.getMessage() );
+//            e.printStackTrace();
+        }
     }
 
     @Override
