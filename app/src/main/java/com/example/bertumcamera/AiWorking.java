@@ -21,6 +21,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import java.util.HashMap;
 import java.util.Map;
+import com.example.bertumcamera.Const;
 
 public class AiWorking extends AppCompatActivity {
     private ProgressBar loadingPB;
@@ -34,8 +35,8 @@ public class AiWorking extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        sh = getSharedPreferences("BertumTmpData", MODE_APPEND); //read
-        sharedPreferences = getSharedPreferences("BertumTmpData",MODE_PRIVATE); // write
+        sh = getSharedPreferences(Const.SHARE_STORE, MODE_APPEND); //read
+        sharedPreferences = getSharedPreferences(Const.SHARE_STORE,MODE_PRIVATE); // write
 
 
         setContentView(R.layout.activity_ai_working);
@@ -83,7 +84,7 @@ public class AiWorking extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("photoId", photoId);
+                params.put("rmPoints", "1");
                 params.put("photoBase64", photoBase64);
                 return params;
             }

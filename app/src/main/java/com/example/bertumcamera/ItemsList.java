@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Random;
+import com.example.bertumcamera.Const;
 
 public class ItemsList extends AppCompatActivity {
     private ImageView search_result_1, search_result_2, search_result_3;
@@ -35,7 +36,7 @@ public class ItemsList extends AppCompatActivity {
         Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("BertumTmpData", MODE_APPEND);
+        SharedPreferences sharedPreferences = getSharedPreferences(Const.SHARE_STORE, MODE_APPEND);
         SharedPreferences.Editor ed;
         ed = sharedPreferences.edit();
         ed.putInt("cntPhoto", 0);
@@ -102,7 +103,7 @@ public class ItemsList extends AppCompatActivity {
             public void onClick(View v){
                 // достаем сохраненные данные
                 Log.d("BERTUM---------------", "OnClick");
-                SharedPreferences getSharedPrefs = getSharedPreferences("BertumTmpData", MODE_APPEND);
+                SharedPreferences getSharedPrefs = getSharedPreferences(Const.SHARE_STORE, MODE_APPEND);
                 int cartSum = getSharedPrefs.getInt("cartSum", 0); // get saved summ
                 int cartCnt = getSharedPrefs.getInt("cartCnt", 0); // get saved cnt
 
@@ -114,7 +115,7 @@ public class ItemsList extends AppCompatActivity {
                 sumRepairs.setText(String.valueOf(cartSumRepairs));
                 cntTotalItems.setText(String.valueOf(cartCntRepairs));
 
-                SharedPreferences sh = getSharedPreferences("BertumTmpData",MODE_PRIVATE);
+                SharedPreferences sh = getSharedPreferences(Const.SHARE_STORE,MODE_PRIVATE);
                 SharedPreferences.Editor ed;
                 ed = sh.edit();
 
@@ -137,7 +138,7 @@ public class ItemsList extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        SharedPreferences sh = getSharedPreferences("BertumTmpData", MODE_APPEND);
+        SharedPreferences sh = getSharedPreferences(Const.SHARE_STORE, MODE_APPEND);
         int b = sh.getInt("cartSum", 0);
         sumRepairs.setText(String.valueOf(b));
         int c = sh.getInt("cartRepairWork", 0);

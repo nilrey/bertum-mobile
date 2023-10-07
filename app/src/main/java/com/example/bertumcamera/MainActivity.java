@@ -15,10 +15,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -26,47 +24,44 @@ import java.io.IOException;
 import android.util.Base64;
 import android.widget.Toast;
 
+
 public class MainActivity extends AppCompatActivity {
-
-    private ImageView aiWorking, clIcoDtp, carOnMain,
-            m3d_detail_1, m3d_detail_2;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor ed;
-
-    private EditText nameEdt, jobEdt;
-    private ImageButton button, postDataBtn, postDataBtn2, bottomPrices;
-    private ProgressBar loadingPB;
-    private TextView responseTV, cntPhoto, cntTotalItems, sumRepairs, sumRepairsWork, selectFileMedia;
-
-    private static final String TAG = ""; // Bitmap to base64
     private final int GALLERY_REQ_CODE = 1000;
+    private final int CAMERA_REQ_CODE = 100;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor ed;
+    private ImageView clIcoDtp, m3dCarFrontRight, m3d_detail_1, m3d_detail_2;
+    private ImageButton selectCamera, startBlockDisbld, startBlockEnbld, bottomPrices;
+    private TextView cntPhoto, cntTotalItems, sumRepairs, sumRepairsWork, selectFileMedia;
+    private String msgPhotoAdded, msgDetailSelected;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //startActivity(new Intent(MainActivity.this, Model3d.class));
         Window w = getWindow();
-        w.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        w.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // make app fullscreen
+        // Bottom block Prices - priceRepair, cntDetailsSelected, priceRepairWork
+        bottomPrices = findViewById(R.id.bottomPrices);
         sumRepairs = findViewById(R.id.sumRepairs);
         sumRepairsWork = findViewById(R.id.sumRepairsWork);
         cntTotalItems = findViewById(R.id.cntTotalItems);
-        button = findViewById(R.id.button);
-        bottomPrices = findViewById(R.id.bottomPrices);
+        // Top block actions - Media Gallery, Camera
+        selectCamera = findViewById(R.id.selectCamera);
         clIcoDtp = findViewById(R.id.ico_dtp2);
         selectFileMedia = findViewById(R.id.selectFileMedia);
-        carOnMain  = findViewById(R.id.m3d_car);
+        // block 3d model
+        m3dCarFrontRight  = findViewById(R.id.m3d_car_front_right);
         m3d_detail_1 = findViewById(R.id.m3d_detail_1);
         m3d_detail_2 = findViewById(R.id.m3d_detail_2);
-
-        aiWorking = findViewById(R.id.aiWorking);
-        postDataBtn = findViewById(R.id.idBtnPostData);
-        postDataBtn2 = findViewById(R.id.idBtnPostData2);
-        loadingPB = findViewById(R.id.idPBLoading);
-        responseTV = findViewById(R.id.idTVResponse);
-        // Storing data into SharedPreferences
-        sharedPreferences = getSharedPreferences("BertumTmpData",MODE_PRIVATE);
+        // Middle block - post photo to AI API
+        startBlockDisbld = findViewById(R.id.btnStartDisbld);
+        startBlockEnbld = findViewById(R.id.idBtnPostData2);
+        cntPhoto = findViewById(R.id.cntPhoto);
+        // messages text
+        msgPhotoAdded  =  getResources().getString (R.string.msg_photo_added);
+        msgDetailSelected  =  getResources().getString(R.string.msg_detail_selected);
 
         //Request for camera runtime permission
         if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA)
@@ -75,11 +70,12 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.CAMERA
                     }, 100);
         }
-        button.setOnClickListener(new View.OnClickListener(){
+        
+        selectCamera.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 100);
+                startActivityForResult(intent, CAMERA_REQ_CODE);
             }
         });
 
@@ -89,21 +85,19 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, ItemsList.class));
             }
         });
+        
         clIcoDtp.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                SharedPreferences sh = getSharedPreferences("BertumTmpData",MODE_PRIVATE);
-                SharedPreferences.Editor ed;
-                ed = sh.edit();
-                sumRepairs.setText("0");
-                sumRepairsWork.setText("0");
-                cntTotalItems.setText("0");
-
-                ed.putInt("cartSum", 0);
-                ed.putInt("cartCnt", 0);
-                ed.putInt("cartRepairWork", 0);
-                ed.commit();
-                startActivity(new Intent(MainActivity.this, MainActivity.class));
+                setSharedValueInt(Const.CART_SUM, 0);
+                setSharedValueInt(Const.CART_CNT, 0);
+                setSharedValueInt(Const.CART_REPAIR_WORK, 0);
+                setSharedValueInt(Const.CNT_PHOTO, 0);
+                sumRepairs.setText(String.valueOf( getSharedValueInt(Const.CART_SUM) ));
+                sumRepairsWork.setText(String.valueOf( getSharedValueInt(Const.CART_REPAIR_WORK) ));
+                cntTotalItems.setText(String.valueOf( getSharedValueInt(Const.CART_CNT) ));
+                cntPhoto.setText(String.valueOf( getSharedValueInt(Const.CNT_PHOTO) ));
+                checkAiApiPostBlock();
             }
         });
 
@@ -115,14 +109,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(iGallery, GALLERY_REQ_CODE);
             }
         });
-        carOnMain.setOnClickListener(new View.OnClickListener(){
+        m3dCarFrontRight.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 startActivity(new Intent(MainActivity.this, Model3d.class));
             }
         });
 
-        postDataBtn2.setOnClickListener(new View.OnClickListener() {
+        startBlockEnbld.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, AiWorking.class));
@@ -131,13 +125,13 @@ public class MainActivity extends AppCompatActivity {
         m3d_detail_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Выбрана деталь - Правая передняя дверь", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, String.format(msgDetailSelected, "Правая передняя дверь"), Toast.LENGTH_SHORT).show();
             }
         });
         m3d_detail_2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Выбрана деталь - Стекло лобовое", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, String.format(msgDetailSelected, "Стекло лобовое"), Toast.LENGTH_SHORT).show();
             }
         });
 //        bottomPrices.setOnClickListener(new View.OnClickListener() {
@@ -151,51 +145,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data ){
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 100){
-            postDataBtn2.setVisibility(View.VISIBLE); // show +1 photo image
-                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                ByteArrayOutputStream baoStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baoStream);
-                byte[] b = baoStream.toByteArray();
-                String photoBase64 = Base64.encodeToString(b, Base64.DEFAULT);
-
-            SharedPreferences sh = getSharedPreferences("BertumTmpData", MODE_APPEND);
-            cntPhoto = findViewById(R.id.cntPhoto);
-            int a = sh.getInt("cntPhoto", 0);
-            a += 1;
-            cntPhoto.setText(String.valueOf(a));
-            ed = sharedPreferences.edit();
-            ed.putInt("cntPhoto", a);
-            ed.putString("photoBase64", photoBase64);
-            ed.commit();
-            Toast.makeText(MainActivity.this, "Фотография добавлена", Toast.LENGTH_SHORT).show();
-        }
         if(resultCode == RESULT_OK) {
-            if (requestCode == GALLERY_REQ_CODE) {
-                //imgGallery.setImageURI(data.getData());
-                try {
-                    Uri imageUri = data.getData();
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-                    ByteArrayOutputStream baoStream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baoStream);
-                    byte[] b = baoStream.toByteArray();
-                    String photoBase64 = Base64.encodeToString(b, Base64.DEFAULT);
-
-                    SharedPreferences sh = getSharedPreferences("BertumTmpData", MODE_APPEND);
-                    cntPhoto = findViewById(R.id.cntPhoto);
-                    int a = sh.getInt("cntPhoto", 0);
-                    a += 1;
-                    cntPhoto.setText(String.valueOf(a));
-                    ed = sharedPreferences.edit();
-                    ed.putInt("cntPhoto", a);
-                    ed.putString("photoBase64", photoBase64);
-                    ed.commit();
-                    Toast.makeText(MainActivity.this, "Фотография добавлена", Toast.LENGTH_SHORT).show();
-
-                    //textBase64.setText(photoBase64);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+            if(requestCode == CAMERA_REQ_CODE){
+                setSharedValueStr(Const.PHOTO_BASE64, getBase64FromBitmap(data));
+                increaseCntPhoto();
+                enableAiApiPostBlock();
+                Toast.makeText(MainActivity.this, msgPhotoAdded, Toast.LENGTH_SHORT).show();
+            }else if (requestCode == GALLERY_REQ_CODE) {
+                saveFromMediaGallery(data);
+                increaseCntPhoto();
+                enableAiApiPostBlock();
             }
         }
     }
@@ -203,17 +162,91 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        cntPhoto.setText(String.valueOf( getSharedValueInt(Const.CNT_PHOTO) ));
+        sumRepairs.setText(String.valueOf( getSharedValueInt(Const.CART_SUM) ));
+        cntTotalItems.setText(String.valueOf( getSharedValueInt(Const.CART_CNT) ));
+        sumRepairsWork.setText(String.valueOf( getSharedValueInt(Const.CART_REPAIR_WORK) ));
+    }
 
-        SharedPreferences sh = getSharedPreferences("BertumTmpData", MODE_APPEND);
-        cntPhoto = findViewById(R.id.cntPhoto);
-//            String s1 = sh.getString("name", "");
-        int a = sh.getInt("cntPhoto", 0);
-        cntPhoto.setText(String.valueOf(a));
-        int b = sh.getInt("cartSum", 0);
-        sumRepairs.setText(String.valueOf(b));
-        int c = sh.getInt("cartCnt", 0);
-        cntTotalItems.setText(String.valueOf(c));
-        int d = sh.getInt("cartRepairWork", 0);
-        sumRepairsWork.setText(String.valueOf(d));
+    private void saveFromMediaGallery(Intent data){
+        Uri imageUri = data.getData();
+        setSharedValueStr(Const.PHOTO_BASE64, getBase64FromUri(imageUri));
+        Toast.makeText(MainActivity.this, msgPhotoAdded, Toast.LENGTH_SHORT).show();
+    }
+
+    private String getBase64FromUri(Uri imageUri){
+        String strBase64;
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+            strBase64 = convertBaosToBase64(bitmap);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return strBase64;
+    }
+
+    private String getBase64FromBitmap(Intent data){
+        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+        String strBase64 = convertBaosToBase64(bitmap);
+        return strBase64;
+    }
+
+    private String convertBaosToBase64(Bitmap bitmap){
+        ByteArrayOutputStream baoStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baoStream);
+        byte[] b = baoStream.toByteArray();
+        String strBase64 = Base64.encodeToString(b, Base64.DEFAULT);
+        return strBase64;
+    }
+
+    private void setSharedValueInt(String name, int value){
+        ed = getSharedPreferencesEditor();
+        ed.putInt(name, value);
+        ed.commit();
+    }
+
+    private void setSharedValueStr(String name, String value){
+        ed = getSharedPreferencesEditor();
+        ed.putString(name, value);
+        ed.commit();
+    }
+
+    private SharedPreferences.Editor getSharedPreferencesEditor(){
+        sharedPreferences = getSharedPreferences(Const.SHARE_STORE,MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        return editor;
+    }
+
+    private int getSharedValueInt(String name){
+        sharedPreferences = getSharedPreferences(Const.SHARE_STORE,MODE_APPEND);
+        return sharedPreferences.getInt(name, 0);
+    }
+    private String getSharedValueStr(String name){
+        sharedPreferences = getSharedPreferences(Const.SHARE_STORE,MODE_APPEND);
+        return sharedPreferences.getString(name, "");
+    }
+
+    private void increaseCntPhoto(){
+        setSharedValueInt( Const.CNT_PHOTO, getSharedValueInt(Const.CNT_PHOTO) + 1 );
+//        cntPhoto = findViewById(R.id.cntPhoto);
+        cntPhoto.setText(String.valueOf( getSharedValueInt(Const.CNT_PHOTO) ));
+    }
+
+    private void checkAiApiPostBlock(){
+        if(getSharedValueInt(Const.CNT_PHOTO) > 0){
+            enableAiApiPostBlock();
+        }else{
+            disableAiApiPostBlock();
+        }
+    }
+
+    private void enableAiApiPostBlock(){
+        startBlockEnbld.setVisibility(View.VISIBLE);
+        cntPhoto.setVisibility(View.VISIBLE);
+    }
+
+    private void disableAiApiPostBlock(){
+        startBlockEnbld.setVisibility(View.GONE);
+        cntPhoto.setVisibility(View.GONE);
     }
 }

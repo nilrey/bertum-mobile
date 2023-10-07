@@ -40,7 +40,7 @@
         app:srcCompat="@drawable/ico_dtp2" />
 
     <ImageButton
-        android:id="@+id/button"
+        android:id="@+id/selectCamera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -53,26 +53,11 @@
         app:layout_constraintTop_toBottomOf="@+id/vw_logo_full"
         app:srcCompat="@drawable/block_grey_unit" />
 
-    <ImageView
-        android:id="@+id/aiWorking"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/vw_logo_full"
-        android:layout_margin="0dp"
-        android:layout_x="34dp"
-        android:layout_y="212dp"
-        android:background="@android:color/transparent"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vw_logo_full"
-        app:srcCompat="@drawable/ai_working" />
-
     <ImageButton
-        android:id="@+id/idBtnPostData"
+        android:id="@+id/btnStartDisbld"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/button"
+        android:layout_above="@id/selectCamera"
         android:layout_marginTop="16dp"
         android:layout_x="7dp"
         android:layout_y="148dp"
@@ -81,14 +66,14 @@
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button"
+        app:layout_constraintTop_toBottomOf="@+id/selectCamera"
         app:srcCompat="@drawable/block_start_send_photo_grey" />
 
     <ImageButton
         android:id="@+id/idBtnPostData2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/button"
+        android:layout_above="@id/selectCamera"
         android:layout_marginTop="16dp"
         android:layout_x="7dp"
         android:layout_y="148dp"
@@ -98,7 +83,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button"
+        app:layout_constraintTop_toBottomOf="@+id/selectCamera"
         app:srcCompat="@drawable/block_start_send_photo_red2" />
 
     <!--<ProgressBar
@@ -123,7 +108,7 @@
 -->
 
     <ImageView
-        android:id="@+id/m3d_car"
+        android:id="@+id/m3d_car_front_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -142,8 +127,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="128dp"
         android:layout_marginTop="63dp"
-        app:layout_constraintStart_toStartOf="@+id/m3d_car"
-        app:layout_constraintTop_toTopOf="@+id/m3d_car"
+        app:layout_constraintStart_toStartOf="@+id/m3d_car_front_right"
+        app:layout_constraintTop_toTopOf="@+id/m3d_car_front_right"
         app:srcCompat="@drawable/m3d_real_detail_1" />
 
     <ImageView
@@ -152,8 +137,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="127dp"
         android:layout_marginTop="38dp"
-        app:layout_constraintStart_toStartOf="@+id/m3d_car"
-        app:layout_constraintTop_toTopOf="@+id/m3d_car"
+        app:layout_constraintStart_toStartOf="@+id/m3d_car_front_right"
+        app:layout_constraintTop_toTopOf="@+id/m3d_car_front_right"
         app:srcCompat="@drawable/m3d_real_detail_2" />
 
     <TextView
@@ -164,8 +149,8 @@
         android:text="0"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
-        app:layout_constraintStart_toStartOf="@+id/idBtnPostData"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintStart_toStartOf="@+id/btnStartDisbld"
+        app:layout_constraintTop_toBottomOf="@+id/selectCamera" />
 
     <ImageButton
         android:id="@+id/bottomPrices"
@@ -197,8 +182,8 @@
         android:text="0"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="@+id/idBtnPostData"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintEnd_toEndOf="@+id/btnStartDisbld"
+        app:layout_constraintTop_toBottomOf="@+id/selectCamera" />
 
     <TextView
         android:id="@+id/sumRepairs"
@@ -226,12 +211,11 @@
 
     <TextView
         android:id="@+id/selectFileMedia"
-        android:layout_width="236dp"
-        android:layout_height="108dp"
-        android:layout_marginStart="44dp"
+        android:layout_width="328dp"
+        android:layout_height="124dp"
         android:layout_marginTop="24dp"
-        app:layout_constraintStart_toStartOf="@+id/button"
-        app:layout_constraintTop_toTopOf="@+id/button" />
+        app:layout_constraintStart_toStartOf="@+id/selectCamera"
+        app:layout_constraintTop_toTopOf="@+id/selectCamera" />
 
     <!--    <ImageButton
             android:id="@+id/imageButton"
