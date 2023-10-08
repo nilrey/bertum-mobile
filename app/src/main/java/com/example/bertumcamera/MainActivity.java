@@ -15,11 +15,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 import android.util.Base64;
 import android.widget.Toast;
@@ -31,8 +31,9 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor ed;
     private ImageView clIcoDtp, m3dCarFrontRight, m3d_detail_1, m3d_detail_2;
-    private ImageButton selectCamera, startBlockDisbld, startBlockEnbld, bottomPrices;
+    private ImageButton startBlockDisbld, startBlockEnbld, bottomPrices;
     private TextView cntPhoto, cntTotalItems, sumRepairs, sumRepairsWork, selectFileMedia;
+    private Button selectCamera;
     private String msgPhotoAdded, msgDetailSelected;
 
 
@@ -176,18 +177,25 @@ public class MainActivity extends AppCompatActivity {
 
     private String getBase64FromUri(Uri imageUri){
         String strBase64;
+        Bitmap bitmap;
         try {
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
-            strBase64 = convertBaosToBase64(bitmap);
-        } catch (IOException e) {
+            bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        strBase64 = convertBaosToBase64(bitmap);
         return strBase64;
     }
 
     private String getBase64FromBitmap(Intent data){
-        Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-        String strBase64 = convertBaosToBase64(bitmap);
+        String strBase64;
+        Bitmap bitmap;
+        try {
+            bitmap = (Bitmap) data.getExtras().get("data");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        strBase64 = convertBaosToBase64(bitmap);
         return strBase64;
     }
 

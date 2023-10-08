@@ -40,7 +40,7 @@
         app:srcCompat="@drawable/ico_dtp2" />
 
     <ImageButton
-        android:id="@+id/selectCamera"
+        android:id="@+id/block_add_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -51,13 +51,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/vw_logo_full"
-        app:srcCompat="@drawable/block_grey_unit" />
+        app:srcCompat="@drawable/block_grey" />
+
+    <Button
+        android:id="@+id/selectCamera"
+        android:layout_width="145dp"
+        android:layout_height="61dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="168dp"
+        android:autoText="false"
+        android:background="#FE605C"
+        android:capitalize="none"
+        android:text="Сделать фото"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="@+id/block_add_photo"
+        app:layout_constraintTop_toTopOf="@+id/block_add_photo" />
 
     <ImageButton
         android:id="@+id/btnStartDisbld"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/selectCamera"
+        android:layout_above="@id/block_add_photo"
         android:layout_marginTop="16dp"
         android:layout_x="7dp"
         android:layout_y="148dp"
@@ -66,14 +80,14 @@
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectCamera"
+        app:layout_constraintTop_toBottomOf="@+id/block_add_photo"
         app:srcCompat="@drawable/block_start_send_photo_grey" />
 
     <ImageButton
         android:id="@+id/idBtnPostData2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/selectCamera"
+        android:layout_above="@id/block_add_photo"
         android:layout_marginTop="16dp"
         android:layout_x="7dp"
         android:layout_y="148dp"
@@ -83,7 +97,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectCamera"
+        app:layout_constraintTop_toBottomOf="@+id/block_add_photo"
         app:srcCompat="@drawable/block_start_send_photo_red2" />
 
     <!--<ProgressBar
@@ -149,8 +163,9 @@
         android:text="0"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="@+id/btnStartDisbld"
-        app:layout_constraintTop_toBottomOf="@+id/selectCamera" />
+        app:layout_constraintTop_toBottomOf="@+id/block_add_photo" />
 
     <ImageButton
         android:id="@+id/bottomPrices"
@@ -183,7 +198,7 @@
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="@+id/btnStartDisbld"
-        app:layout_constraintTop_toBottomOf="@+id/selectCamera" />
+        app:layout_constraintTop_toBottomOf="@+id/block_add_photo" />
 
     <TextView
         android:id="@+id/sumRepairs"
@@ -214,8 +229,13 @@
         android:layout_width="328dp"
         android:layout_height="124dp"
         android:layout_marginTop="24dp"
-        app:layout_constraintStart_toStartOf="@+id/selectCamera"
-        app:layout_constraintTop_toTopOf="@+id/selectCamera" />
+        android:gravity="center"
+        android:text="Нажмите сюда\nдля добавления\nфотографии из галереи"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/block_add_photo"
+        app:layout_constraintTop_toTopOf="@+id/block_add_photo"
+        app:lineHeight="28dp" />
 
     <!--    <ImageButton
             android:id="@+id/imageButton"
