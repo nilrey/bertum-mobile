@@ -147,17 +147,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data ){
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK) {
-            if(requestCode == CAMERA_REQ_CODE){
-                setSharedValueStr(Const.PHOTO_BASE64, getBase64FromBitmap(data));
-                increaseCntPhoto();
-                enableAiApiPostBlock();
-                Toast.makeText(MainActivity.this, msgPhotoAdded, Toast.LENGTH_SHORT).show();
-            }else if (requestCode == GALLERY_REQ_CODE) {
-                saveFromMediaGallery(data);
-                increaseCntPhoto();
-                enableAiApiPostBlock();
+            if(requestCode == CAMERA_REQ_CODE || requestCode == GALLERY_REQ_CODE){
+                if(requestCode == CAMERA_REQ_CODE){
+                    saveFromBitmap(data);
+                }else{
+                    saveFromUri(data);
+                }
+                manageCntPhoto();
             }
         }
+    }
+
+    private void manageCntPhoto(){
+        increaseCntPhoto();
+        enableAiApiPostBlock();
+        Toast.makeText(MainActivity.this, msgPhotoAdded, Toast.LENGTH_SHORT).show();
+    }
+
+    private void saveFromBitmap(Intent data){
+        String photoBase64 = getBase64FromBitmap(data);
+        setSharedValueStr(Const.PHOTO_BASE64, photoBase64);
+    }
+
+    private void saveFromUri(Intent data){
+        String photoBase64 = getBase64FromUri(data);
+        setSharedValueStr(Const.PHOTO_BASE64, photoBase64);
     }
 
     @Override
@@ -169,13 +183,8 @@ public class MainActivity extends AppCompatActivity {
         sumRepairsWork.setText(String.valueOf( getSharedValueInt(Const.CART_REPAIR_WORK) ));
     }
 
-    private void saveFromMediaGallery(Intent data){
+    private String getBase64FromUri(Intent data){
         Uri imageUri = data.getData();
-        setSharedValueStr(Const.PHOTO_BASE64, getBase64FromUri(imageUri));
-        Toast.makeText(MainActivity.this, msgPhotoAdded, Toast.LENGTH_SHORT).show();
-    }
-
-    private String getBase64FromUri(Uri imageUri){
         String strBase64;
         Bitmap bitmap;
         try {
@@ -183,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        strBase64 = convertBaosToBase64(bitmap);
+        strBase64 = convertBitmapToBase64(bitmap);
         return strBase64;
     }
 
@@ -195,11 +204,11 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        strBase64 = convertBaosToBase64(bitmap);
+        strBase64 = convertBitmapToBase64(bitmap);
         return strBase64;
     }
 
-    private String convertBaosToBase64(Bitmap bitmap){
+    private String convertBitmapToBase64(Bitmap bitmap){
         ByteArrayOutputStream baoStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baoStream);
         byte[] b = baoStream.toByteArray();
