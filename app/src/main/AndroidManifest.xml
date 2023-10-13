@@ -19,6 +19,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".DetailPricesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DetailsListActivity"
+            android:exported="false" />
+        <activity
             android:name=".Model3d"
             android:exported="false" />
         <activity

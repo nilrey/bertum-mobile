@@ -21,8 +21,10 @@ import java.util.Random;
 import com.example.bertumcamera.Const;
 
 public class ItemsList extends AppCompatActivity {
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor ed;
     private ImageView search_result_1, search_result_2, search_result_3;
-    private TextView cntOrig, cntNonOrig, cntBU, cntDiscont, cntVariants,
+    private TextView cntOrig, cntNonOrig, cntBU, cntDiscont, cntVariants, textView2,
             cntTotalItems, sumRepairs, sumRepairsWork, tagPrice1, tagPrice2, tagPrice3,
             titleDetail1, titleDetail2, titleDetail3, jsonOut;
     private int cnt, low, high, cartSumRepairs, cartSumRepairsWork, cartCntRepairs, cntAllVariants = 0;
@@ -95,6 +97,9 @@ public class ItemsList extends AppCompatActivity {
         high = 5500;
         cnt = r.nextInt(high-low) + low;
         tagPrice1.setText(String.valueOf(cnt) );
+
+
+//        textView2.setText(getSharedValueStr("detail_title") +"["+ getSharedValueStr("detail_article") +"]");
         
 
         // по клику
@@ -201,8 +206,6 @@ public class ItemsList extends AppCompatActivity {
                     cartPrice3.setVisibility(View.VISIBLE);
                     titleDetail3.setText(titleDetail);
                 }
-
-
             }
 
         } catch (JSONException e) {
@@ -210,10 +213,39 @@ public class ItemsList extends AppCompatActivity {
 //            e.printStackTrace();
         }
     }
+//
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        startActivity(new Intent(ItemsList.this, MainActivity.class));
+//    }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        startActivity(new Intent(ItemsList.this, MainActivity.class));
+
+    private void setSharedValueInt(String name, int value){
+        ed = getSharedPreferencesEditor();
+        ed.putInt(name, value);
+        ed.commit();
     }
+
+    private void setSharedValueStr(String name, String value){
+        ed = getSharedPreferencesEditor();
+        ed.putString(name, value);
+        ed.commit();
+    }
+
+    private SharedPreferences.Editor getSharedPreferencesEditor(){
+        sharedPreferences = getSharedPreferences(Const.SHARE_STORE,MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        return editor;
+    }
+
+    private int getSharedValueInt(String name){
+        sharedPreferences = getSharedPreferences(Const.SHARE_STORE,MODE_APPEND);
+        return sharedPreferences.getInt(name, 0);
+    }
+    private String getSharedValueStr(String name){
+        sharedPreferences = getSharedPreferences(Const.SHARE_STORE,MODE_APPEND);
+        return sharedPreferences.getString(name, "");
+    }
+
 }

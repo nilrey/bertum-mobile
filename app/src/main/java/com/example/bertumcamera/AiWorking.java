@@ -66,7 +66,7 @@ public class AiWorking extends AppCompatActivity {
 //                } catch (InterruptedException e) {
 //                    e.printStackTrace();
 //                }
-                startActivity(new Intent(AiWorking.this, ItemsList.class));
+                startActivity(new Intent(AiWorking.this, DetailsListActivity.class));
             }
         }, new Response.ErrorListener() {
             @Override
@@ -97,4 +97,5 @@ public class AiWorking extends AppCompatActivity {
         // post the data.
         queue.add(request);
     }
+
 }

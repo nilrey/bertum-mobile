@@ -27,9 +27,9 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private final int GALLERY_REQ_CODE = 1000;
-    private final int CAMERA_REQ_CODE = 100;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor ed;
+        private final int CAMERA_REQ_CODE = 100;
+        private SharedPreferences sharedPreferences;
+        private SharedPreferences.Editor ed;
     private ImageView clIcoDtp, m3dCarFrontRight, m3d_detail_1, m3d_detail_2;
     private ImageButton startBlockDisbld, startBlockEnbld, bottomPrices;
     private TextView cntPhoto, cntTotalItems, sumRepairs, sumRepairsWork, selectFileMedia;
@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        startActivity(new Intent(MainActivity.this, DetailsListActivity.class));
         Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // make app fullscreen
         // Bottom block Prices - priceRepair, cntDetailsSelected, priceRepairWork
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         bottomPrices.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                startActivity(new Intent(MainActivity.this, ItemsList.class));
+                startActivity(new Intent(MainActivity.this, DetailsListActivity.class));
             }
         });
         
