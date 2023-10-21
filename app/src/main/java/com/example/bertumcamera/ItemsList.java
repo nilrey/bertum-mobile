@@ -1,7 +1,10 @@
 package com.example.bertumcamera;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,19 +20,59 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
-import com.example.bertumcamera.Const;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
+import java.util.HashMap;
+import java.util.Map;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 public class ItemsList extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor ed;
-    private ImageView search_result_1, search_result_2, search_result_3;
-    private TextView cntOrig, cntNonOrig, cntBU, cntDiscont, cntVariants, textView2,
-            cntTotalItems, sumRepairs, sumRepairsWork, tagPrice1, tagPrice2, tagPrice3,
-            titleDetail1, titleDetail2, titleDetail3, jsonOut;
-    private int cnt, low, high, cartSumRepairs, cartSumRepairsWork, cartCntRepairs, cntAllVariants = 0;
+    private ImageView origDetailImage, nonorigDetailImage, usedDetailImage, discontDetailImage;
+    private TextView detailTitle, detailArticle, cntSearchRresult,
+            origDetailTitle, nonorigDetailTitle, usedDetailTitle, discontDetailTitle,
+            origDetailArticle, nonorigDetailArticle, usedDetailArticle, discontDetailArticle,
+            origDetailPrice, nonorigDetailPrice, usedDetailPrice, discontDetailPrice,
 
-    private Button cartPrice1,cartPrice2, cartPrice3;
+            cntTotalItems, sumRepairs, sumRepairsWork;
+    private int cnt, low, high, cartSumRepairs, cartSumRepairsWork, cartCntRepairs, cntAllVariants = 0;
+    private Button filterOrig, filterNonOrig, filterUsed, filterDiscont,
+            origCartAdd, nonorigCartAdd, usedCartAdd, discontCartAdd;
+    private String countTotal, countOrig, countNonorig, countDiscont, countUsed,
+            minPriceOrig, minPriceNonorig, minPriceDiscont, minPriceUsed;
+
+    private ConstraintLayout origLayout, nonorigLayout, discontLayout, usedLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,106 +81,132 @@ public class ItemsList extends AppCompatActivity {
         Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(Const.SHARE_STORE, MODE_APPEND);
-        SharedPreferences.Editor ed;
-        ed = sharedPreferences.edit();
-        ed.putInt("cntPhoto", 0);
-        ed.commit();
-
-        cntOrig = findViewById(R.id.cntOrig);
-        cntNonOrig = findViewById(R.id.cntNonOrig);
-        cntBU = findViewById(R.id.cntBU);
-        cntDiscont = findViewById(R.id.cntDiscont);
-        cntVariants = findViewById(R.id.cntVariants);
-
+        setSharedValueInt("cntPhoto", 0);
+        // результаты поиска
+        detailTitle = findViewById(R.id.detail_title);
+        detailArticle = findViewById(R.id.detail_article);
+        cntSearchRresult = findViewById(R.id.count_search_result);
+        // кнопки фильтров
+        filterOrig = findViewById(R.id.filter_orig);
+        filterNonOrig = findViewById(R.id.filter_nonorig);
+        filterUsed = findViewById(R.id.filter_used);
+        filterDiscont = findViewById(R.id.filter_discont);
+        // блоки цен
+        origLayout = findViewById(R.id.orig_cl_details);
+        nonorigLayout = findViewById(R.id.nonorig_cl_details);
+        discontLayout = findViewById(R.id.discont_cl_details);
+        usedLayout = findViewById(R.id.orig_cl_details);
+        // нижняя часть
         cntTotalItems = findViewById(R.id.cntTotalItems);
         sumRepairs = findViewById(R.id.sumRepairs);
         sumRepairsWork = findViewById(R.id.sumRepairsWork);
+        // плашки разных типов цен
+        origDetailImage = findViewById(R.id.orig_detail_image);
+//        origDetailTitle = findViewById(R.id.orig_detail_title);
+//        origDetailArticle = findViewById(R.id.orig_detail_article);
+        origDetailPrice = findViewById(R.id.orig_detail_price);
+        origCartAdd = findViewById(R.id.orig_cart_add);
 
-        search_result_1 = findViewById(R.id.search_result_1);
-        tagPrice1 = findViewById(R.id.tagPrice1);
-        cartPrice1 = findViewById(R.id.cartPrice1);
-        titleDetail1 = findViewById(R.id.titleDetail1);
+        nonorigDetailImage = findViewById(R.id.nonorig_detail_image);
+//        nonorigDetailTitle = findViewById(R.id.nonorig_detail_title);
+//        nonorigDetailArticle = findViewById(R.id.nonorig_detail_article);
+        nonorigDetailPrice = findViewById(R.id.nonorig_detail_price);
+        nonorigCartAdd = findViewById(R.id.nonorig_cart_add);
 
-        search_result_2 = findViewById(R.id.search_result_2);
-        tagPrice2 = findViewById(R.id.tagPrice2);
-        cartPrice2 = findViewById(R.id.cartPrice2);
-        titleDetail2 = findViewById(R.id.titleDetail2);
+        usedDetailImage = findViewById(R.id.used_detail_image);
+//        usedDetailTitle = findViewById(R.id.used_detail_title);
+//        usedDetailArticle = findViewById(R.id.used_detail_article);
+        usedDetailPrice = findViewById(R.id.used_detail_price);
+        usedCartAdd = findViewById(R.id.used_cart_add);
 
-        search_result_3 = findViewById(R.id.search_result_3);
-        tagPrice3 = findViewById(R.id.tagPrice3);
-        cartPrice3 = findViewById(R.id.cartPrice3);
-        titleDetail3 = findViewById(R.id.titleDetail3);
-        
-        jsonOut = findViewById(R.id.jsonOut);
+        discontDetailImage = findViewById(R.id.discont_detail_image);
+//        discontDetailTitle = findViewById(R.id.discont_detail_title);
+//        discontDetailArticle = findViewById(R.id.discont_detail_article);
+        discontDetailPrice = findViewById(R.id.discont_detail_price);
+        discontCartAdd = findViewById(R.id.discont_cart_add);
 
-        Random r = new Random();
-        low = 1;
-        high = 6;
+        // Наполнение данными
+        detailTitle.setText( getSharedValueStr("detail_title"));
+        detailArticle.setText( getSharedValueStr("detail_article"));
+        // get data from API
 
-        cnt = r.nextInt(high-low) + low;
-        cntAllVariants += cnt;
-        cntOrig.setText("ОРИГИНАЛ : " + cnt);
+        String jsonAiApi = getSharedValueStr("jsonDetailPrices");
+        setSharedValueStr("jsonDetailPrices", "no records");
+        try {
+            // get JSONObject from JSON file
+            String titleDetail, part_name, article;
+            JSONObject objects = new JSONObject (jsonAiApi);
+            JSONObject settings = objects.getJSONObject("prices");
+            JSONArray keys = settings.names ();
+            for (int i = 0; i < keys.length(); ++i) {
+                String key = keys.getString (i);
+                JSONObject record = settings.getJSONObject(key);
 
-        cnt = r.nextInt(high-low) + low;
-        cntAllVariants += cnt;
-        cntNonOrig.setText("НЕОРИГИНАЛ : " + cnt);
+                countTotal = record.getString("cntTotal");
+                countOrig = record.getString("cntOrig");
+                countNonorig = record.getString("cntNonorig");
+                countDiscont = record.getString("cntDiscont");
+                countUsed = record.getString("cntUsed");
+                minPriceOrig = record.getString("minPriceOrig");
+                minPriceNonorig = record.getString("minPriceNonorig");
+                minPriceDiscont = record.getString("minPriceDiscont");
+                minPriceUsed= record.getString("minPriceUsed");
+            }
+//            Log.d("BERTUM----view_angle", view_angle );
 
-        cnt = r.nextInt(high-low) + low;
-        cntAllVariants += cnt;
-        cntBU.setText("Б/У : " + cnt);
+        } catch (JSONException e) {
+            Log.d("BERTUM---JSONException", e.getMessage() );
+//            e.printStackTrace();
+        }
 
-        cnt = r.nextInt(high-low) + low;
-        cntAllVariants += cnt;
-        cntDiscont.setText("УЦЕНКА : " + cnt);
+        if(countTotal == null){
+            startActivity(new Intent(ItemsList.this, ProxyActivity.class));
+        }
 
-        cntVariants.setText(cntAllVariants + " вариантов");
+        cntSearchRresult.setText(countTotal+ " вариантов");
+        filterOrig.setText("ОРИГИНАЛ : " + countOrig);
+        filterNonOrig.setText("НЕОРИГИНАЛ : " + countNonorig);
+        filterUsed.setText("Б/У : " + countUsed);
+        filterDiscont.setText("УЦЕНКА : " + countDiscont);
+        origDetailPrice.setText(minPriceOrig);
+        nonorigDetailPrice.setText(minPriceNonorig);
+        usedDetailPrice.setText(minPriceDiscont);
+        discontDetailPrice.setText(minPriceUsed);
 
-        low = 2500;
-        high = 5500;
-        cnt = r.nextInt(high-low) + low;
-        tagPrice1.setText(String.valueOf(cnt) );
-
-
-//        textView2.setText(getSharedValueStr("detail_title") +"["+ getSharedValueStr("detail_article") +"]");
-        
-
-        // по клику
-        cartPrice1.setOnClickListener(new View.OnClickListener(){
+//        if( countDiscont.equals("0")){ discontLayout.setVisibility(View.GONE); }
+//        if( countUsed.equals("0")){ usedLayout.setVisibility(View.GONE); }
+//        if( countNonorig.equals("0")){ nonorigLayout.setVisibility(View.GONE); }
+//        if( countOrig.equals("0")) { origLayout.setVisibility(View.GONE); }
+/*
+        origCartAdd.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 // достаем сохраненные данные
                 Log.d("BERTUM---------------", "OnClick");
-                SharedPreferences getSharedPrefs = getSharedPreferences(Const.SHARE_STORE, MODE_APPEND);
-                int cartSum = getSharedPrefs.getInt("cartSum", 0); // get saved summ
-                int cartCnt = getSharedPrefs.getInt("cartCnt", 0); // get saved cnt
+                int cartSum = getSharedValueInt("cartSum"); // get saved summ
+                int cartCnt = getSharedValueInt("cartCnt"); // get saved cnt
 
                 // цена товара 1
-                int price1 = Integer.parseInt(tagPrice1.getText().toString()); // get added price
+                int price1 = Integer.parseInt(origDetailPrice.getText().toString()); // get added price
                 cartSumRepairs = cartSum + price1;
                 cartCntRepairs = cartCnt + 1;
 
                 sumRepairs.setText(String.valueOf(cartSumRepairs));
                 cntTotalItems.setText(String.valueOf(cartCntRepairs));
 
-                SharedPreferences sh = getSharedPreferences(Const.SHARE_STORE,MODE_PRIVATE);
-                SharedPreferences.Editor ed;
-                ed = sh.edit();
-
                 Random r = new Random();
                 low = 6000;
                 high = 18500;
                 cartSumRepairsWork = r.nextInt(high-low) + low;
                 sumRepairsWork.setText(String.valueOf(cartSumRepairsWork) );
-                ed.putInt("cartRepairWork", cartSumRepairsWork);
+                setSharedValueInt("cartRepairWork", cartSumRepairsWork);
 
-                ed.putInt("cartSum", cartSumRepairs);
-                ed.putInt("cartCnt", cartCntRepairs);
-                ed.commit();
+                setSharedValueInt("cartSum", cartSumRepairs);
+                setSharedValueInt("cartCnt", cartCntRepairs);
 
                 Toast.makeText(ItemsList.this, "Деталь добавлна в корзину", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
 
     }
     @Override
@@ -150,75 +219,13 @@ public class ItemsList extends AppCompatActivity {
         sumRepairsWork.setText(String.valueOf(c));
         int d = sh.getInt("cartCnt", 0);
         cntTotalItems.setText(String.valueOf(d));
-
-        String jsonAiApi = sh.getString("jsonAiApi", "no json");
-
-        jsonOut.setText(jsonAiApi);
-
-        try {
-            // get JSONObject from JSON file
-//            JSONObject obj = new JSONObject(loadJSONFromAsset());
-            JSONObject obj = new JSONObject(jsonAiApi);
-            // fetch JSONArray named users
-//            JSONArray arDetails = obj.getJSONArray("mask");
-            JSONObject objDetails = obj.getJSONObject("mask");
-            // implement for loop for getting users list data
-            for (int i = 0; i < objDetails.length(); i++) {
-                // create a JSONObject for fetching single user data
-                //JSONObject userDetail = objDetails.getJSONObject(i);
-
-                // fetch email and name and store it in arraylist
-//                personNames.add(userDetail.getString("name"));
-//                emailIds.add(userDetail.getString("email"));
-//                // create a object for getting contact data from JSONObject
-//                JSONObject contact = userDetail.getJSONObject("contact");
-//                // fetch mobile number and store it in arraylist
-//                mobileNumbers.add(contact.getString("mobile"));
-            }
-            //jsonOut.setText(String.valueOf(objDetails.length()));
-
-            JSONObject objects = new JSONObject (jsonAiApi);
-            JSONObject objDetails2 = objects.getJSONObject("mask");
-            JSONArray keys = objDetails2.names ();
-            for (int i = 0; i < keys.length (); ++i) {
-                String key = keys.getString (i);
-                //String titleDetail = objDetails2.getString (key); //.getString ("Part_Name");
-
-                JSONObject objDetail = objDetails2.getJSONObject(key);
-                String titleDetail = objDetail.getString ("Part_Name");
-
-                if(i==0){
-                    search_result_1.setVisibility(View.VISIBLE);
-                    titleDetail1.setVisibility(View.VISIBLE);
-                    tagPrice1.setVisibility(View.VISIBLE);
-                    cartPrice1.setVisibility(View.VISIBLE);
-                    titleDetail1.setText(titleDetail);
-                } else if (i == 1) {
-                    search_result_2.setVisibility(View.VISIBLE);
-                    titleDetail2.setVisibility(View.VISIBLE);
-                    tagPrice2.setVisibility(View.VISIBLE);
-                    cartPrice2.setVisibility(View.VISIBLE);
-                    titleDetail2.setText(titleDetail);
-                } else if (i == 2) {
-                    search_result_3.setVisibility(View.VISIBLE);
-                    titleDetail3.setVisibility(View.VISIBLE);
-                    tagPrice3.setVisibility(View.VISIBLE);
-                    cartPrice3.setVisibility(View.VISIBLE);
-                    titleDetail3.setText(titleDetail);
-                }
-            }
-
-        } catch (JSONException e) {
-            Log.d("BERTUM------JSONException", e.getMessage() );
-//            e.printStackTrace();
-        }
     }
-//
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        startActivity(new Intent(ItemsList.this, MainActivity.class));
-//    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(ItemsList.this, MainActivity.class));
+    }
 
 
     private void setSharedValueInt(String name, int value){

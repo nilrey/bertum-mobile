@@ -23,13 +23,16 @@ import java.util.HashMap;
 import java.util.Map;
 import com.example.bertumcamera.Const;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class AiWorking extends AppCompatActivity {
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor ed;
     private ProgressBar loadingPB;
     private TextView responseTV;
     String photoBase64;
     SharedPreferences sh;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor ed;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,36 +51,25 @@ public class AiWorking extends AppCompatActivity {
 
         postDataUsingVolley("123456789", photoBase64);
 
+
     }
     private void postDataUsingVolley(final String photoId, final String photoBase64) {
-        String url = "http://h304809427.nichost.ru/api/get_segments.php";
+        String url = "http://h304809427.nichost.ru/api/get_segments_test_base.php";
         RequestQueue queue = Volley.newRequestQueue(AiWorking.this);
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                //responseTV.setVisibility(View.VISIBLE);
-                responseTV.setText("Response from the API is :" + response); // comment for a while
-
-                ed = sharedPreferences.edit();
-                ed.putString("jsonAiApi", response);
-                ed.commit();
-//                try {
-//                    Thread.sleep(5000); // delay for 5 seс
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
+                setSharedValueStr("jsonAiApi", response);
                 startActivity(new Intent(AiWorking.this, DetailsListActivity.class));
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 // handling error on below line.
-                loadingPB.setVisibility(View.GONE);
-                responseTV.setVisibility(View.VISIBLE);
-                responseTV.setText(error.getMessage());
-                Toast.makeText(AiWorking.this, "Fail to get response..", Toast.LENGTH_SHORT).show();
-                //startActivity(new Intent(AiWorking.this, ItemsList.class));
-
+//                loadingPB.setVisibility(View.GONE);
+//                responseTV.setVisibility(View.VISIBLE);
+//                responseTV.setText(error.getMessage());
+//                Toast.makeText(AiWorking.this, "Fail to get response..", Toast.LENGTH_SHORT).show();
             }
         }) {
             @Nullable
@@ -97,5 +89,33 @@ public class AiWorking extends AppCompatActivity {
         // post the data.
         queue.add(request);
     }
+
+    private void setSharedValueInt(String name, int value){
+        ed = getSharedPreferencesEditor();
+        ed.putInt(name, value);
+        ed.commit();
+    }
+
+    private void setSharedValueStr(String name, String value){
+        ed = getSharedPreferencesEditor();
+        ed.putString(name, value);
+        ed.commit();
+    }
+
+    private SharedPreferences.Editor getSharedPreferencesEditor(){
+        sharedPreferences = getSharedPreferences(Const.SHARE_STORE,MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        return editor;
+    }
+
+    private int getSharedValueInt(String name){
+        sharedPreferences = getSharedPreferences(Const.SHARE_STORE,MODE_APPEND);
+        return sharedPreferences.getInt(name, 0);
+    }
+    private String getSharedValueStr(String name){
+        sharedPreferences = getSharedPreferences(Const.SHARE_STORE,MODE_APPEND);
+        return sharedPreferences.getString(name, "no val");
+    }
+
 
 }

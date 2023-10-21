@@ -8,37 +8,42 @@
     tools:context=".MainActivity">
 
 
-    <ImageView
-        android:id="@+id/ico_menu"
-        android:layout_width="35dp"
-        android:layout_height="38dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="28dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ico_menu" />
-
-    <ImageView
-        android:id="@+id/vw_logo_full"
-        android:layout_width="wrap_content"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/layout_top_menu"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="top|fill_horizontal"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/vw_logo_full" />
-
-
-    <ImageView
-        android:id="@+id/ico_dtp2"
-        android:layout_width="53dp"
-        android:layout_height="69dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="13dp"
-        app:layout_constraintStart_toEndOf="@+id/vw_logo_full"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ico_dtp2" />
-
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:id="@+id/ico_menu"
+            android:layout_width="35dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="28dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ico_menu" />
+        <ImageView
+            android:id="@+id/vw_logo_full"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/vw_logo_full" />
+        <ImageView
+            android:id="@+id/ico_dtp2"
+            android:layout_width="53dp"
+            android:layout_height="69dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="13dp"
+            app:layout_constraintStart_toEndOf="@+id/vw_logo_full"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ico_dtp2" />
+    </android.support.constraint.ConstraintLayout>
 
     <ImageButton
         android:id="@+id/button"
@@ -51,7 +56,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vw_logo_full"
+        app:layout_constraintTop_toBottomOf="@+id/layout_top_menu"
         app:srcCompat="@drawable/block_grey_unit" />
 
     <ImageButton
@@ -65,7 +70,7 @@
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/vw_logo_full"
+        app:layout_constraintTop_toBottomOf="@+id/layout_top_menu"
         app:srcCompat="@drawable/ai_working" />
 
 
@@ -89,6 +94,7 @@
         android:textAlignment="center"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
@@ -101,6 +107,72 @@
         android:layout_centerInParent="true"
         android:indeterminate="true"
         android:visibility="gone" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom|fill_horizontal"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/bottomPrices"
+            android:layout_width="339dp"
+            android:layout_height="53dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/bottom_prices" />
+
+        <TextView
+            android:id="@+id/cntTotalItems"
+            android:layout_width="35dp"
+            android:layout_height="26dp"
+            android:layout_marginStart="152dp"
+            android:layout_marginTop="8dp"
+            android:text="0"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/bottomPrices"
+            app:layout_constraintTop_toTopOf="@+id/bottomPrices" />
+
+        <TextView
+            android:id="@+id/cntVideo"
+            android:layout_width="30dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="20dp"
+            android:text="0"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="@+id/btnStartDisbld"
+            app:layout_constraintTop_toBottomOf="@+id/block_add_photo" />
+
+        <TextView
+            android:id="@+id/sumRepairs"
+            android:layout_width="60dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="22dp"
+            android:text="0"
+            android:textAlignment="textEnd"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/bottomPrices"
+            app:layout_constraintTop_toTopOf="@+id/bottomPrices" />
+
+        <TextView
+            android:id="@+id/sumRepairsWork"
+            android:layout_width="60dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginEnd="57dp"
+            android:text="0"
+            android:textAlignment="textEnd"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@+id/bottomPrices"
+            app:layout_constraintTop_toTopOf="@+id/bottomPrices" />
+
+    </android.support.constraint.ConstraintLayout>
 
 
 </android.support.constraint.ConstraintLayout>

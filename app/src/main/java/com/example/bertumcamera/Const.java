@@ -8,6 +8,7 @@ public class Const {
     public static final String CART_REPAIR_WORK = "cartRepairWork";
     public static final String PHOTO_BASE64 = "photoBase64";
     public static final String CNT_PHOTO = "cntPhoto";
+    public static final String MSG_FOTO_ADDED = "cntPhoto";
 
     //""
 }

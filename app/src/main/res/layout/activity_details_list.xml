@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -13,124 +12,302 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-        <RelativeLayout
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/layout_top_menu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
+            android:gravity="top|fill_horizontal"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
             <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="44dp"
-                android:layout_marginTop="30dp"
+                android:id="@+id/ico_menu"
+                android:layout_width="35dp"
+                android:layout_height="38dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="28dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ico_menu" />
-
             <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="10dp"
-                app:srcCompat="@drawable/vw_logo_full" />
-
-            <ImageView
-                android:id="@+id/imageView4"
+                android:id="@+id/vw_logo_full"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="32dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/vw_logo_full" />
+            <ImageView
+                android:id="@+id/ico_dtp2"
+                android:layout_width="53dp"
+                android:layout_height="69dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="13dp"
+                app:layout_constraintStart_toEndOf="@+id/vw_logo_full"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ico_dtp2" />
-        </RelativeLayout>
+        </android.support.constraint.ConstraintLayout>
 
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/ll_details"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="vertical">
-
-                <!--RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal">
-
-                    <ImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/search_result_2" />
-
-                    <TextView
-                        android:id="@+id/textView5"
-                        android:layout_width="305dp"
-                        android:layout_height="54dp"
-                        android:layout_alignStart="@+id/imageView"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="150dp"
-                        android:layout_marginEnd="10dp"
-                        android:text="TextView" />
-
-                    <Button
-                        android:id="@+id/button2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignStart="@+id/imageView"
-                        android:layout_marginStart="215dp"
-                        android:layout_marginTop="277dp"
-                        android:text="Button" />
-
-                </RelativeLayout-->
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:layout_marginBottom="5dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/idTVResponse"
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:layout_marginTop="16dp"
-                        android:gravity="center"
-                        android:textAlignment="center"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                    <ImageButton
+                        android:id="@+id/arrow_plus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:background="@color/colorWhite"
+                        app:srcCompat="@drawable/m3d_arrow_plus" />
+
+                    <ImageButton
+                        android:id="@+id/arrow_minus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:background="@color/colorWhite"
+                        app:srcCompat="@drawable/m3d_arrow_minus" />
+
+                    <ImageButton
+                        android:id="@+id/arrow_left"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:background="@color/colorWhite"
+                        app:srcCompat="@drawable/m3d_arrow_left" />
+
+                    <ImageButton
+                        android:id="@+id/arrow_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:background="@color/colorWhite"
+                        app:srcCompat="@drawable/m3d_arrow_right" />
                 </LinearLayout>
 
-                <!--LinearLayout
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="300dp">
+
+                <ImageView
+                    android:id="@+id/layoutCarRF"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:scaleX="1"
+                    android:scaleY="1"
+                    android:src="@drawable/m3d_vw6_sed_x033_right_front" />
 
-                    <ImageView
-                        android:id="@+id/imageView6"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/search_result_2" />
+                <ImageView
+                    android:id="@+id/doorRightFrontRF"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/layoutCarRF"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="105dp"
+                    android:layout_marginTop="72dp"
+                    android:scaleX="1"
+                    android:scaleY="1"
+                    android:src="@drawable/m3d_vw6_sed_x033_right_front_door_r" />
+            </RelativeLayout>
 
-                    <Button
-                        android:id="@+id/button5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Button" />
-                </LinearLayout-->
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="42dp"
+                android:layout_marginRight="42dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Список распознаных деталей"
+                    android:textColor="#000000"
+                    android:textSize="16sp"/>
             </LinearLayout>
-        </ScrollView>
 
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp">
+
+                <LinearLayout
+                    android:id="@+id/ll_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+<!--
+
+                                    <RelativeLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center_horizontal">
+
+                                        <ImageView
+                                            android:id="@+id/imageView"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            app:srcCompat="@drawable/det_door_right" />
+
+                                        <TextView
+                                            android:id="@+id/textView5"
+                                            android:layout_width="305dp"
+                                            android:layout_height="26dp"
+                                            android:layout_alignStart="@+id/imageView"
+                                            android:layout_alignParentTop="true"
+                                            android:layout_marginStart="10dp"
+                                            android:layout_marginTop="150dp"
+                                            android:layout_marginEnd="10dp"
+                                            android:text="TextView 1" />
+
+                                        <TextView
+                                            android:id="@+id/textView5"
+                                            android:layout_width="305dp"
+                                            android:layout_height="26dp"
+                                            android:layout_alignStart="@+id/imageView"
+                                            android:layout_alignParentTop="true"
+                                            android:layout_marginStart="10dp"
+                                            android:layout_marginTop="176dp"
+                                            android:layout_marginEnd="10dp"
+                                            android:text="TextView 2" />
+
+                                        <Button
+                                            android:id="@+id/button2"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_alignStart="@+id/imageView"
+                                            android:layout_marginStart="120dp"
+                                            android:layout_marginTop="200dp"
+                                            android:text="Button" />
+
+                                    </RelativeLayout>
+-->
+
+                    <!--                <LinearLayout-->
+                    <!--                    android:layout_width="match_parent"-->
+                    <!--                    android:layout_height="match_parent"-->
+                    <!--                    android:layout_marginTop="20dp"-->
+                    <!--                    android:orientation="vertical"-->
+                    <!--                    android:visibility="gone">-->
+
+                    <!--                    <TextView-->
+                    <!--                        android:id="@+id/idTVResponse"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="100dp"-->
+                    <!--                        android:layout_marginTop="16dp"-->
+                    <!--                        android:gravity="center"-->
+                    <!--                        android:textAlignment="center"-->
+                    <!--                        android:textSize="18sp"-->
+                    <!--                        android:textStyle="bold" />-->
+                    <!--                </LinearLayout>-->
+
+                    <!--                <LinearLayout-->
+                    <!--                    android:layout_width="match_parent"-->
+                    <!--                    android:layout_height="match_parent"-->
+                    <!--                    android:orientation="vertical">-->
+
+                    <!--                    <ImageView-->
+                    <!--                        android:id="@+id/imageView6"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        app:srcCompat="@drawable/search_result_2" />-->
+
+                    <!--                    <Button-->
+                    <!--                        android:id="@+id/button5"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:text="Button" />-->
+                    <!--                </LinearLayout>-->
+
+                </LinearLayout>
+            </ScrollView>
+
+        </LinearLayout>
 
     </LinearLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom|fill_horizontal"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/bottomPrices"
+            android:layout_width="339dp"
+            android:layout_height="53dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/bottom_prices" />
+
+        <TextView
+            android:id="@+id/cntTotalItems"
+            android:layout_width="35dp"
+            android:layout_height="26dp"
+            android:layout_marginStart="152dp"
+            android:layout_marginTop="8dp"
+            android:text="0"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/bottomPrices"
+            app:layout_constraintTop_toTopOf="@+id/bottomPrices" />
+
+        <TextView
+            android:id="@+id/cntVideo"
+            android:layout_width="30dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="20dp"
+            android:text="0"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="@+id/btnStartDisbld"
+            app:layout_constraintTop_toBottomOf="@+id/block_add_photo" />
+
+        <TextView
+            android:id="@+id/sumRepairs"
+            android:layout_width="60dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="22dp"
+            android:text="0"
+            android:textAlignment="textEnd"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/bottomPrices"
+            app:layout_constraintTop_toTopOf="@+id/bottomPrices" />
+
+        <TextView
+            android:id="@+id/sumRepairsWork"
+            android:layout_width="60dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginEnd="57dp"
+            android:text="0"
+            android:textAlignment="textEnd"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="@+id/bottomPrices"
+            app:layout_constraintTop_toTopOf="@+id/bottomPrices" />
+    </android.support.constraint.ConstraintLayout>
+
 </android.support.constraint.ConstraintLayout>

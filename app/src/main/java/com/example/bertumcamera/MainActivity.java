@@ -30,18 +30,18 @@ public class MainActivity extends AppCompatActivity {
         private final int CAMERA_REQ_CODE = 100;
         private SharedPreferences sharedPreferences;
         private SharedPreferences.Editor ed;
-    private ImageView clIcoDtp, m3dCarFrontRight, m3d_detail_1, m3d_detail_2;
+    private ImageView clIcoDtp, m3dCarFrontRight;
     private ImageButton startBlockDisbld, startBlockEnbld, bottomPrices;
     private TextView cntPhoto, cntTotalItems, sumRepairs, sumRepairsWork, selectFileMedia;
     private Button selectCamera;
-    private String msgPhotoAdded, msgDetailSelected;
+    private String msgDetailSelected;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        startActivity(new Intent(MainActivity.this, DetailsListActivity.class));
+//        startActivity(new Intent(MainActivity.this, ImageDragActivity.class));
         Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // make app fullscreen
         // Bottom block Prices - priceRepair, cntDetailsSelected, priceRepairWork
@@ -55,14 +55,11 @@ public class MainActivity extends AppCompatActivity {
         selectFileMedia = findViewById(R.id.selectFileMedia);
         // block 3d model
         m3dCarFrontRight  = findViewById(R.id.m3d_car_front_right);
-        m3d_detail_1 = findViewById(R.id.m3d_detail_1);
-        m3d_detail_2 = findViewById(R.id.m3d_detail_2);
         // Middle block - post photo to AI API
         startBlockDisbld = findViewById(R.id.btnStartDisbld);
         startBlockEnbld = findViewById(R.id.idBtnPostData2);
         cntPhoto = findViewById(R.id.cntPhoto);
         // messages text
-        msgPhotoAdded  =  getResources().getString (R.string.msg_photo_added);
         msgDetailSelected  =  getResources().getString(R.string.msg_detail_selected);
 
         //Request for camera runtime permission
@@ -114,7 +111,8 @@ public class MainActivity extends AppCompatActivity {
         m3dCarFrontRight.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                startActivity(new Intent(MainActivity.this, Model3d.class));
+//                startActivity(new Intent(MainActivity.this, Model3d.class));
+                startActivity(new Intent(MainActivity.this, ImageDragActivity.class));
             }
         });
 
@@ -124,24 +122,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, AiWorking.class));
             }
         });
-        m3d_detail_1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, String.format(msgDetailSelected, "Правая передняя дверь"), Toast.LENGTH_SHORT).show();
-            }
-        });
-        m3d_detail_2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, String.format(msgDetailSelected, "Стекло лобовое"), Toast.LENGTH_SHORT).show();
-            }
-        });
-//        bottomPrices.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this, ItemsList.class));
-//            }
-//        });
     }
 
     @Override
@@ -162,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
     private void manageCntPhoto(){
         increaseCntPhoto();
         enableAiApiPostBlock();
-        Toast.makeText(MainActivity.this, msgPhotoAdded, Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, Const.MSG_FOTO_ADDED, Toast.LENGTH_SHORT).show();
     }
 
     private void saveFromBitmap(Intent data){
@@ -236,16 +216,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private int getSharedValueInt(String name){
-        sharedPreferences = getSharedPreferences(Const.SHARE_STORE,MODE_APPEND);
+        sharedPreferences = getSharedPreferences(Const.SHARE_STORE,MODE_PRIVATE);
         return sharedPreferences.getInt(name, 0);
     }
     private String getSharedValueStr(String name){
-        sharedPreferences = getSharedPreferences(Const.SHARE_STORE,MODE_APPEND);
+        sharedPreferences = getSharedPreferences(Const.SHARE_STORE,MODE_PRIVATE);
         return sharedPreferences.getString(name, "");
     }
 
     private void increaseCntPhoto(){
-        setSharedValueInt( Const.CNT_PHOTO, getSharedValueInt(Const.CNT_PHOTO) + 1 );
+        setSharedValueInt( Const.CNT_PHOTO,  1 );
 //        cntPhoto = findViewById(R.id.cntPhoto);
         cntPhoto.setText(String.valueOf( getSharedValueInt(Const.CNT_PHOTO) ));
     }
