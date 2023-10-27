@@ -49,7 +49,7 @@ public class Model3d extends AppCompatActivity {
         RF_lo_033 = findViewById(R.id.layout_m3d_vw6_sed_x033_right_front);
         RF_lo_050 = findViewById(R.id.layout_m3d_vw6_sed_x050_right_front);
 //        RF_wing_r_033 = findViewById(R.id.m3d_vw6_sed_x033_right_front_wing_r);
-//        RF_door_r_033 = findViewById(R.id.m3d_vw6_sed_x033_right_front_door_r);
+//        RF_door_r_033 = findViewById(R.id.m3d_vw6_sed_x033_front_right_front_right_door);
 
         btnGallery.setOnClickListener(new View.OnClickListener(){
             @Override

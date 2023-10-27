@@ -60,7 +60,7 @@
         app:srcCompat="@drawable/block_grey_unit" />
 
     <ImageButton
-        android:id="@+id/aiWorking"
+        android:id="@+id/plateAiWorking"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
@@ -81,7 +81,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/aiWorking"
+        app:layout_constraintTop_toBottomOf="@+id/plateAiWorking"
         app:srcCompat="@drawable/car_on_main" />
 
     <TextView
@@ -138,17 +138,6 @@
             app:layout_constraintTop_toTopOf="@+id/bottomPrices" />
 
         <TextView
-            android:id="@+id/cntVideo"
-            android:layout_width="30dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="20dp"
-            android:text="0"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF"
-            app:layout_constraintEnd_toEndOf="@+id/btnStartDisbld"
-            app:layout_constraintTop_toBottomOf="@+id/block_add_photo" />
-
-        <TextView
             android:id="@+id/sumRepairs"
             android:layout_width="60dp"
             android:layout_height="25dp"
@@ -171,6 +160,16 @@
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="@+id/bottomPrices"
             app:layout_constraintTop_toTopOf="@+id/bottomPrices" />
+
+        <TextView
+            android:id="@+id/responseTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="625dp" />
 
     </android.support.constraint.ConstraintLayout>
 

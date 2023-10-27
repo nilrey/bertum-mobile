@@ -11,47 +11,51 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.lang.reflect.Method;
 
 public class ImageDragActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor ed;
     private RelativeLayout blockCarRF_x033, blockCarRF_x050, blockCarFF_x033, blockCarLF_x033;
-    private ImageView layoutCarRF_x033, doorRightFrontRF_x033, wingRightFrontRF_x033,
-            layoutCarRF_x050, doorRightFrontRF_x050, wingRightFrontRF_x050;
+    private ImageView layoutCarRF_x033, doorRightFrontRF_x033, wingRightFrontRF_x033, bumperRightFrontRF_x033,
+            layoutCarRF_x050, doorRightFrontRF_x050, wingRightFrontRF_x050, bumperRightFrontRF_x050;
     private ImageButton arrowPlus, arrowMinus, arrowLeft, arrowRight;
     private TextView respView;
-    private String msgDetailSelected, vewRacurs="right_front";
-    float x, y;
-    float dx, dy;
-    private int scaleValue = 1;
-    private int mTouchSlop;
-    private boolean mIsScrolling;
+    private String msgDetailSelected, sideView=Const.VIEW_RIGHT_FRONT;
+    float x, y, dx, dy;
+    private int bias=0, scaleValue = 1;
+//    private int mTouchSlop;
+//    private boolean mIsScrolling;
 
+    long durationTouch = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_drag);
 
-        ViewConfiguration vc = ViewConfiguration.get( ImageDragActivity.this );
-        mTouchSlop = vc.getScaledTouchSlop();
+        calculateBias();
+        initAllSideViews();
+        hideAllSideViews();
+        setItemsListBackPage();
 
-        blockCarRF_x033 = findViewById(R.id.blockCarRF_x033);
         layoutCarRF_x033 = findViewById(R.id.layoutCarRF_x033);
         doorRightFrontRF_x033 = findViewById(R.id.doorRightFrontRF_x033);
         wingRightFrontRF_x033 = findViewById(R.id.wingRightFrontRF_x033);
-        blockCarRF_x050 = findViewById(R.id.blockCarRF_x050);
+        bumperRightFrontRF_x033 = findViewById(R.id.bumperRightFrontRF_x033);
+
         layoutCarRF_x050 = findViewById(R.id.layoutCarRF_x050);
         doorRightFrontRF_x050 = findViewById(R.id.doorRightFrontRF_x050);
         wingRightFrontRF_x050 = findViewById(R.id.wingRightFrontRF_x050);
-
-        blockCarFF_x033 = findViewById(R.id.blockCarFF_x033);
-        blockCarLF_x033 = findViewById(R.id.blockCarLF_x033);
+        bumperRightFrontRF_x050 = findViewById(R.id.bumperRightFrontRF_x050);
 
         arrowPlus = findViewById(R.id.arrow_plus);
         arrowMinus = findViewById(R.id.arrow_minus);
@@ -59,164 +63,192 @@ public class ImageDragActivity extends AppCompatActivity {
         arrowLeft = findViewById(R.id.arrow_left);
         msgDetailSelected  =  getResources().getString(R.string.msg_detail_selected);
 
-
         respView = findViewById(R.id.respView);
 
-        arrowMinus.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                scaleValue = 1;
+        genScaleOnClick(arrowMinus, 1);
+        genScaleOnClick(arrowPlus, 2);
 
-                blockCarRF_x050.setVisibility(View.GONE);
-                blockCarRF_x033.setVisibility(View.GONE);
-                blockCarFF_x033.setVisibility(View.GONE);
-                blockCarLF_x033.setVisibility(View.GONE);
-                blockCarRF_x033.setVisibility(View.VISIBLE);
-            }
-        });
+        if(getBias() > 0){
+            setDetailPosition(wingRightFrontRF_x033, 160, 111);
+            setDetailPosition(doorRightFrontRF_x033, 106, 72);
+            setDetailPosition(bumperRightFrontRF_x033, 200, 161);
+        }
 
-
-        arrowPlus.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                scaleValue = 2;
-                blockCarRF_x050.setVisibility(View.GONE);
-                blockCarRF_x033.setVisibility(View.GONE);
-                blockCarFF_x033.setVisibility(View.GONE);
-                blockCarLF_x033.setVisibility(View.GONE);
-                blockCarRF_x050.setVisibility(View.VISIBLE);
-                /*
-                if( layoutCarRF_x033.getScaleX() < 2 ) {
-                    float scalingFactor = 2f;
-                    layoutCarRF_x033.setScaleType(ImageView.ScaleType.CENTER);
-                    layoutCarRF_x033.setX(0.0F);
-                    layoutCarRF_x033.setY(0.0F);
-                    layoutCarRF_x033.setScaleX(scalingFactor);
-                    layoutCarRF_x033.setScaleY(scalingFactor);
-
-                    doorRightFrontRF_x033.setX(0.0F);
-                    doorRightFrontRF_x033.setY(0.0F);
-                    doorRightFrontRF_x033.setScaleX(scalingFactor);
-                    doorRightFrontRF_x033.setScaleY(scalingFactor);
-
-                    RelativeLayout.LayoutParams elemParams = new RelativeLayout.LayoutParams(
-                            RelativeLayout.LayoutParams.WRAP_CONTENT,
-                            RelativeLayout.LayoutParams.WRAP_CONTENT
-                    );
-                    elemParams.setMargins(convertDpToPixels(ImageDragActivity.this, 140),
-                            convertDpToPixels(ImageDragActivity.this, 130), 0, 0);
-                    doorRightFrontRF_x033.setLayoutParams(elemParams);
-
-                    wingRightFrontRF_x033.setX(0.0F);
-                    wingRightFrontRF_x033.setY(0.0F);
-                    wingRightFrontRF_x033.setScaleX(scalingFactor);
-                    wingRightFrontRF_x033.setScaleY(scalingFactor);
-                    RelativeLayout.LayoutParams elemParams2 = new RelativeLayout.LayoutParams(
-                            RelativeLayout.LayoutParams.WRAP_CONTENT,
-                            RelativeLayout.LayoutParams.WRAP_CONTENT
-                    );
-                    elemParams2.setMargins(convertDpToPixels(ImageDragActivity.this, 310),
-                            convertDpToPixels(ImageDragActivity.this, 230), 0, 0);
-                    wingRightFrontRF_x033.setLayoutParams(elemParams2);
-//                    setDetailParams(wingRightFrontRF_x033, scalingFactor, 153, 113, 0);
-                }*/
-            }
-        });
         arrowRight.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                blockCarRF_x050.setVisibility(View.GONE);
-                blockCarRF_x033.setVisibility(View.GONE);
-                blockCarFF_x033.setVisibility(View.GONE);
-                blockCarLF_x033.setVisibility(View.GONE);
-                if(vewRacurs=="right_front"){
-                    blockCarFF_x033.setVisibility(View.VISIBLE);
-                    vewRacurs = "front_front";
-                } else if (vewRacurs=="front_front") {
-                    blockCarLF_x033.setVisibility(View.VISIBLE);
-                    vewRacurs = "left_front";
-                } else if (vewRacurs=="left_front") {
-                    blockCarLF_x033.setVisibility(View.VISIBLE); // future change to back left
-                }
+            hideAllSideViews();
+            if(sideView == Const.VIEW_RIGHT_FRONT){
+                sideView = Const.VIEW_FRONT_FRONT;
+                activateSvBlock();
+            } else if (sideView == Const.VIEW_FRONT_FRONT) {
+                sideView = Const.VIEW_LEFT_FRONT;
+                activateSvBlock();
+            } else if (sideView == Const.VIEW_LEFT_FRONT) {
+                activateSvBlock();
+            }
             }
         });
 
         arrowLeft.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                blockCarRF_x050.setVisibility(View.GONE);
-                blockCarRF_x033.setVisibility(View.GONE);
-                blockCarFF_x033.setVisibility(View.GONE);
-                blockCarLF_x033.setVisibility(View.GONE);
-                if(vewRacurs=="left_front"){
-                    blockCarFF_x033.setVisibility(View.VISIBLE);
-                    vewRacurs = "front_front";
-                } else if (vewRacurs=="front_front") {
-                    blockCarRF_x033.setVisibility(View.VISIBLE);
-                    vewRacurs = "right_front";
-                } else if (vewRacurs=="right_front") {
-                    blockCarRF_x033.setVisibility(View.VISIBLE);// future change to back right
+                hideAllSideViews();
+                if(sideView == Const.VIEW_RIGHT_FRONT){
+                    activateSvBlock();
+                } else if (sideView == Const.VIEW_FRONT_FRONT) {
+                    sideView = Const.VIEW_RIGHT_FRONT;
+                    activateSvBlock();
+                } else if (sideView == Const.VIEW_LEFT_FRONT) {
+                    sideView = Const.VIEW_FRONT_FRONT;
+                    activateSvBlock();
                 }
             }
         });
 
-        doorRightFrontRF_x033.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                clickDoorRightFrontRF();
-            }
-        });
-        doorRightFrontRF_x050.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                clickDoorRightFrontRF();
-            }
-        });
-        doorRightFrontRF_x050.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                doMoveAction(event);
-                return false;
-            }
-        });
-        wingRightFrontRF_x033.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                clickWingRightFrontRF();
-            }
-        });
-        wingRightFrontRF_x050.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                clickWingRightFrontRF();
-            }
-        });
-        wingRightFrontRF_x050.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                doMoveAction(event);
-                return false;
-            }
-        });
+        genImageViewOnClick(doorRightFrontRF_x033, "6RU831055J", "Передняя правая дверь");
+        genImageViewOnClick(doorRightFrontRF_x050, "6RU831055J", "Передняя правая дверь");
+        genImageViewOnClick(wingRightFrontRF_x033, "6RU821106C", "Переднее правое крыло");
+        genImageViewOnClick(wingRightFrontRF_x050, "6RU821106C", "Переднее правое крыло");
+        genImageViewOnClick(bumperRightFrontRF_x033, "6RU807221A", "Бампер передний");
+        genImageViewOnClick(bumperRightFrontRF_x050, "6RU807221A", "Бампер передний");
 
-    } // \onCreate
+        genImageViewOnTouch(layoutCarRF_x050);
+        genImageViewOnTouch(doorRightFrontRF_x033);
+        genImageViewOnTouch(doorRightFrontRF_x050);
+        genImageViewOnTouch(wingRightFrontRF_x033);
+        genImageViewOnTouch(wingRightFrontRF_x050);
+        genImageViewOnTouch(bumperRightFrontRF_x033);
+        genImageViewOnTouch(bumperRightFrontRF_x050);
+
+        layoutCarRF_x050.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+            }
+        });
+    }
+
+    private void calculateBias(){
+        Resources r = this.getResources();
+        int currentWidth = Math.round(r.getDisplayMetrics().widthPixels / r.getDisplayMetrics().density);
+        setBias(Math.round( (Const.SETS_WIDTH_KOEF_DEFAULT - currentWidth) / 2 ));
+    }
+
+    private void setItemsListBackPage(){
+        setSharedValueStr("ItemsListBackPage", "ImageDragActivity");
+    }
+    private void setBias(int val){
+        this.bias = val;
+    }
+
+    private int getBias(){
+        return this.bias;
+    }
+
+    private void setDetailPosition(ImageView elem, int left, int top){
+        RelativeLayout.LayoutParams elemParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        int biasLocal = getBias();
+        elemParams.setMargins(convertDpToPixels(ImageDragActivity.this, left - biasLocal ),
+                convertDpToPixels(ImageDragActivity.this, top ), 0, 0);
+        elem.setLayoutParams(elemParams);
+    }
+    private void setSideViewToMiddle(){
+        int middleBias = -250;
+        if(sideView == Const.VIEW_RIGHT_FRONT){
+            blockCarRF_x050.setX(middleBias);
+        } else if (sideView == Const.VIEW_FRONT_FRONT) {
+
+        } else if (sideView == Const.VIEW_LEFT_FRONT) {
+
+        }
+    }
+    private void genScaleOnClick(ImageView elem, final int newScale){
+        elem.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                scaleValue = newScale;
+                hideAllSideViews();
+                activateSvBlock();
+                if(scaleValue == 2){
+                    setSideViewToMiddle();
+                }
+            }
+        });
+    }
+
+    private void genImageViewOnClick(ImageView elem, final String da, final String dt){
+        elem.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                if(durationTouch < 200) {
+                    setSharedValueStr("detail_article", da );
+                    setSharedValueStr("detail_title", dt );
+                    setSharedValueStr("detail_title_rus", dt );
+                    sendRequestToProxy();
+                }
+                durationTouch = 0;
+            }
+        });
+    }
+
+    private void genImageViewOnTouch(ImageView elem){
+        elem.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                doMoveAction(event);
+                return false;
+            }
+        });
+    }
+
+    private void initAllSideViews(){
+        blockCarRF_x050 = findViewById(R.id.blockCarRF_x050);
+        blockCarRF_x033 = findViewById(R.id.blockCarRF_x033);
+        blockCarFF_x033 = findViewById(R.id.blockCarFF_x033);
+        blockCarLF_x033 = findViewById(R.id.blockCarLF_x033);
+    }
+
+    private void hideAllSideViews(){
+        hideSideView(blockCarRF_x050);
+        hideSideView(blockCarRF_x033);
+        hideSideView(blockCarFF_x033);
+        hideSideView(blockCarLF_x033);
+    }
+    
+    private void hideSideView(RelativeLayout elem){
+        elem.setVisibility(View.GONE);
+    }
+    
+    private void activateSvBlock(){
+        // при заданном ракурсе, определим приближение
+        if(sideView == Const.VIEW_RIGHT_FRONT){
+            setVisibilityOnScaleValue(blockCarRF_x050, blockCarRF_x033);
+        } else if (sideView == Const.VIEW_FRONT_FRONT) {
+            setVisibilityOnScaleValue(blockCarFF_x033, blockCarFF_x033);
+        } else if (sideView == Const.VIEW_LEFT_FRONT) {
+            setVisibilityOnScaleValue(blockCarLF_x033, blockCarLF_x033);
+        }
+    }
+
+    private void setVisibilityOnScaleValue(RelativeLayout elem, RelativeLayout elem_default){
+        if(scaleValue == 2){
+            elem.setVisibility(View.VISIBLE);
+        }else{
+            elem_default.setVisibility(View.VISIBLE);
+            setDetailPosition(wingRightFrontRF_x033, 160, 111);
+            setDetailPosition(doorRightFrontRF_x033, 106, 72);
+            setDetailPosition(bumperRightFrontRF_x033, 200, 161);
+        }
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
         blockCarRF_x050.setVisibility(View.GONE);
         blockCarRF_x033.setVisibility(View.VISIBLE);
-    }
-
-    private void clickDoorRightFrontRF(){
-        setSharedValueStr("detail_article", "6RU831055J" );
-        setSharedValueStr("detail_title", "Передняя левая дверь" );
-        sendRequestToProxy();
-    }
-    private void clickWingRightFrontRF(){
-        setSharedValueStr("detail_article", "6RU821106C" );
-        setSharedValueStr("detail_title", "Переднее правое крыло" );
-        sendRequestToProxy();
     }
 
     private void setDetailParams(ImageView elem, float scalingFactor, int marLeft, int marTop, int marRight ){
@@ -237,77 +269,30 @@ public class ImageDragActivity extends AppCompatActivity {
         startActivity(new Intent(ImageDragActivity.this, ProxyActivity.class));
     }
 
-//
-//    @Override
-//    public boolean onInterceptTouchEvent(MotionEvent ev) {
-//        // This method only determines whether you want to intercept the motion.
-//        // If this method returns true, onTouchEvent is called and you can do
-//        // the actual scrolling there.
-//
-//        final int action = MotionEventCompat.getActionMasked(ev);
-//
-//        // Always handle the case of the touch gesture being complete.
-//        if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
-//            // Release the scroll.
-//            mIsScrolling = false;
-//            return false; // Don't intercept touch event. Let the child handle it.
-//        }
-//
-//        switch (action) {
-//            case MotionEvent.ACTION_MOVE: {
-//                if (mIsScrolling) {
-//                    // You're currently scrolling, so intercept the touch event.
-//                    return true;
-//                }
-//
-//                // If the user drags their finger horizontally more than the
-//                // touch slop, start the scroll.
-//
-//                // Left as an exercise for the reader.
-//                final int xDiff = calculateDistanceX(ev);
-//
-//                // Touch slop is calculated using ViewConfiguration constants.
-//                if (xDiff > mTouchSlop) {
-//                    // Start scrolling.
-//                    mIsScrolling = true;
-//                    return true;
-//                }
-//                break;
-//            }
-//            ...
-//        }
-//
-//        // In general, don't intercept touch events. The child view handles them.
-//        return false;
-//    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) { // 3D model actions
-        if(scaleValue == 2){
-            doMoveAction(event);
-        }
-        return super.onTouchEvent(event);
-    }
-
     private void doMoveAction(MotionEvent event){
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             x = event.getX();
             y = event.getY();
-            Toast.makeText(ImageDragActivity.this, "Down", Toast.LENGTH_SHORT).show();
+        }else if (event.getAction() == MotionEvent.ACTION_UP) {
+            durationTouch = event.getEventTime() - event.getDownTime();
         }
         if (event.getAction() == MotionEvent.ACTION_MOVE) {
             dx = event.getX() - x;
             dy = event.getY() - y;
-
-            layoutCarRF_x050.setX(layoutCarRF_x050.getX() + dx);
-            layoutCarRF_x050.setY(layoutCarRF_x050.getY() + dy);
-
-            doorRightFrontRF_x050.setX(doorRightFrontRF_x050.getX() + dx);
-            doorRightFrontRF_x050.setY(doorRightFrontRF_x050.getY() + dy);
-
-            wingRightFrontRF_x050.setX(wingRightFrontRF_x050.getX() + dx);
-            wingRightFrontRF_x050.setY(wingRightFrontRF_x050.getY() + dy);
-
+            if(sideView == Const.VIEW_RIGHT_FRONT){
+                layoutCarRF_x050.setX(layoutCarRF_x050.getX() + dx);
+                layoutCarRF_x050.setY(layoutCarRF_x050.getY() + dy);
+                doorRightFrontRF_x050.setX(doorRightFrontRF_x050.getX() + dx);
+                doorRightFrontRF_x050.setY(doorRightFrontRF_x050.getY() + dy);
+                wingRightFrontRF_x050.setX(wingRightFrontRF_x050.getX() + dx);
+                wingRightFrontRF_x050.setY(wingRightFrontRF_x050.getY() + dy);
+                bumperRightFrontRF_x050.setX(bumperRightFrontRF_x050.getX() + dx);
+                bumperRightFrontRF_x050.setY(bumperRightFrontRF_x050.getY() + dy);
+            } else if (sideView == Const.VIEW_FRONT_FRONT) {
+                setVisibilityOnScaleValue(blockCarFF_x033, blockCarFF_x033);
+            } else if (sideView == Const.VIEW_LEFT_FRONT) {
+                setVisibilityOnScaleValue(blockCarLF_x033, blockCarLF_x033);
+            }
             x = event.getX();
             y = event.getY();
         }

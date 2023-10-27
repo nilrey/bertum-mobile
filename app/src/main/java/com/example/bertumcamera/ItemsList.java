@@ -126,12 +126,12 @@ public class ItemsList extends AppCompatActivity {
         discontCartAdd = findViewById(R.id.discont_cart_add);
 
         // Наполнение данными
-        detailTitle.setText( getSharedValueStr("detail_title"));
+        detailTitle.setText( getSharedValueStr("detail_title_rus"));
         detailArticle.setText( getSharedValueStr("detail_article"));
         // get data from API
 
         String jsonAiApi = getSharedValueStr("jsonDetailPrices");
-        setSharedValueStr("jsonDetailPrices", "no records");
+//        setSharedValueStr("jsonDetailPrices", "no records");
         try {
             // get JSONObject from JSON file
             String titleDetail, part_name, article;
@@ -204,7 +204,7 @@ public class ItemsList extends AppCompatActivity {
                 setSharedValueInt("cartSum", cartSumRepairs);
                 setSharedValueInt("cartCnt", cartCntRepairs);
 
-                Toast.makeText(ItemsList.this, "Деталь добавлна в корзину", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ItemsList.this, "Деталь добавлена в корзину", Toast.LENGTH_SHORT).show();
             }
         });*/
 
@@ -220,11 +220,16 @@ public class ItemsList extends AppCompatActivity {
         int d = sh.getInt("cartCnt", 0);
         cntTotalItems.setText(String.valueOf(d));
     }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(ItemsList.this, MainActivity.class));
+        if(getSharedValueStr("ItemsListBackPage").equals("ImageDragActivity") ){
+            startActivity(new Intent(ItemsList.this, ImageDragActivity.class));
+        }else if(getSharedValueStr("ItemsListBackPage").equals("DetailsListActivity") ){
+            startActivity(new Intent(ItemsList.this, DetailsListActivity.class));
+        }else{
+            startActivity(new Intent(ItemsList.this, MainActivity.class));
+        }
     }
 
 

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import com.example.bertumcamera.Const;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,18 +33,23 @@ public class AiWorking extends AppCompatActivity {
     private SharedPreferences.Editor ed;
     private ProgressBar loadingPB;
     private TextView responseTV;
+    private ImageView plateAiWorking;
     String photoBase64;
     SharedPreferences sh;
+    private int cntAttemptVolley = 0;
+    private String msgAiService = "";
+
+    int ifAiError = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.activity_ai_working);
         sh = getSharedPreferences(Const.SHARE_STORE, MODE_APPEND); //read
         sharedPreferences = getSharedPreferences(Const.SHARE_STORE,MODE_PRIVATE); // write
 
-
-        setContentView(R.layout.activity_ai_working);
+        plateAiWorking = findViewById(R.id.plateAiWorking);
         loadingPB = findViewById(R.id.idPBLoading);
         responseTV = findViewById(R.id.idTVResponse);
 
@@ -51,16 +58,21 @@ public class AiWorking extends AppCompatActivity {
 
         postDataUsingVolley("123456789", photoBase64);
 
-
     }
     private void postDataUsingVolley(final String photoId, final String photoBase64) {
-        String url = "http://h304809427.nichost.ru/api/get_segments_test_base.php";
+//        String url = "http://h304809427.nichost.ru/api/get_segments_test_base.php";
+//        String url = "http://h304809427.nichost.ru/api/get_segments.php";
+        String url = Const.URL_AIAPI;
         RequestQueue queue = Volley.newRequestQueue(AiWorking.this);
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                setSharedValueStr("jsonAiApi", response);
-                startActivity(new Intent(AiWorking.this, DetailsListActivity.class));
+                String resp = "no val";
+                if ( !(response instanceof String) ){ resp = String.valueOf(response); }
+                else { resp = response; }
+                setSharedValueStr("jsonAiApi", resp);
+                setVolleyResponse();
+
             }
         }, new Response.ErrorListener() {
             @Override
@@ -69,7 +81,7 @@ public class AiWorking extends AppCompatActivity {
 //                loadingPB.setVisibility(View.GONE);
 //                responseTV.setVisibility(View.VISIBLE);
 //                responseTV.setText(error.getMessage());
-//                Toast.makeText(AiWorking.this, "Fail to get response..", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AiWorking.this, "Fail to get response..", Toast.LENGTH_SHORT).show();
             }
         }) {
             @Nullable
@@ -77,11 +89,12 @@ public class AiWorking extends AppCompatActivity {
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("rmPoints", "1");
-                params.put("photoBase64", photoBase64);
+                params.put("photoBase64", photoBase64 );
+                cntAttemptVolley++ ;
                 return params;
             }
         };
-        DefaultRetryPolicy retryPolicy = new DefaultRetryPolicy(0, -1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        DefaultRetryPolicy retryPolicy = new DefaultRetryPolicy(10000, 3, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         request.setRetryPolicy(retryPolicy);
 
         Toast.makeText(AiWorking.this, "Фотография успешно отправлена", Toast.LENGTH_SHORT).show();
@@ -116,6 +129,50 @@ public class AiWorking extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(Const.SHARE_STORE,MODE_APPEND);
         return sharedPreferences.getString(name, "no val");
     }
+    private void setVolleyResponse(){
 
+        String jsonAiApi = getSharedValueStr("jsonAiApi");
 
+        try {
+            if( jsonAiApi.substring(0, 1).equals("{")) {
+                setSharedValueStr("jsonAiApi", jsonAiApi);
+                JSONObject objects = new JSONObject(jsonAiApi);
+                JSONObject settings = objects.getJSONObject("settings");
+                JSONArray keys = settings.names ();
+                ifAiError = 1;
+                for (int i = 0; i < keys.length(); ++i) {
+                    String key = keys.getString(i);
+                    JSONObject objDetail = settings.getJSONObject(key);
+                    ifAiError = Integer.parseInt(objDetail.getString("error"));
+                    if (ifAiError == 0) {
+                        startActivity(new Intent(AiWorking.this, DetailsListActivity.class));
+                    } else {
+                        msgAiService = objDetail.getString("text");
+                    }
+                }
+                /*
+                ifAiError =  Integer.parseInt(settings.getString("error"));
+                if (ifAiError ==  0) {
+                    cntAttemptVolley = 0;
+                    startActivity(new Intent(AiWorking.this, DetailsListActivity.class));
+                }else{
+                    msgAiService =settings.getString ("text");
+                }*/
+            }else{
+                ifAiError = 1;
+                msgAiService = "Извините, сервис распознования сейчас не недоступен, повторите попытку.";
+                // no api server connect
+            }
+        }catch (Exception e){
+            ifAiError = 1;
+            msgAiService = e.getMessage();
+        }
+
+        if(ifAiError > 0){
+            plateAiWorking.setVisibility(View.GONE);
+            responseTV.setText(msgAiService);
+            responseTV.setVisibility(View.VISIBLE);
+            Toast.makeText(AiWorking.this, msgAiService, Toast.LENGTH_SHORT).show();
+        }
+    }
 }

@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="-12dp"
                 android:layout_marginTop="110dp"
-                app:srcCompat="@drawable/m3d_vw6_sed_x033_right_front_wing_r" />
+                app:srcCompat="@drawable/m3d_vw6_sed_x033_front_right_rear_right_wing" />
 
             <ImageView
                 android:id="@+id/m3d_vw6_sed_x033_right_front_door_r"
@@ -124,7 +124,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="-146dp"
                 android:layout_marginTop="71dp"
-                app:srcCompat="@drawable/m3d_vw6_sed_x033_right_front_door_r" />
+                app:srcCompat="@drawable/m3d_vw6_sed_x033_front_right_front_right_door" />
         </RelativeLayout>
 
 

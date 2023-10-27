@@ -16,7 +16,16 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity
+            android:name=".AiProxyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TestVisualActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Car3dActivity"
+            android:exported="false" />
         <activity
             android:name=".ProxyActivity"
             android:exported="false" />

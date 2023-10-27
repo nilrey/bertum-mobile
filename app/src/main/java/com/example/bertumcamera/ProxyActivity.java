@@ -116,7 +116,7 @@ public class ProxyActivity extends AppCompatActivity {
                 jobEdt.setText("");
 
                 // on below line we are displaying a success toast message.
-                Toast.makeText(ProxyActivity.this, "Data added to API", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ProxyActivity.this, "Data added to API", Toast.LENGTH_SHORT).show();
                 try {
                     // on below line we are parsing the response
                     // to json object to extract data from it.
