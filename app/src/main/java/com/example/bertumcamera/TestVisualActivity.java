@@ -1,9 +1,13 @@
 package com.example.bertumcamera;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,9 +23,8 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TestVisualActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
@@ -35,154 +38,48 @@ public class TestVisualActivity extends AppCompatActivity {
     float x, y;
     float dx, dy;
 
+    private TextView informer;
+    private ConstraintLayout topCarLayout;
+    private RelativeLayout areaSideView;
+    private ImageView carSideView;
+    private Resources r;
 
+    private Button reload;
+
+
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_visual);
 
-        layoutCarRF = findViewById(R.id.carSideView);
-        doorRightFrontRF = findViewById(R.id.doorRightFrontRF);
-        arrowPlus = findViewById(R.id.arrow_plus);
-        arrowMinus = findViewById(R.id.arrow_minus);
-        msgDetailSelected = getResources().getString(R.string.msg_detail_selected);
-        cntDetailsFound = findViewById(R.id.cnt_detail_found);
-        tvSideview = findViewById(R.id.tv_sideview);
+        r = this.getResources();
 
-//        responseTV = findViewById(R.id.idTVResponse);
-        // TEST get JSON AI API
-//        postDataUsingVolley("123456789", "fasdfasdf");
-        String jsonAiApi = DataStore.getTestJsonAiApi();
-        String view_angle = "";
-        String cache_file_name = "";
-        String file_size = "";
-
-        try {
-            // get JSONObject from JSON file
-            String part_name_rus, part_name, article;
-            JSONObject objects = new JSONObject (jsonAiApi);
-            JSONArray mask  = objects.getJSONArray("mask");
-            for (int i = 0; i < mask.length(); i++)
-            {
-                JSONObject record = mask.getJSONObject(i);
-                part_name = record.getString("Part_Name");
-                part_name_rus = record.getString("Part_Name_rus");
-//                try {
-//                    byte bytes[] = part_name_rus.getBytes("ISO-8859-1");
-//                } catch (UnsupportedEncodingException e) {
-//                    throw new RuntimeException(e);
-//                }
-                article = record.getString("Article");
-                generateDetailBlock(part_name, article, part_name_rus);
-            }
-            cntDetailsFound.setText( String.valueOf(mask.length()) );
+        informer = findViewById(R.id.informer);
+        topCarLayout = findViewById(R.id.topCarLayout);
+        areaSideView = findViewById(R.id.areaSideView);
+        carSideView = findViewById(R.id.carSideView);
+        reload = findViewById(R.id.reload);
 
 
-            JSONObject settings = objects.getJSONObject("settings");
-            JSONArray keys = settings.names ();
-            for (int i = 0; i < keys.length(); ++i) {
-                String key = keys.getString (i);
-                JSONObject objDetail = settings.getJSONObject(key);
-                view_angle = objDetail.getString ("view");
-                cache_file_name = objDetail.getString ("cache");
-                file_size = objDetail.getString ("file_size");
-            }
-            tvSideview.setText(getSideViewTitleRus(view_angle));
-//            tvSideview.setText(view_angle);
-            Log.d("BERTUM----view_angle", view_angle );
-            // заменить картинку на нужный ракурс
-            // layoutCarRF m3d_vw6_sed_x033_right_front
-            String img = "m3d_vw6_sed_x033_right_front";
-            if(view_angle.equals("front_front")){
-                img = "m3d_vw6_sed_x033_front_front";
-            }
-            if(view_angle.equals("front_left")){
-                img = "m3d_vw6_sed_x033_left_front";
-            }
-            Context context = layoutCarRF.getContext();
-            int id = context.getResources().getIdentifier(img, "drawable", context.getPackageName());
-            layoutCarRF.setImageResource(id);
-
-
-        } catch (JSONException e) {
-            Log.d("BERTUM---JSONException", e.getMessage() );
-//            e.printStackTrace();
-        }
-
-        // 3D model functions
-
-        arrowMinus.setOnClickListener(new View.OnClickListener(){
+        reload.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
-                if( layoutCarRF.getScaleX() > 1 ) {
-//                    startActivity(new Intent(TestVisualActivity.this, Test.class));
-                }
+            public void onClick(View v) {
+                startActivity(new Intent(TestVisualActivity.this, TestVisualActivity.class));
             }
         });
 
-        arrowPlus.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                if( layoutCarRF.getScaleX() < 2 ) {
-                    float scalingFactor = 2f;
-                    layoutCarRF.setScaleType(ImageView.ScaleType.CENTER);
-                    layoutCarRF.setX(0.0F);
-                    layoutCarRF.setY(0.0F);
-                    layoutCarRF.setScaleX(scalingFactor);
-                    layoutCarRF.setScaleY(scalingFactor);
-
-                    doorRightFrontRF.setX(0.0F);
-                    doorRightFrontRF.setY(0.0F);
-                    doorRightFrontRF.setScaleX(scalingFactor);
-                    doorRightFrontRF.setScaleY(scalingFactor);
-
-
-                    RelativeLayout.LayoutParams elemParams = new RelativeLayout.LayoutParams(
-                            RelativeLayout.LayoutParams.WRAP_CONTENT,
-                            RelativeLayout.LayoutParams.WRAP_CONTENT
-                    );
-                    elemParams.setMargins(convertDpToPixels(TestVisualActivity.this, 140),
-                            convertDpToPixels(TestVisualActivity.this, 130), 0, 0);
-                    doorRightFrontRF.setLayoutParams(elemParams);
-                }
-            }
-        });
-    }
-
-    private void generateDetailBlock(String part_name, String detail_article, String part_name_rus){
-        // Dynamic ids for controls
-        int layoutRelativeId = ViewCompat.generateViewId();
-        int plateDetail = ViewCompat.generateViewId();
-        int imageDetail = ViewCompat.generateViewId();
-        int textTitleId = ViewCompat.generateViewId();
-        int textArticleId = ViewCompat.generateViewId();
-        int btnPricesId = ViewCompat.generateViewId();
-        LinearLayout ll_parent = findViewById(R.id.ll_details);
-        // Create detail Relative layout
-        RelativeLayout ll_new_block = new RelativeLayout(this);
-        RelativeLayout.LayoutParams elemParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
+        int a =  r.getDisplayMetrics().widthPixels;
+        int b  = r.getDisplayMetrics().heightPixels;
+        float c = r.getDisplayMetrics().density;
+        float d = r.getDisplayMetrics().densityDpi;
+        float f = r.getDisplayMetrics().scaledDensity;
+        informer.setText("Width="+a+"; "
+                +"Height="+b+"; "
+                +"density="+c+"; "
+                +"densityDpi="+d+"; "
+                +"scaledDensity="+f+"; "
         );
-        elemParams.setMargins( convertDpToPixels(this, 20),
-                convertDpToPixels(this, 20),
-                convertDpToPixels(this, 20),
-                0);
-        ll_new_block.setLayoutParams(elemParams);
-        ll_new_block.setId(layoutRelativeId);
-        ll_new_block.setGravity(Gravity.CENTER_HORIZONTAL);
-        ll_new_block.addView(genImageView(plateDetail , 0, 0) );
-        ll_new_block.addView(genImageView2(imageDetail, plateDetail , 0, 0, part_name));
-
-        //set detail title
-        ll_new_block.addView(setDetailTitle(textTitleId, part_name_rus, plateDetail));
-        // set detail article
-        ll_new_block.addView(setArticleTitle(textArticleId, detail_article, plateDetail));
-        // Create Button
-        ll_new_block.addView(genButton(btnPricesId, part_name, "Цены", plateDetail , detail_article));
-
-        ll_parent.addView(ll_new_block);
-
     }
 
     private TextView setDetailTitle(int elem_id, String title, int parent_id){
@@ -324,4 +221,98 @@ public class TestVisualActivity extends AppCompatActivity {
         return valuePx;
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        activateSideView("front_right");
+
+    }
+
+    private void activateSideView(String sideView){
+        String[] detailsList = getSideViewDetails(sideView);
+        for (Object detailName : detailsList)
+        {
+            initDetail(detailName.toString());
+        }
+    }
+
+    private String[] getSideViewDetails(String sideView){
+        if(sideView.equals("front_right")){
+            return new String[]{"front_bumper", "front_right_door",
+                     "hood"};
+//            return new String[]{"front_bumper", "rear_bumper", "front_right_door",
+//                    "rear_right_door", "hood", "wheel", "front_right_wing", "rear_right_wing",
+//                    "trunk_lid", "windshield", "roof" };
+        }else if (sideView.equals("front_left")) {
+            return new String[]{"front_bumper", "rear_bumper", "front_left_door",
+                    "rear_left_door", "hood", "wheel", "front_left_wing", "rear_left_wing",
+                    "trunk_lid", "windshield", "roof" };
+        }
+        return new String[]{};
+    }
+
+    private void initDetail(String fName){
+        float density = r.getDisplayMetrics().density;
+        double wCar = carSideView.getWidth();
+        double hCar = carSideView.getHeight();
+
+        fName = "m3d_vw6_sed_x033_front_right_front_bumper";
+        Context context = carSideView.getContext();
+        int detailImageId = context.getResources().getIdentifier(fName, "drawable", context.getPackageName());
+        Drawable drawable = getResources().getDrawable(detailImageId );
+        int widthImage = drawable.getIntrinsicWidth();
+        int heightImage = drawable.getIntrinsicHeight();
+        double wDetail = widthImage/density;
+        double hDetail = heightImage/density;
+
+        // 2,289017341040462 w 396/173
+        // 4,242857142857143 h 297/70
+        // 2,084210526315789 bx 396/190
+        // 1,84472049689441 by 297/161
+        double detailPxWidth = wDetail; // 173
+        double detailPxHeight =  hDetail; // 70
+        double detailPxLeft = 191; // 190
+        double detailPxTop = 160; // 160
+
+        double ratioWidth = 396/detailPxWidth ; //2.289017341040462;
+        double ratioHeight = 297/detailPxHeight; //4.242857142857143;
+        double ratioLeft = 396/detailPxLeft; //2.084210526315789;
+        double ratioTop = 297/detailPxTop; // 1.84472049689441;
+
+        int left = (int) (wCar/ ratioLeft );
+//        int top = (int) (hCar/ ratioTop );
+        double calcHeight = wCar/1.333333;
+        int biasHeight = (int) (((hCar - calcHeight)*0.3333)*0.3333);
+        int top = (int) (calcHeight/ ratioTop - biasHeight); //  - (((780-613)*0.3333) /2 ));
+        // define Main Image height once
+        areaSideView.getLayoutParams().height = (int) calcHeight;
+
+        // init new Detail
+        ImageView elem = new ImageView(this);
+        RelativeLayout.LayoutParams elemParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        elemParams.width = (int) (wCar/ ratioWidth );
+        elemParams.height = (int) (hCar/ ratioHeight );
+        elemParams.setMargins(left, top, 0, 0);
+        elem.setLayoutParams(elemParams);
+
+        elem.setImageResource(detailImageId);
+        elem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 1.save detail id
+//                setSharedValueStr("detail_article", da );
+//                setSharedValueStr("detail_title", ta );
+//                setSharedValueStr("detail_title_rus", tr );
+                // 2.redirect to page-Prices
+//                startActivity(new Intent(DetailsListActivity.this, DetailPricesActivity.class));
+                startActivity(new Intent(TestVisualActivity.this, TestVisualActivity.class));
+                //Toast.makeText(DetailsListActivity.this, da, Toast.LENGTH_SHORT).show();
+            }
+        });
+        areaSideView.addView(elem);
+    }
 }

@@ -60,8 +60,6 @@ public class AiWorking extends AppCompatActivity {
 
     }
     private void postDataUsingVolley(final String photoId, final String photoBase64) {
-//        String url = "http://h304809427.nichost.ru/api/get_segments_test_base.php";
-//        String url = "http://h304809427.nichost.ru/api/get_segments.php";
         String url = Const.URL_AIAPI;
         RequestQueue queue = Volley.newRequestQueue(AiWorking.this);
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -94,7 +92,7 @@ public class AiWorking extends AppCompatActivity {
                 return params;
             }
         };
-        DefaultRetryPolicy retryPolicy = new DefaultRetryPolicy(10000, 3, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        DefaultRetryPolicy retryPolicy = new DefaultRetryPolicy(30000, 3, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         request.setRetryPolicy(retryPolicy);
 
         Toast.makeText(AiWorking.this, "Фотография успешно отправлена", Toast.LENGTH_SHORT).show();

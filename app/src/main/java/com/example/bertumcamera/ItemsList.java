@@ -1,10 +1,14 @@
 package com.example.bertumcamera;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +17,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,18 +64,27 @@ import javax.net.ssl.X509TrustManager;
 public class ItemsList extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor ed;
-    private ImageView origDetailImage, nonorigDetailImage, usedDetailImage, discontDetailImage;
-    private TextView detailTitle, detailArticle, cntSearchRresult,
+    private ConstraintLayout layoutButtons, areaInformer;
+    private ImageView origDetailImage, nonorigDetailImage, usedDetailImage, discontDetailImage, ico_cart;
+    private TextView detailTitle, detailArticle, cntSearchRresult, linkToBack,
             origDetailTitle, nonorigDetailTitle, usedDetailTitle, discontDetailTitle,
             origDetailArticle, nonorigDetailArticle, usedDetailArticle, discontDetailArticle,
             origDetailPrice, nonorigDetailPrice, usedDetailPrice, discontDetailPrice,
 
-            cntTotalItems, sumRepairs, sumRepairsWork;
+            cntTotalItems, sumRepairs, sumRepairsWork, linkToSmetaRepairs , linkToSmetaDetails;
     private int cnt, low, high, cartSumRepairs, cartSumRepairsWork, cartCntRepairs, cntAllVariants = 0;
-    private Button filterOrig, filterNonOrig, filterUsed, filterDiscont,
-            origCartAdd, nonorigCartAdd, usedCartAdd, discontCartAdd;
-    private String countTotal, countOrig, countNonorig, countDiscont, countUsed,
-            minPriceOrig, minPriceNonorig, minPriceDiscont, minPriceUsed;
+    private Button filterOrig;
+    private Button filterNonOrig;
+    private Button filterUsed;
+    private Button filterDiscont;
+    private Button origCartAdd;
+    private Button nonorigCartAdd;
+    private Button discontCartAdd;
+    private String countTotal = "0", countOrig = "0", countNonorig = "0", countDiscont = "0", countUsed = "0",
+            minPriceOrig = "0", minPriceNonorig = "0", minPriceDiscont = "0", minPriceUsed = "0",
+            minPriceOrigArticle = "0", minPriceNonorigArticle = "0", minPriceDiscontArticle = "0", minPriceUsedArticle = "0",
+            minPriceOrigTitle = "0", minPriceNonorigTitle = "0", minPriceDiscontTitle = "0", minPriceUsedTitle = "0",
+            responseArticle = "";
 
     private ConstraintLayout origLayout, nonorigLayout, discontLayout, usedLayout;
 
@@ -87,6 +101,9 @@ public class ItemsList extends AppCompatActivity {
         detailArticle = findViewById(R.id.detail_article);
         cntSearchRresult = findViewById(R.id.count_search_result);
         // кнопки фильтров
+        areaInformer = findViewById(R.id.areaInformer);
+        linkToBack = findViewById(R.id.linkToBack);
+        layoutButtons = findViewById(R.id.layoutButtons);
         filterOrig = findViewById(R.id.filter_orig);
         filterNonOrig = findViewById(R.id.filter_nonorig);
         filterUsed = findViewById(R.id.filter_used);
@@ -95,41 +112,78 @@ public class ItemsList extends AppCompatActivity {
         origLayout = findViewById(R.id.orig_cl_details);
         nonorigLayout = findViewById(R.id.nonorig_cl_details);
         discontLayout = findViewById(R.id.discont_cl_details);
-        usedLayout = findViewById(R.id.orig_cl_details);
+        usedLayout = findViewById(R.id.used_cl_details);
         // нижняя часть
         cntTotalItems = findViewById(R.id.cntTotalItems);
         sumRepairs = findViewById(R.id.sumRepairs);
         sumRepairsWork = findViewById(R.id.sumRepairsWork);
+        linkToSmetaDetails = findViewById(R.id.linkToSmetaDetails);
+        linkToSmetaRepairs = findViewById(R.id.linkToSmetaRepairs);
         // плашки разных типов цен
         origDetailImage = findViewById(R.id.orig_detail_image);
-//        origDetailTitle = findViewById(R.id.orig_detail_title);
-//        origDetailArticle = findViewById(R.id.orig_detail_article);
+        origDetailTitle = findViewById(R.id.orig_detail_title);
+        origDetailArticle = findViewById(R.id.orig_detail_article);
         origDetailPrice = findViewById(R.id.orig_detail_price);
         origCartAdd = findViewById(R.id.orig_cart_add);
 
         nonorigDetailImage = findViewById(R.id.nonorig_detail_image);
-//        nonorigDetailTitle = findViewById(R.id.nonorig_detail_title);
-//        nonorigDetailArticle = findViewById(R.id.nonorig_detail_article);
+        nonorigDetailTitle = findViewById(R.id.nonorig_detail_title);
+        nonorigDetailArticle = findViewById(R.id.nonorig_detail_article);
         nonorigDetailPrice = findViewById(R.id.nonorig_detail_price);
         nonorigCartAdd = findViewById(R.id.nonorig_cart_add);
 
         usedDetailImage = findViewById(R.id.used_detail_image);
-//        usedDetailTitle = findViewById(R.id.used_detail_title);
-//        usedDetailArticle = findViewById(R.id.used_detail_article);
+        usedDetailTitle = findViewById(R.id.used_detail_title);
+        usedDetailArticle = findViewById(R.id.used_detail_article);
         usedDetailPrice = findViewById(R.id.used_detail_price);
-        usedCartAdd = findViewById(R.id.used_cart_add);
+        Button usedCartAdd = findViewById(R.id.used_cart_add);
 
         discontDetailImage = findViewById(R.id.discont_detail_image);
-//        discontDetailTitle = findViewById(R.id.discont_detail_title);
-//        discontDetailArticle = findViewById(R.id.discont_detail_article);
+        discontDetailTitle = findViewById(R.id.discont_detail_title);
+        discontDetailArticle = findViewById(R.id.discont_detail_article);
         discontDetailPrice = findViewById(R.id.discont_detail_price);
         discontCartAdd = findViewById(R.id.discont_cart_add);
 
         // Наполнение данными
         detailTitle.setText( getSharedValueStr("detail_title_rus"));
         detailArticle.setText( getSharedValueStr("detail_article"));
-        // get data from API
 
+        origDetailTitle.setText( getSharedValueStr("detail_title_rus"));
+        origDetailArticle.setText( getSharedValueStr("detail_article"));
+
+        nonorigDetailTitle.setText( getSharedValueStr("detail_title_rus"));
+        nonorigDetailArticle.setText( getSharedValueStr("detail_article"));
+
+        usedDetailTitle.setText( getSharedValueStr("detail_title_rus"));
+        usedDetailArticle.setText( getSharedValueStr("detail_article"));
+
+        discontDetailTitle.setText( getSharedValueStr("detail_title_rus"));
+        discontDetailArticle.setText( getSharedValueStr("detail_article"));
+
+
+        linkToSmetaDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setSharedValueInt("smetaTab", 0);
+                startActivity(new Intent(ItemsList.this, SmetaActivity.class));
+            }
+        });
+        linkToSmetaRepairs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setSharedValueInt("smetaTab", 1);
+                startActivity(new Intent(ItemsList.this, SmetaActivity.class));
+            }
+        });
+        ico_cart = findViewById(R.id.ico_cart);
+        ico_cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ItemsList.this, CartActivity.class));
+            }
+        });
+
+        // get data from API
         String jsonAiApi = getSharedValueStr("jsonDetailPrices");
 //        setSharedValueStr("jsonDetailPrices", "no records");
         try {
@@ -151,6 +205,18 @@ public class ItemsList extends AppCompatActivity {
                 minPriceNonorig = record.getString("minPriceNonorig");
                 minPriceDiscont = record.getString("minPriceDiscont");
                 minPriceUsed= record.getString("minPriceUsed");
+
+                minPriceOrigArticle = record.getString("minPriceOrigArticle");
+                minPriceNonorigArticle = record.getString("minPriceNonorigArticle");
+                minPriceDiscontArticle = record.getString("minPriceDiscontArticle");
+                minPriceUsedArticle = record.getString("minPriceUsedArticle");
+
+                minPriceOrigTitle = record.getString("minPriceOrigTitle");
+                minPriceNonorigTitle = record.getString("minPriceNonorigTitle");
+                minPriceDiscontTitle = record.getString("minPriceDiscontTitle");
+                minPriceUsedTitle = record.getString("minPriceUsedTitle");
+
+                responseArticle = record.getString("article");
             }
 //            Log.d("BERTUM----view_angle", view_angle );
 
@@ -158,8 +224,11 @@ public class ItemsList extends AppCompatActivity {
             Log.d("BERTUM---JSONException", e.getMessage() );
 //            e.printStackTrace();
         }
+        int cntTry = getSharedValueInt("countTry" );
 
-        if(countTotal == null){
+        if( (jsonAiApi.equals("") && cntTry < 2)
+        || ( (!getSharedValueStr("detail_article").equals(responseArticle))  && cntTry < 3 )
+        ){
             startActivity(new Intent(ItemsList.this, ProxyActivity.class));
         }
 
@@ -170,45 +239,100 @@ public class ItemsList extends AppCompatActivity {
         filterDiscont.setText("УЦЕНКА : " + countDiscont);
         origDetailPrice.setText(minPriceOrig);
         nonorigDetailPrice.setText(minPriceNonorig);
-        usedDetailPrice.setText(minPriceDiscont);
-        discontDetailPrice.setText(minPriceUsed);
+        usedDetailPrice.setText(minPriceUsed);
+        discontDetailPrice.setText(minPriceDiscont);
 
-//        if( countDiscont.equals("0")){ discontLayout.setVisibility(View.GONE); }
-//        if( countUsed.equals("0")){ usedLayout.setVisibility(View.GONE); }
-//        if( countNonorig.equals("0")){ nonorigLayout.setVisibility(View.GONE); }
-//        if( countOrig.equals("0")) { origLayout.setVisibility(View.GONE); }
-/*
-        origCartAdd.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                // достаем сохраненные данные
-                Log.d("BERTUM---------------", "OnClick");
-                int cartSum = getSharedValueInt("cartSum"); // get saved summ
-                int cartCnt = getSharedValueInt("cartCnt"); // get saved cnt
+        if( countDiscont.equals("0")){ discontLayout.setVisibility(View.GONE); }
+        if( countUsed.equals("0")){ usedLayout.setVisibility(View.GONE); }
+        if( countNonorig.equals("0")){ nonorigLayout.setVisibility(View.GONE); }
+        if( countOrig.equals("0")) { origLayout.setVisibility(View.GONE); }
 
-                // цена товара 1
-                int price1 = Integer.parseInt(origDetailPrice.getText().toString()); // get added price
-                cartSumRepairs = cartSum + price1;
-                cartCntRepairs = cartCnt + 1;
+        if (Integer.parseInt(countTotal) > 0 ) {
 
-                sumRepairs.setText(String.valueOf(cartSumRepairs));
-                cntTotalItems.setText(String.valueOf(cartCntRepairs));
+            layoutButtons.setVisibility(View.VISIBLE);
+            areaInformer.setVisibility(View.GONE);
 
-                Random r = new Random();
-                low = 6000;
-                high = 18500;
-                cartSumRepairsWork = r.nextInt(high-low) + low;
-                sumRepairsWork.setText(String.valueOf(cartSumRepairsWork) );
-                setSharedValueInt("cartRepairWork", cartSumRepairsWork);
+            origCartAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 1.save detail id
+                    saveSelectedDetailProps(responseArticle, getSharedValueStr("detail_title"),
+                            minPriceOrigTitle, minPriceOrigTitle, minPriceOrigArticle, minPriceOrig);
+                    // 2.redirect to page-Prices
+                    addToCart(Integer.parseInt(minPriceOrig));
+                }
+            });
+            nonorigCartAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    saveSelectedDetailProps(responseArticle, getSharedValueStr("detail_title"),
+                            minPriceNonorigTitle, minPriceNonorigTitle, minPriceNonorigArticle, minPriceNonorig);
+                    addToCart(Integer.parseInt(minPriceNonorig));
+                }
+            });
+            usedCartAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    saveSelectedDetailProps(responseArticle, getSharedValueStr("detail_title"),
+                            minPriceUsedTitle, minPriceUsedTitle, minPriceUsedArticle, minPriceUsed);
+                    addToCart(Integer.parseInt(minPriceUsed));
+                }
+            });
+            discontCartAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    saveSelectedDetailProps(responseArticle, getSharedValueStr("detail_title"),
+                            minPriceDiscontTitle, minPriceDiscontTitle, minPriceDiscontArticle, minPriceDiscont);
+                    addToCart(Integer.parseInt(minPriceDiscont));
+                }
+            });
+        }else{
+            layoutButtons.setVisibility(View.GONE);
+            areaInformer.setVisibility(View.VISIBLE);
+            linkToBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
+        }
+    }
 
-                setSharedValueInt("cartSum", cartSumRepairs);
-                setSharedValueInt("cartCnt", cartCntRepairs);
+    private void saveSelectedDetailProps(String da, String ta, String tr, String mpt, String mpa, String mpf ){
+        setSharedValueStr("detail_article", da );
+        setSharedValueStr("detail_title", ta );
+        setSharedValueStr("detail_title_rus", tr );
+        setSharedValueStr("detail_minpice_type", mpt );
+        setSharedValueStr("detail_minpice_article", mpa );
+        setSharedValueStr("detail_minpice_final", mpf );
+    }
+    private void addToCart(int minPrice){
+        // достаем сохраненные данные
+//        int cartSum = getSharedValueInt("cartSum"); // get saved summ
+//        int cartCnt = getSharedValueInt("cartCnt"); // get saved cnt
+//        int cartSumRepWork = getSharedValueInt("cartRepairWork"); // get saved cnt
 
-                Toast.makeText(ItemsList.this, "Деталь добавлена в корзину", Toast.LENGTH_SHORT).show();
-            }
-        });*/
+//        cartSumRepairs = cartSum + minPrice;
+//        cartSumRepairsWork = cartSumRepWork + getSumRepairsWork( getSharedValueStr("detail_article") );
+//        cartCntRepairs = cartCnt + 1;
+
+        // цена товара 1
+        cartSumRepairs = minPrice;
+        cartSumRepairsWork = DataStore.getSumRepairsWork( getSharedValueStr("detail_article") );
+        cartCntRepairs = 1;
+
+        sumRepairs.setText(String.valueOf(cartSumRepairs));
+        cntTotalItems.setText(String.valueOf(cartCntRepairs));
+        sumRepairsWork.setText(String.valueOf(cartSumRepairsWork) );
+        setSharedValueInt("cartRepairWork", cartSumRepairsWork);
+
+        setSharedValueInt("cartSum", cartSumRepairs);
+        setSharedValueInt("cartCnt", cartCntRepairs);
+
+        Toast.makeText(ItemsList.this, "Деталь добавлена в корзину", Toast.LENGTH_SHORT).show();
 
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -260,4 +384,9 @@ public class ItemsList extends AppCompatActivity {
         return sharedPreferences.getString(name, "");
     }
 
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+    }
 }

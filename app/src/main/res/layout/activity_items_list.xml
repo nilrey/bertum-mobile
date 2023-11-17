@@ -42,7 +42,7 @@
                 app:srcCompat="@drawable/vw_logo_full" />
 
             <ImageButton
-                android:id="@+id/btCart"
+                android:id="@+id/ico_cart"
                 android:layout_width="42dp"
                 android:layout_height="42dp"
                 android:layout_marginStart="24dp"
@@ -119,18 +119,70 @@
                 app:layout_constraintTop_toBottomOf="@+id/detail_article" />
         </android.support.constraint.ConstraintLayout>
 
+
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/areaInformer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="10dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:textAlignment="center">
+
+                <TextView
+                    android:id="@+id/smeta_warn_empty_order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:text="Извините по выбранной детали нет предложений"
+                    android:textColor="#374957"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/linkToBack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="30dp"
+                    android:gravity="center"
+                    android:text="Вернутся к выбору деталей"
+                    android:textColor="#FF605C"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </android.support.constraint.ConstraintLayout>
+
+
         <android.support.constraint.ConstraintLayout
             android:id="@+id/layoutButtons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="42dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
-            android:layout_marginRight="42dp">
+            android:layout_marginEnd="10dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="325dp"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -206,13 +258,96 @@
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="60dp">
 
                     <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="vertical">
+
+                        <android.support.constraint.ConstraintLayout
+                            android:id="@+id/nonorig_cl_details"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="24dp"
+                            android:layout_marginBottom="12dp"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/nonorig_detail_image"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:srcCompat="@drawable/price_nonorig" />
+
+                            <TextView
+                                android:id="@+id/nonorig_detail_title"
+                                android:layout_width="281dp"
+                                android:layout_height="26dp"
+                                android:layout_marginTop="148dp"
+                                android:text="Дверь передняя левая"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                android:visibility="visible"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/nonorig_detail_image"
+                                app:lineHeight="26dp" />
+                            <TextView
+                                android:id="@+id/nonorig_detail_article"
+                                android:layout_width="281dp"
+                                android:layout_height="26dp"
+                                android:layout_marginTop="26dp"
+                                android:text="6RU831055J"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                android:visibility="visible"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/nonorig_detail_title"
+                                app:lineHeight="26dp" />
+
+                            <TextView
+                                android:id="@+id/nonorig_detail_price"
+                                android:layout_width="102dp"
+                                android:layout_height="27dp"
+                                android:layout_marginTop="12dp"
+                                android:shadowColor="#EF5350"
+                                android:text="10530"
+                                android:textAlignment="textEnd"
+                                android:textColor="#EF5350"
+                                android:textFontWeight="950"
+                                android:textSize="20sp"
+                                app:layout_constraintStart_toStartOf="@+id/nonorig_detail_article"
+                                app:layout_constraintTop_toBottomOf="@+id/nonorig_detail_article" />
+
+                            <TextView
+                                android:id="@+id/orig_tag_currency"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="112dp"
+                                android:layout_marginTop="12dp"
+                                android:text=" р/шт."
+                                android:textAlignment="textStart"
+                                android:textColor="#EF5350"
+                                android:textFontWeight="950"
+                                android:textSize="20sp"
+                                app:layout_constraintStart_toStartOf="@+id/nonorig_detail_article"
+                                app:layout_constraintTop_toBottomOf="@+id/nonorig_detail_article" />
+
+                            <Button
+                                android:id="@+id/nonorig_cart_add"
+                                android:layout_width="99dp"
+                                android:layout_height="31dp"
+                                android:layout_marginTop="12dp"
+                                android:background="#FF605C"
+                                android:text="В КОРЗИНУ"
+                                android:textColor="#FFFFFF"
+                                android:textSize="12sp"
+                                app:layout_constraintEnd_toEndOf="@+id/nonorig_detail_article"
+                                app:layout_constraintTop_toBottomOf="@+id/nonorig_detail_article" />
+                        </android.support.constraint.ConstraintLayout>
 
                         <android.support.constraint.ConstraintLayout
                             android:id="@+id/orig_cl_details"
@@ -302,34 +437,34 @@
                         </android.support.constraint.ConstraintLayout>
 
                         <android.support.constraint.ConstraintLayout
-                            android:id="@+id/nonorig_cl_details"
+                            android:id="@+id/used_cl_details"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginTop="24dp"
                             android:layout_marginBottom="12dp"
                             android:orientation="vertical">
 
-                        <ImageView
-                                android:id="@+id/nonorig_detail_image"
+                            <ImageView
+                                android:id="@+id/used_detail_image"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                app:srcCompat="@drawable/price_nonorig" />
+                                app:srcCompat="@drawable/price_used" />
 
                             <TextView
-                                android:id="@+id/nonorig_detail_title"
+                                android:id="@+id/used_detail_title"
                                 android:layout_width="281dp"
                                 android:layout_height="26dp"
                                 android:layout_marginTop="148dp"
-                                android:text="Дверь передняя левая"
+                                android:text=""
                                 android:textSize="20sp"
                                 android:textStyle="bold"
                                 android:visibility="visible"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="@+id/nonorig_detail_image"
+                                app:layout_constraintTop_toTopOf="@+id/used_detail_image"
                                 app:lineHeight="26dp" />
                             <TextView
-                                android:id="@+id/nonorig_detail_article"
+                                android:id="@+id/used_detail_article"
                                 android:layout_width="281dp"
                                 android:layout_height="26dp"
                                 android:layout_marginTop="26dp"
@@ -339,11 +474,11 @@
                                 android:visibility="visible"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="@+id/nonorig_detail_title"
+                                app:layout_constraintTop_toTopOf="@+id/used_detail_title"
                                 app:lineHeight="26dp" />
 
                             <TextView
-                                android:id="@+id/nonorig_detail_price"
+                                android:id="@+id/used_detail_price"
                                 android:layout_width="102dp"
                                 android:layout_height="27dp"
                                 android:layout_marginTop="12dp"
@@ -353,8 +488,8 @@
                                 android:textColor="#EF5350"
                                 android:textFontWeight="950"
                                 android:textSize="20sp"
-                                app:layout_constraintStart_toStartOf="@+id/nonorig_detail_article"
-                                app:layout_constraintTop_toBottomOf="@+id/nonorig_detail_article" />
+                                app:layout_constraintStart_toStartOf="@+id/used_detail_article"
+                                app:layout_constraintTop_toBottomOf="@+id/used_detail_article" />
 
                             <TextView
                                 android:id="@+id/orig_tag_currency"
@@ -367,11 +502,11 @@
                                 android:textColor="#EF5350"
                                 android:textFontWeight="950"
                                 android:textSize="20sp"
-                                app:layout_constraintStart_toStartOf="@+id/nonorig_detail_article"
-                                app:layout_constraintTop_toBottomOf="@+id/nonorig_detail_article" />
+                                app:layout_constraintStart_toStartOf="@+id/used_detail_article"
+                                app:layout_constraintTop_toBottomOf="@+id/used_detail_article" />
 
                             <Button
-                                android:id="@+id/nonorig_cart_add"
+                                android:id="@+id/used_cart_add"
                                 android:layout_width="99dp"
                                 android:layout_height="31dp"
                                 android:layout_marginTop="12dp"
@@ -379,8 +514,9 @@
                                 android:text="В КОРЗИНУ"
                                 android:textColor="#FFFFFF"
                                 android:textSize="12sp"
-                                app:layout_constraintEnd_toEndOf="@+id/nonorig_detail_article"
-                                app:layout_constraintTop_toBottomOf="@+id/nonorig_detail_article" />
+                                app:layout_constraintEnd_toEndOf="@+id/used_detail_article"
+                                app:layout_constraintTop_toBottomOf="@+id/used_detail_article" />
+
                         </android.support.constraint.ConstraintLayout>
 
                         <android.support.constraint.ConstraintLayout
@@ -466,98 +602,10 @@
 
                         </android.support.constraint.ConstraintLayout>
 
-                        <android.support.constraint.ConstraintLayout
-                            android:id="@+id/used_cl_details"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="24dp"
-                            android:layout_marginBottom="12dp"
-                            android:orientation="vertical">
-
-                            <ImageView
-                                android:id="@+id/used_detail_image"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                app:srcCompat="@drawable/price_used" />
-
-                            <TextView
-                                android:id="@+id/used_detail_title"
-                                android:layout_width="281dp"
-                                android:layout_height="26dp"
-                                android:layout_marginTop="148dp"
-                                android:text="Дверь передняя левая"
-                                android:textSize="20sp"
-                                android:textStyle="bold"
-                                android:visibility="visible"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="@+id/used_detail_image"
-                                app:lineHeight="26dp" />
-                            <TextView
-                                android:id="@+id/used_detail_article"
-                                android:layout_width="281dp"
-                                android:layout_height="26dp"
-                                android:layout_marginTop="26dp"
-                                android:text="6RU831055J"
-                                android:textSize="20sp"
-                                android:textStyle="bold"
-                                android:visibility="visible"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="@+id/used_detail_title"
-                                app:lineHeight="26dp" />
-
-                            <TextView
-                                android:id="@+id/used_detail_price"
-                                android:layout_width="102dp"
-                                android:layout_height="27dp"
-                                android:layout_marginTop="12dp"
-                                android:shadowColor="#EF5350"
-                                android:text="10530"
-                                android:textAlignment="textEnd"
-                                android:textColor="#EF5350"
-                                android:textFontWeight="950"
-                                android:textSize="20sp"
-                                app:layout_constraintStart_toStartOf="@+id/used_detail_article"
-                                app:layout_constraintTop_toBottomOf="@+id/used_detail_article" />
-
-                            <TextView
-                                android:id="@+id/orig_tag_currency"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="112dp"
-                                android:layout_marginTop="12dp"
-                                android:text=" р/шт."
-                                android:textAlignment="textStart"
-                                android:textColor="#EF5350"
-                                android:textFontWeight="950"
-                                android:textSize="20sp"
-                                app:layout_constraintStart_toStartOf="@+id/used_detail_article"
-                                app:layout_constraintTop_toBottomOf="@+id/used_detail_article" />
-
-                            <Button
-                                android:id="@+id/used_cart_add"
-                                android:layout_width="99dp"
-                                android:layout_height="31dp"
-                                android:layout_marginTop="12dp"
-                                android:background="#FF605C"
-                                android:text="В КОРЗИНУ"
-                                android:textColor="#FFFFFF"
-                                android:textSize="12sp"
-                                app:layout_constraintEnd_toEndOf="@+id/used_detail_article"
-                                app:layout_constraintTop_toBottomOf="@+id/used_detail_article" />
-
-                        </android.support.constraint.ConstraintLayout>
-
                     </LinearLayout>
 
             </ScrollView>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-            </RelativeLayout>
 
         </android.support.constraint.ConstraintLayout>
 
@@ -594,27 +642,50 @@
 
         <TextView
             android:id="@+id/sumRepairs"
-            android:layout_width="60dp"
+            android:layout_width="80dp"
             android:layout_height="25dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="22dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
             android:text="0"
             android:textAlignment="textEnd"
-            android:textSize="20sp"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/bottomPrices"
             app:layout_constraintTop_toTopOf="@+id/bottomPrices" />
 
         <TextView
             android:id="@+id/sumRepairsWork"
-            android:layout_width="60dp"
+            android:layout_width="80dp"
             android:layout_height="25dp"
-            android:layout_marginTop="22dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="57dp"
             android:text="0"
             android:textAlignment="textEnd"
-            android:textSize="20sp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="@+id/bottomPrices"
             app:layout_constraintTop_toTopOf="@+id/bottomPrices" />
+
+        <TextView
+            android:id="@+id/linkToSmetaDetails"
+            android:layout_width="120dp"
+            android:layout_height="46dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="3dp"
+            android:textAlignment="textEnd"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@+id/bottomPrices"
+            app:layout_constraintTop_toTopOf="@+id/bottomPrices" />
+
+        <TextView
+            android:id="@+id/linkToSmetaRepairs"
+            android:layout_width="125dp"
+            android:layout_height="46dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="10dp"
+            android:textAlignment="textEnd"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="@+id/bottomPrices"
+            app:layout_constraintTop_toTopOf="@+id/bottomPrices" />
+
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

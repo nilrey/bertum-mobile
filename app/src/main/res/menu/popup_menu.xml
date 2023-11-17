@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <item
+        android:id="@+id/java"
+        android:title="Java" />
+
+    <item
+        android:id="@+id/kotlin"
+        android:title="Kotlin"
+        android:icon="@drawable/ico_menu"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/android"
+        android:title="Android" />
+
+    <item
+        android:id="@+id/react_native"
+        android:title="React Native" />
+</menu>

@@ -3,6 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:splitMotionEvents = "false"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFFFF"
@@ -12,12 +13,14 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:splitMotionEvents = "false"
         android:background="#FFFFFFFF">
 
         <LinearLayout
             android:id="@+id/top_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:splitMotionEvents = "false"
             android:gravity="center_horizontal"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -42,11 +45,13 @@
                 app:srcCompat="@drawable/vw_logo_full" />
 
             <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:id="@+id/ico_cart"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="15dp"
                 android:layout_toEndOf="@+id/imageView3"
-                app:srcCompat="@drawable/ico_dtp2" />
+                app:srcCompat="@drawable/fi_rr_shopping_cart" />
 
         </LinearLayout>
 
@@ -72,7 +77,6 @@
                     android:id="@+id/arrow_plus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="0dp"
                     android:background="@color/colorWhite"
                     app:srcCompat="@drawable/m3d_arrow_plus" />
 
@@ -80,8 +84,8 @@
                     android:id="@+id/arrow_minus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="50dp"
                     android:background="@color/colorWhite"
                     app:srcCompat="@drawable/m3d_arrow_minus" />
 
@@ -89,7 +93,8 @@
                     android:id="@+id/arrow_left"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginEnd="25dp"
                     android:background="@color/colorWhite"
                     app:srcCompat="@drawable/m3d_arrow_left" />
 
@@ -97,7 +102,6 @@
                     android:id="@+id/arrow_right"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
                     android:background="@color/colorWhite"
                     app:srcCompat="@drawable/m3d_arrow_right" />
             </LinearLayout>
@@ -106,6 +110,9 @@
                 android:id="@+id/area_3dmodel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:splitMotionEvents = "false"
+                android:layout_marginStart="0px"
+                android:layout_marginEnd="0px"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -115,15 +122,14 @@
                     android:id="@+id/blockCarRF_x033"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:visibility="visible">
+                    android:visibility="visible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent">
 
                     <ImageView
                         android:id="@+id/layoutCarRF_x033"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:scaleX="1"
-                        android:scaleY="1"
                         android:src="@drawable/m3d_vw6_sed_x033_right_front" />
 
                     <ImageView
@@ -132,10 +138,9 @@
                         android:layout_height="wrap_content"
                         android:layout_alignTop="@+id/layoutCarRF_x033"
                         android:layout_alignParentStart="true"
-                        android:layout_marginStart="106dp"
+                        android:layout_marginStart="97dp"
                         android:layout_marginTop="72dp"
-                        android:scaleX="1"
-                        android:scaleY="1"
+                        android:visibility="gone"
                         android:src="@drawable/m3d_vw6_sed_x033_front_right_front_right_door" />
 
                     <ImageView
@@ -146,8 +151,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_marginStart="160dp"
                         android:layout_marginTop="110dp"
-                        android:scaleX="1"
-                        android:scaleY="1"
+                        android:visibility="gone"
                         android:src="@drawable/m3d_vw6_sed_x033_front_right_front_right_wing" />
 
                     <ImageView
@@ -156,54 +160,10 @@
                         android:layout_height="wrap_content"
                         android:layout_alignTop="@+id/layoutCarRF_x033"
                         android:layout_alignParentStart="true"
-                        android:layout_marginStart="200dp"
-                        android:layout_marginTop="161dp"
-                        android:scaleX="1"
-                        android:scaleY="1"
-                        android:src="@drawable/m3d_vw6_sed_x033_front_right_front_bumper" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/blockCarRF_x050"
-                    android:layout_width="600dp"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone">
-
-                    <ImageView
-                        android:id="@+id/layoutCarRF_x050"
-                        android:layout_width="561dp"
-                        android:layout_height="276dp"
-                        android:scaleType="center"
-                        android:src="@drawable/m3d_vw6_sed_x050_right_front" />
-
-                    <ImageView
-                        android:id="@+id/doorRightFrontRF_x050"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/layoutCarRF_x050"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginStart="127dp"
-                        android:layout_marginTop="22dp"
-                        android:src="@drawable/m3d_vw6_sed_x050_right_front_door_r" />
-
-                    <ImageView
-                        android:id="@+id/wingRightFrontRF_x050"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/layoutCarRF_x050"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginStart="206dp"
-                        android:layout_marginTop="79dp"
-                        android:src="@drawable/m3d_vw6_sed_x050_right_front_wing_r" />
-
-                    <ImageView
-                        android:id="@+id/bumperRightFrontRF_x050"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="266dp"
-                        android:layout_marginTop="155dp"
-                        app:srcCompat="@drawable/m3d_vw6_sed_x050_right_front_bumper_f" />
+                        android:layout_marginStart="190dp"
+                        android:layout_marginTop="160dp"
+                        android:src="@drawable/m3d_vw6_sed_x033_front_right_front_bumper"
+                        android:visibility="gone" />
 
                 </RelativeLayout>
 
@@ -239,7 +199,1144 @@
 
                 </RelativeLayout>
 
+                <RelativeLayout
+                    android:id="@+id/blockCarLL_x033"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_gravity="center"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/layoutCarLL_x033"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/m3d_vw6_sed_x033_left_left" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/blockCarLB_x033"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_gravity="center"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/layoutCarBL_x033"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/m3d_vw6_sed_x033_back_left" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/blockCarBB_x033"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_gravity="center"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/layoutCarBB_x033"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/m3d_vw6_sed_x033_back_back" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/blockCarBR_x033"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_gravity="center"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/layoutCarBR_x033"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/m3d_vw6_sed_x033_back_right" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/blockCarRR_x033"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_gravity="center"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/layoutCarRR_x033"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/m3d_vw6_sed_x033_right_right" />
+
+                </RelativeLayout>
+
+
+<!--                050 -->
+
+                <RelativeLayout
+                    android:id="@+id/blockCarRF_x050"
+                    android:layout_width="600dp"
+                    android:layout_height="wrap_content"
+                    android:splitMotionEvents = "false"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/layoutCarRF_x050"
+                        android:layout_width="600dp"
+                        android:layout_height="450dp"
+                        android:layout_marginStart="0dp"
+                        android:scaleType="center"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_right" />
+
+                    <ImageView
+                        android:id="@+id/front_right_roof"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="112dp"
+                        android:layout_marginTop="98dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_right_roof"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/front_right_hood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="265dp"
+                        android:layout_marginTop="169dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_right_hood"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/front_right_windshield"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="218dp"
+                        android:layout_marginTop="110dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_right_windshield"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/doorRightFrontRF_x050"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="146dp"
+                        android:layout_marginTop="108dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_right_front_right_door"
+                        android:visibility="visible" />
+
+
+                    <ImageView
+                        android:id="@+id/bumperRightFrontRF_x050"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="289dp"
+                        android:layout_marginTop="242dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_right_front_bumper"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/doorRightRearRF_x050"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="95dp"
+                        android:layout_marginTop="155dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_right_rear_right_door"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/wingRightFrontRF_x050"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="229dp"
+                        android:layout_marginTop="167dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_right_front_right_wing"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/front_right_front_right_headlight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="322dp"
+                        android:layout_marginTop="221dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_right_front_right_headlight"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/front_right_front_right_wheel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="240dp"
+                        android:layout_marginTop="250dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_right_front_right_wheel"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/front_right_rear_right_wing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="64dp"
+                        android:layout_marginTop="121dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_right_rear_right_wing"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/front_right_rear_right_wheel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="75dp"
+                        android:layout_marginTop="205dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_right_rear_right_wheel"
+                        android:visibility="visible" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/blockCarFF_x050"
+                    android:layout_width="600dp"
+                    android:layout_height="wrap_content"
+                    android:splitMotionEvents = "false"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/layoutCarFF_x050"
+                        android:layout_width="600dp"
+                        android:layout_height="450dp"
+                        android:layout_marginStart="0dp"
+                        android:scaleType="center"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_front" />
+
+
+                    <ImageView
+                        android:id="@+id/front_front_windshield"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarFF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="168dp"
+                        android:layout_marginTop="81dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_front_windshield"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/front_front_front_bumper"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarFF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="115dp"
+                        android:layout_marginTop="239dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_front_front_bumper"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/front_front_front_left_headlight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarFF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="392dp"
+                        android:layout_marginTop="207dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_front_front_left_headlight"
+                        android:visibility="visible" />
+
+
+                    <ImageView
+                        android:id="@+id/front_front_front_right_headlight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarFF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="126dp"
+                        android:layout_marginTop="207dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_front_front_right_headlight"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/front_front_roof"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarFF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="168dp"
+                        android:layout_marginTop="71dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_front_roof"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/front_front_hood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarFF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="141dp"
+                        android:layout_marginTop="156dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_front_hood"
+                        android:visibility="visible" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/blockCarLF_x050"
+                    android:layout_width="600dp"
+                    android:layout_height="wrap_content"
+                    android:splitMotionEvents = "false"
+                    android:visibility="visible">
+
+                    <ImageView
+                        android:id="@+id/layoutCarLF_x050"
+                        android:layout_width="600dp"
+                        android:layout_height="450dp"
+                        android:scaleType="center"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_left" />
+
+                    <ImageView
+                        android:id="@+id/front_left_roof"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="179dp"
+                        android:layout_marginTop="97dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_left_roof"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/front_left_hood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="72dp"
+                        android:layout_marginTop="166dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_left_hood"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/front_left_windshield"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="178dp"
+                        android:layout_marginTop="111dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_left_windshield"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/front_left_front_bumper"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="51dp"
+                        android:layout_marginTop="240dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_left_front_bumper"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/front_left_front_left_wing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="245dp"
+                        android:layout_marginTop="166dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_left_front_left_wing"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/front_left_front_left_door"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="366dp"
+                        android:layout_marginTop="110dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_left_front_left_door"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/front_left_front_left_headlight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="170dp"
+                        android:layout_marginTop="221dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_left_front_left_headlight"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/front_left_rear_left_wing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="482dp"
+                        android:layout_marginTop="120dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_left_rear_left_wing"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/front_left_rear_left_door"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="445dp"
+                        android:layout_marginTop="154dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_left_rear_left_door"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/front_left_front_left_wheel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="293dp"
+                        android:layout_marginTop="253dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_left_front_left_wheel"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/front_left_rear_left_wheel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLF_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="478dp"
+                        android:layout_marginTop="209dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_front_left_rear_left_wheel"
+                        android:visibility="visible" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/blockCarLL_x050"
+                    android:layout_width="600dp"
+                    android:layout_height="wrap_content"
+                    android:splitMotionEvents = "false"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/layoutCarLL_x050"
+                        android:layout_width="600dp"
+                        android:layout_height="450dp"
+                        android:scaleType="center"
+                        android:src="@drawable/m3d_vw6_sed_x050_left_left" />
+
+                    <ImageView
+                        android:id="@+id/left_left_front_bumper"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLL_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="277dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_left_left_front_bumper"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/left_left_front_left_door"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLL_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="180dp"
+                        android:layout_marginTop="169dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_left_left_front_left_door"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/left_left_front_left_headlight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLL_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="35dp"
+                        android:layout_marginTop="256dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_left_left_front_left_headlight"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/left_left_front_left_wing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLL_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="58dp"
+                        android:layout_marginTop="223dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_left_left_front_left_wing"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/left_left_front_wheel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLL_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="74dp"
+                        android:layout_marginTop="286dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_left_left_front_wheel"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/left_left_hood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLL_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginTop="211dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_left_left_hood"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/left_left_rear_bumper"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLL_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="508dp"
+                        android:layout_marginTop="259dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_left_left_rear_bumper"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/left_left_rear_left_door"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLL_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="323dp"
+                        android:layout_marginTop="173dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_left_left_rear_left_door"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/left_left_rear_left_headlight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLL_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="549dp"
+                        android:layout_marginTop="229dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_left_left_rear_left_headlight"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/left_left_rear_left_wing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLL_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="399dp"
+                        android:layout_marginTop="184dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_left_left_rear_left_wing"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/left_left_roof"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLL_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="173dp"
+                        android:layout_marginTop="161dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_left_left_roof"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/left_left_rear_wheel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLL_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="432dp"
+                        android:layout_marginTop="278dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_left_left_rear_wheel"
+                        android:visibility="visible" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/blockCarLB_x050"
+                    android:layout_width="600dp"
+                    android:layout_height="wrap_content"
+                    android:splitMotionEvents = "false"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/layoutCarLB_x050"
+                        android:layout_width="600dp"
+                        android:layout_height="450dp"
+                        android:scaleType="center"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_left" />
+
+                    <ImageView
+                        android:id="@+id/back_left_front_left_wing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="36dp"
+                        android:layout_marginTop="177dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_left_front_left_wing"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_left_front_wheel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="38dp"
+                        android:layout_marginTop="223dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_left_front_wheel"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_left_rear_body_glass"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="252dp"
+                        android:layout_marginTop="116dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_left_rear_body_glass"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_left_rear_bumper"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="252dp"
+                        android:layout_marginTop="234dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_left_rear_bumper"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_left_rear_left_door"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="130dp"
+                        android:layout_marginTop="115dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_left_rear_left_door"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_left_rear_left_headlight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="306dp"
+                        android:layout_marginTop="201dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_left_rear_left_headlight"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_left_rear_left_wing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="178dp"
+                        android:layout_marginTop="122dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_left_rear_left_wing"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_left_rear_wheel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="201dp"
+                        android:layout_marginTop="266dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_left_rear_wheel"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_left_trunk_lid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="309dp"
+                        android:layout_marginTop="163dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_left_trunk_lid"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_left_roof"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="115dp"
+                        android:layout_marginTop="105dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_left_roof"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_left_front_left_door"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarLB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="74dp"
+                        android:layout_marginTop="117dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_left_front_left_door"
+                        android:visibility="visible" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/blockCarBB_x050"
+                    android:layout_width="600dp"
+                    android:layout_height="wrap_content"
+                    android:splitMotionEvents = "false"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/layoutCarBB_x050"
+                        android:layout_width="600dp"
+                        android:layout_height="450dp"
+                        android:scaleType="center"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_back" />
+
+                    <ImageView
+                        android:id="@+id/back_back_rear_body_glass"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarBB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="161dp"
+                        android:layout_marginTop="93dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_back_rear_body_glass"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_back_rear_bumper"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarBB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="113dp"
+                        android:layout_marginTop="239dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_back_rear_bumper"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_back_rear_left_headlight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarBB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="116dp"
+                        android:layout_marginTop="184dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_back_rear_left_headlight"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_back_rear_left_wing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarBB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="122dp"
+                        android:layout_marginTop="125dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_back_rear_left_wing"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_back_rear_right_headlight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarBB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="421dp"
+                        android:layout_marginTop="184dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_back_rear_right_headlight"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_back_rear_right_wing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarBB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="415dp"
+                        android:layout_marginTop="121dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_back_rear_right_wing"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_back_roof"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarBB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="168dp"
+                        android:layout_marginTop="83dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_back_roof"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_back_trunk_lid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarBB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="149dp"
+                        android:layout_marginTop="148dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_back_trunk_lid"
+                        android:visibility="visible" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/blockCarRB_x050"
+                    android:layout_width="600dp"
+                    android:layout_height="wrap_content"
+                    android:splitMotionEvents = "false"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/layoutCarRB_x050"
+                        android:layout_width="600dp"
+                        android:layout_height="450dp"
+                        android:scaleType="center"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_right" />
+
+                    <ImageView
+                        android:id="@+id/back_right_front_right_door"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="431dp"
+                        android:layout_marginTop="118dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_right_front_right_door"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_right_front_right_wing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="518dp"
+                        android:layout_marginTop="178dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_right_front_right_wing"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_right_front_wheel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="516dp"
+                        android:layout_marginTop="222dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_right_front_wheel"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_right_rear_body_glass"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="125dp"
+                        android:layout_marginTop="116dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_right_rear_body_glass"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_right_rear_bumper"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="43dp"
+                        android:layout_marginTop="233dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_right_rear_bumper"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_right_rear_right_door"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="369dp"
+                        android:layout_marginTop="115dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_right_rear_right_door"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_right_trunk_lid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="52dp"
+                        android:layout_marginTop="162dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_right_trunk_lid"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_right_rear_right_wing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="216dp"
+                        android:layout_marginTop="122dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_right_rear_right_wing"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_right_rear_right_headlight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="202dp"
+                        android:layout_marginTop="201dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_right_rear_right_headlight"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_right_rear_wheel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="316dp"
+                        android:layout_marginTop="268dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_right_rear_wheel"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/back_right_roof"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRB_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="208dp"
+                        android:layout_marginTop="104dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_back_right_roof"
+                        android:visibility="visible" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/blockCarRR_x050"
+                    android:layout_width="600dp"
+                    android:layout_height="wrap_content"
+                    android:splitMotionEvents = "false"
+                    android:visibility="gone">
+
+
+                    <ImageView
+                        android:id="@+id/layoutCarRR_x050"
+                        android:layout_width="600dp"
+                        android:layout_height="450dp"
+                        android:scaleType="center"
+                        android:src="@drawable/m3d_vw6_sed_x050_right_right" />
+
+                    <ImageView
+                        android:id="@+id/right_right_front_bumper"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRR_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="533dp"
+                        android:layout_marginTop="256dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_right_right_front_bumper"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/right_right_front_right_door"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRR_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="287dp"
+                        android:layout_marginTop="153dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_right_right_front_right_door"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/right_right_front_right_headlight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRR_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="545dp"
+                        android:layout_marginTop="237dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_right_right_front_right_headlight"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/right_right_front_right_wing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRR_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="438dp"
+                        android:layout_marginTop="205dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_right_right_front_right_wing"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/right_right_front_wheel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRR_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="460dp"
+                        android:layout_marginTop="269dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_right_right_front_wheel"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/right_right_hood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRR_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="436dp"
+                        android:layout_marginTop="193dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_right_right_hood"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/right_right_rear_bumper"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRR_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="14dp"
+                        android:layout_marginTop="249dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_right_right_rear_bumper"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/right_right_rear_right_door"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRR_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="148dp"
+                        android:layout_marginTop="155dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_right_right_rear_right_door"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/right_right_rear_right_headlight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRR_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginTop="214dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_right_right_rear_right_headlight"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/right_right_rear_right_wing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRR_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="23dp"
+                        android:layout_marginTop="166dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_right_right_rear_right_wing"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/right_right_rear_wheel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRR_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="95dp"
+                        android:layout_marginTop="276dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_right_right_rear_wheel"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/right_right_roof"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/layoutCarRR_x050"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="145dp"
+                        android:layout_marginTop="141dp"
+                        android:src="@drawable/m3d_vw6_sed_x050_right_right_roof"
+                        android:visibility="visible" />
+
+
+                </RelativeLayout>
+
+
+
             </android.support.constraint.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/informer2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/area_3dmodel" />
 
         </android.support.constraint.ConstraintLayout>
 
@@ -283,25 +1380,25 @@
 
             <TextView
                 android:id="@+id/sumRepairs"
-                android:layout_width="60dp"
+                android:layout_width="80dp"
                 android:layout_height="25dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="22dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
                 android:text="0"
                 android:textAlignment="textEnd"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="@+id/bottomPrices"
                 app:layout_constraintTop_toTopOf="@+id/bottomPrices" />
 
             <TextView
                 android:id="@+id/sumRepairsWork"
-                android:layout_width="60dp"
+                android:layout_width="80dp"
                 android:layout_height="25dp"
-                android:layout_marginTop="22dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="57dp"
                 android:text="0"
                 android:textAlignment="textEnd"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="@+id/bottomPrices"
                 app:layout_constraintTop_toTopOf="@+id/bottomPrices" />
 
@@ -312,6 +1409,29 @@
                 android:text=""
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/linkToSmetaDetails"
+                android:layout_width="120dp"
+                android:layout_height="46dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="3dp"
+                android:textAlignment="textEnd"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@+id/bottomPrices"
+                app:layout_constraintTop_toTopOf="@+id/bottomPrices" />
+
+            <TextView
+                android:id="@+id/linkToSmetaRepairs"
+                android:layout_width="125dp"
+                android:layout_height="46dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginEnd="10dp"
+                android:textAlignment="textEnd"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="@+id/bottomPrices"
+                app:layout_constraintTop_toTopOf="@+id/bottomPrices" />
+
         </android.support.constraint.ConstraintLayout>
 
     </android.support.constraint.ConstraintLayout>

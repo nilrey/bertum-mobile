@@ -22,19 +22,18 @@ public class MappingDetails {
     }
 
     public static  String getSideViewImage(String engSideView) {
-        String rus = "m3d_vw6_sed_x033_right_front";
         // заменить картинку на нужный ракурс
-        if(engSideView.equals("front_right")){ rus = "m3d_vw6_sed_x033_front_right";}
-        else if (engSideView.equals("front_front")) { rus = "m3d_vw6_sed_x033_front_front";}
-        else if (engSideView.equals("front_left")) { rus = "m3d_vw6_sed_x033_front_left";}
-        else if (engSideView.equals("left_left")) { rus = "m3d_vw6_sed_x033_left_left";}
-        else if (engSideView.equals("right_right")) { rus = "m3d_vw6_sed_x033_right_right";}
-        else if (engSideView.equals("back_right")) { rus = "m3d_vw6_sed_x033_back_right";}
-        else if (engSideView.equals("back_back")) { rus = "m3d_vw6_sed_x033_back_back";}
-        else if (engSideView.equals("back_left")) { rus = "m3d_vw6_sed_x033_back_left";}
+        String rus = "m3d_vw6_sed_x033_"+engSideView;
+//        if(engSideView.equals("front_right")){ rus = "m3d_vw6_sed_x033_front_right";}
+//        else if (engSideView.equals("front_front")) { rus = "m3d_vw6_sed_x033_front_front";}
+//        else if (engSideView.equals("front_left")) { rus = "m3d_vw6_sed_x033_front_left";}
+//        else if (engSideView.equals("left_left")) { rus = "m3d_vw6_sed_x033_left_left";}
+//        else if (engSideView.equals("right_right")) { rus = "m3d_vw6_sed_x033_right_right";}
+//        else if (engSideView.equals("back_right")) { rus = "m3d_vw6_sed_x033_back_right";}
+//        else if (engSideView.equals("back_back")) { rus = "m3d_vw6_sed_x033_back_back";}
+//        else if (engSideView.equals("back_left")) { rus = "m3d_vw6_sed_x033_back_left";}
         return rus;
     }
-/*
     public static Boolean checkSideViewDetails( String sideView, String detailCode){
         if(sideView.equals("front_right")){
             if(detailCode.equals("front_bumper")) { return true;}
@@ -85,6 +84,6 @@ public class MappingDetails {
             if(detailCode.equals("windshield")) { return true;}
             if(detailCode.equals("roof")) { return true;}
         }
+        return false;
     }
-    */
 }

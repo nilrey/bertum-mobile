@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences.Editor ed;
     private ImageView clIcoDtp, m3dCarFrontRight;
     private ImageButton startBlockDisbld, startBlockEnbld, bottomPrices;
-    private TextView cntPhoto, cntTotalItems, sumRepairs, sumRepairsWork, selectFileMedia;
+    private TextView cntPhoto, cntTotalItems, sumRepairs, sumRepairsWork, selectFileMedia, linkToSmetaRepairs , linkToSmetaDetails;
     private Button selectCamera;
     private String msgDetailSelected;
 
@@ -43,14 +43,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 //        startActivity(new Intent(MainActivity.this, ImageDragActivity.class));
 //        startActivity(new Intent(MainActivity.this, TestVisualActivity.class));
-//        startActivity(new Intent(MainActivity.this, DetailsListActivity.class));
+//        startActivity(new Intent(MainActivity.this, MenuActivity.class));
         Window w = getWindow();
         w.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // make app fullscreen
+        setSharedValueInt("tokenMainPage" , 123456789);
         // Bottom block Prices - priceRepair, cntDetailsSelected, priceRepairWork
         bottomPrices = findViewById(R.id.bottomPrices);
         sumRepairs = findViewById(R.id.sumRepairs);
         sumRepairsWork = findViewById(R.id.sumRepairsWork);
         cntTotalItems = findViewById(R.id.cntTotalItems);
+        linkToSmetaDetails = findViewById(R.id.linkToSmetaDetails);
+        linkToSmetaRepairs = findViewById(R.id.linkToSmetaRepairs);
         // Top block actions - Media Gallery, Camera
         selectCamera = findViewById(R.id.selectCamera);
         clIcoDtp = findViewById(R.id.ico_dtp2);
@@ -77,13 +80,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v){
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(intent, CAMERA_REQ_CODE);
-            }
-        });
-
-        bottomPrices.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                startActivity(new Intent(MainActivity.this, DetailsListActivity.class));
             }
         });
         
@@ -122,6 +118,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, AiWorking.class));
+            }
+        });
+        linkToSmetaDetails.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                setSharedValueInt("smetaTab", 0);
+                startActivity(new Intent(MainActivity.this, SmetaActivity.class));
+            }
+        });
+        linkToSmetaRepairs.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                setSharedValueInt("smetaTab", 1);
+                startActivity(new Intent(MainActivity.this, SmetaActivity.class));
             }
         });
     }

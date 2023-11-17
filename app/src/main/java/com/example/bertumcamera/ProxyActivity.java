@@ -58,7 +58,6 @@ import javax.net.ssl.X509TrustManager;
 public class ProxyActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor ed;
-    private EditText nameEdt, jobEdt;
     private Button postDataBtn;
     private TextView responseTV;
     private ProgressBar loadingPB;
@@ -69,8 +68,6 @@ public class ProxyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_proxy);
 
         // initializing our views
-        nameEdt = findViewById(R.id.idEdtName);
-        jobEdt = findViewById(R.id.idEdtJob);
         postDataBtn = findViewById(R.id.idBtnPost);
         responseTV = findViewById(R.id.idTVResponse);
         loadingPB = findViewById(R.id.idLoadingPB);
@@ -91,11 +88,9 @@ public class ProxyActivity extends AppCompatActivity {
 //        });
     }
 
-    private void postDataUsingVolley(final String name, final String job) {
+    private void postDataUsingVolley() {
         // url to post our data
-//        String url = "https://reqres.in/api/users";
-//        String url = "https://cncepla.ru/api/get_detail_prices.php";
-        String url = "http://h304809427.nichost.ru/api/get_detail_prices.php";
+        String url = Const.URL_DETAILS_PRICES;
 
         loadingPB.setVisibility(View.VISIBLE);
 
@@ -111,9 +106,9 @@ public class ProxyActivity extends AppCompatActivity {
                 // inside on response method we are
                 // hiding our progress bar
                 // and setting data to edit text as empty
-                loadingPB.setVisibility(View.GONE);
-                nameEdt.setText("");
-                jobEdt.setText("");
+//                loadingPB.setVisibility(View.GONE);
+//                nameEdt.setText("");
+//                jobEdt.setText("");
 
                 // on below line we are displaying a success toast message.
 //                Toast.makeText(ProxyActivity.this, "Data added to API", Toast.LENGTH_SHORT).show();
@@ -153,14 +148,17 @@ public class ProxyActivity extends AppCompatActivity {
                 // and value pair to our parameters.
 //                params.put("name", name);
 //                params.put("job", job);
-                params.put("article", getSharedValueStr("detail_article"));
+                String test = getSharedValueStr("detail_article");
+                params.put("article", test);
 
                 // at last we are
                 // returning our params.
                 return params;
             }
         };
-        DefaultRetryPolicy retryPolicy = new DefaultRetryPolicy(0, 3, DefaultRetryPolicy.DEFAULT_MAX_RETRIES);
+//        DefaultRetryPolicy retryPolicy = new DefaultRetryPolicy(0, 3, DefaultRetryPolicy.DEFAULT_MAX_RETRIES);
+
+        DefaultRetryPolicy retryPolicy = new DefaultRetryPolicy(10000, 3, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         request.setRetryPolicy(retryPolicy);
         // below line is to make
         // a json object request.
@@ -187,11 +185,11 @@ public class ProxyActivity extends AppCompatActivity {
     }
 
     private int getSharedValueInt(String name){
-        sharedPreferences = getSharedPreferences(Const.SHARE_STORE,MODE_APPEND);
+        sharedPreferences = getSharedPreferences(Const.SHARE_STORE,MODE_PRIVATE);
         return sharedPreferences.getInt(name, 0);
     }
     private String getSharedValueStr(String name){
-        sharedPreferences = getSharedPreferences(Const.SHARE_STORE,MODE_APPEND);
+        sharedPreferences = getSharedPreferences(Const.SHARE_STORE,MODE_PRIVATE);
         return sharedPreferences.getString(name, "");
     }
     /**
@@ -233,7 +231,10 @@ public class ProxyActivity extends AppCompatActivity {
 
         handleSSLHandshake();
         // calling a method to post the data and passing our name and job.
-        postDataUsingVolley(nameEdt.getText().toString(), jobEdt.getText().toString());
+
+        int cntTry = getSharedValueInt("countTry" );
+        setSharedValueInt("countTry" , cntTry + 1);
+        postDataUsingVolley();
         startActivity(new Intent(ProxyActivity.this, ItemsList.class));
     }
 }
