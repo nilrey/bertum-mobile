@@ -79,7 +79,7 @@ public class RegActivity extends AppCompatActivity {
 
         setStepsOnclick();
 
-        link_step_6.setOnClickListener(new View.OnClickListener() {
+        link_step_3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setSharedValueInt("isFirstRun" , 1);
@@ -129,24 +129,24 @@ public class RegActivity extends AppCompatActivity {
                 setStep(regstep3);
             }
         });
-        link_step_3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setStep(regstep4);
-            }
-        });
-        link_step_4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setStep(regstep5);
-            }
-        });
-        link_step_5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setStep(regstep6);
-            }
-        });
+//        link_step_3.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                setStep(regstep4);
+//            }
+//        });
+//        link_step_4.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                setStep(regstep5);
+//            }
+//        });
+//        link_step_5.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                setStep(regstep6);
+//            }
+//        });
 
     }
 
@@ -158,9 +158,9 @@ public class RegActivity extends AppCompatActivity {
         regstep1.setVisibility(View.GONE);
         regstep2.setVisibility(View.GONE);
         regstep3.setVisibility(View.GONE);
-        regstep4.setVisibility(View.GONE);
-        regstep5.setVisibility(View.GONE);
-        regstep6.setVisibility(View.GONE);
+//        regstep4.setVisibility(View.GONE);
+//        regstep5.setVisibility(View.GONE);
+//        regstep6.setVisibility(View.GONE);
     }
 
     @Override
@@ -207,10 +207,10 @@ public class RegActivity extends AppCompatActivity {
             if(cntTouchImpulse < 2 ) {
                 if( ( x - event.getX() ) > 0) { // next slide
                     ++cntSlide;
-                    if(cntSlide > cntSlideLimit) cntSlide = 1;
+                    if(cntSlide > cntSlideLimit) cntSlide = cntSlideLimit;
                 }else{ // prev slide
                     --cntSlide;
-                    if(cntSlide < 1) cntSlide = cntSlideLimit;
+                    if(cntSlide < 1) cntSlide = 1;
                 }
                 int detailImageId = getResources().getIdentifier("slide_"+String.valueOf(cntSlide), "drawable", getPackageName());
                 if(detailImageId > 0 ){
