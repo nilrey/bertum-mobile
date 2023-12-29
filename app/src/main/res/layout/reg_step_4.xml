@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/reg_step_4_sign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="212dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/reg_step_4_info" />
+
+    <ImageView
+        android:id="@+id/reg_step_4_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reg_step_4_sign"
+        app:srcCompat="@drawable/reg_step_4_info_numb" />
+
+    <EditText
+        android:id="@+id/input_phone"
+        android:layout_width="324dp"
+        android:layout_height="51dp"
+        android:ems="10"
+        android:inputType="phone"
+        android:maxLength="12"
+        app:layout_constraintBottom_toTopOf="@+id/check_ageee"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reg_step_4_info" />
+
+
+    <CheckBox
+        android:id="@+id/check_agee"
+        android:layout_width="320dp"
+        android:layout_height="32dp"
+        android:text="Я ознакомился и согласен с условиями"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_phone" />
+
+    <TextView
+        android:id="@+id/link_to__agee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/link_to_offer"
+        android:textColor="#111111"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.282"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/check_agee" />
+
+    <ImageView
+        android:id="@+id/link_step_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reg_step_4_sign"
+        app:srcCompat="@drawable/reg_step_4_btn_sms" />
+
+
+</android.support.constraint.ConstraintLayout>

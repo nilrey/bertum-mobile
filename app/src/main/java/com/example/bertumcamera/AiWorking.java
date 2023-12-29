@@ -2,9 +2,14 @@ package com.example.bertumcamera;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -28,12 +33,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class AiWorking extends AppCompatActivity {
+public class AiWorking extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor ed;
+    private DrawerLayout drawerLayout;
     private ProgressBar loadingPB;
     private TextView responseTV;
-    private ImageView plateAiWorking;
+    private ImageView plateAiWorking, ico_menu;
     String photoBase64;
     SharedPreferences sh;
     private int cntAttemptVolley = 0;
@@ -52,6 +58,17 @@ public class AiWorking extends AppCompatActivity {
         plateAiWorking = findViewById(R.id.plateAiWorking);
         loadingPB = findViewById(R.id.idPBLoading);
         responseTV = findViewById(R.id.idTVResponse);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        ico_menu = findViewById(R.id.ico_menu);
+
+        ico_menu.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openCloseNavigationDrawer(v);
+                    }
+                }
+        );
 
         photoBase64 = sh.getString("photoBase64", "no val");
         responseTV.setText(photoBase64);
@@ -173,4 +190,18 @@ public class AiWorking extends AppCompatActivity {
             Toast.makeText(AiWorking.this, msgAiService, Toast.LENGTH_SHORT).show();
         }
     }
+
+    public void openCloseNavigationDrawer(View view) {
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }else{
+            drawerLayout.openDrawer(GravityCompat.START);
+        }
+    }
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        DataStore.setMenuItems(item, AiWorking.this);
+        return true;
+    }
+
 }

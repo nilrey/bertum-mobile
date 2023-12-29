@@ -5,4 +5,7 @@
     <color name="colorAccent">#D81B60</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="white">#FFFFFF</color>
+    <color name="menu_bg_grey">#F2F6FA</color>
+    <color name="app_text">#2E363E</color>
+    <color name="app_logo_header">#6A727A</color>
 </resources>

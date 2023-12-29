@@ -6,17 +6,24 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -34,15 +41,18 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class DetailsListActivity extends AppCompatActivity {
+public class DetailsListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor ed;
+    private DrawerLayout drawerLayout;
+    private ImageView ico_menu;
     private LinearLayout ll_parent;
     private RelativeLayout areaSideView;
     private TextView responseTV, cntDetailsFound, tvSideview, cntDetailsAvailable,
@@ -53,12 +63,16 @@ public class DetailsListActivity extends AppCompatActivity {
     private String msgDetailSelected;
     private float x, y, dx, dy;
     private int cntAttemptVolley = 0, bias=0, biasGen = 8;
-    private int cnt, low, high, cartSumRepairs, cartSumRepairsWork, cartCntRepairs, cntAllVariants = 0;
+    private int cnt, low, high, cartSumRepairs, cartSumRepairsWork, cartCntRepairs, cntAllVariants = 0, isActivateSideViewDetails = 0;
+    private int unDuplicateWheel = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_list);
+        Window w = getWindow();
+        w.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); // make app fullscreen
+
         // 3D Model
         calculateBias();
         setItemsListBackPage();
@@ -70,10 +84,19 @@ public class DetailsListActivity extends AppCompatActivity {
         sumRepairsWork = findViewById(R.id.sumRepairsWork);
         linkToSmetaDetails = findViewById(R.id.linkToSmetaDetails);
         linkToSmetaRepairs = findViewById(R.id.linkToSmetaRepairs);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        ico_menu = findViewById(R.id.ico_menu);
+        ico_menu.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openCloseNavigationDrawer(v);
+                    }
+                }
+        );
         // 3D model functions
         areaSideView = findViewById(R.id.areaSideView);
         carSideView = findViewById(R.id.carSideView);
-//        doorRightFrontRF = findViewById(R.id.doorRightFrontRF);
         arrowPlus = findViewById(R.id.arrow_plus);
         arrowMinus = findViewById(R.id.arrow_minus);
         msgDetailSelected = getResources().getString(R.string.msg_detail_selected);
@@ -82,14 +105,6 @@ public class DetailsListActivity extends AppCompatActivity {
         cntDetailsAvailable = findViewById(R.id.details_available);
         ll_parent = findViewById(R.id.ll_details);
 
-//        arrowMinus.setOnClickListener(new View.OnClickListener(){
-//            @Override
-//            public void onClick(View v){
-//                if( carSideView.getScaleX() > 1 ) {
-//                    startActivity(new Intent(DetailsListActivity.this, DetailsListActivity.class));
-//                }
-//            }
-//        });
         linkToSmetaDetails.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -354,41 +369,6 @@ public class DetailsListActivity extends AppCompatActivity {
         startActivity(new Intent(DetailsListActivity.this, MainActivity.class));
     }
 
-    private void postDataUsingVolley(final String photoId, final String photoBase64) {
-        String url = Const.URL_AIAPI;
-        RequestQueue queue = Volley.newRequestQueue(DetailsListActivity.this);
-        StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-//                responseTV.setText("Response from the API is :" + response); // comment for a while
-                setSharedValueStr("jsonAiApi", response);
-//                startActivity(new Intent(DetailsListActivity.this, ItemsList.class));
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // handling error on below line.
-                Toast.makeText(DetailsListActivity.this, "Fail to get response..", Toast.LENGTH_SHORT).show();
-            }
-        }) {
-            @Nullable
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("rmPoints", "1");
-                params.put("photoBase64", photoBase64);
-                return params;
-            }
-        };
-        DefaultRetryPolicy retryPolicy = new DefaultRetryPolicy(0, -1, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        request.setRetryPolicy(retryPolicy);
-
-        Toast.makeText(DetailsListActivity.this, "Фотография успешно отправлена", Toast.LENGTH_SHORT).show();
-
-        // post the data.
-        queue.add(request);
-    }
-
     private void setSharedValueInt(String name, int value){
         ed = getSharedPreferencesEditor();
         ed.putInt(name, value);
@@ -463,6 +443,11 @@ public class DetailsListActivity extends AppCompatActivity {
                 }
             }
             if(isError < 1) {
+                if(isActivateSideViewDetails == 0) {
+                    activateSideViewDetails(sideView, "", "", "", "");
+                    isActivateSideViewDetails = 1;
+                }
+
                 JSONArray mask = objects.getJSONArray("mask");
                 int cntDA = 0;
                 for (int i = 0; i < mask.length(); i++) {
@@ -475,18 +460,25 @@ public class DetailsListActivity extends AppCompatActivity {
                     minPriceArticle = record.getString("minPriceArticle");
                     if (Integer.parseInt(minPriceFinal) > 0) {
                         cntDA++;
-                        generateDetailBlockHard(part_name, article, part_name_rus, minPriceFinal, minPriceType, minPriceArticle, cntDA);
+                        generateDetailBlockHard(part_name, article, part_name_rus, minPriceFinal,
+                                minPriceType, minPriceArticle, cntDA);
 //                        if(getSharedValueInt("tokenMainPage") > 0) {
 //                        }
                     }
-                    activateSideViewDetails(sideView, getCodeFromName(part_name), part_name, article, part_name_rus);
+
+//                    if(isActivateSideViewDetails == 0){
+////                        activateSideViewDetails(sideView, getCodeFromName(part_name), part_name, article, part_name_rus);
+////                        activateSideViewDetails();
+//                        if(i == mask.length() -1 ) { isActivateSideViewDetails = 1; }
+//                    }
                 }
 //                setSharedValueInt("tokenMainPage", 0);
+                unDuplicateWheel = 0;
 
-                tvSideview.setText(MappingDetails.getSideViewTitleRus(sideView));
+                tvSideview.setText(getSideViewTitleRus(sideView));
 //            Log.d("BERTUM----sideView", sideView );
                 Context context = carSideView.getContext();
-                int id = context.getResources().getIdentifier(MappingDetails.getSideViewImage(sideView),
+                int id = context.getResources().getIdentifier(getSideViewImage(sideView),
                         "drawable", context.getPackageName());
                 carSideView.setImageResource(id);
 
@@ -504,29 +496,6 @@ public class DetailsListActivity extends AppCompatActivity {
 //        activateSideView("front_right");
 
     }
-/*
-
-    private void activateSideView(String sideView){
-        String[] detailsList = getSideViewDetails(sideView);
-        for (Object detailName : detailsList)
-        {
-            initDetail(detailName.toString());
-        }
-    }
-
-    private String[] getSideViewDetails(String sideView){
-        if(sideView.equals("front_right")){
-            return new String[]{"front_bumper", "rear_bumper", "front_right_door",
-                    "rear_right_door", "hood", "wheel", "front_right_wing", "rear_right_wing",
-                    "trunk_lid", "windshield", "roof" };
-        }else if (sideView.equals("front_left")) {
-            return new String[]{"front_bumper", "rear_bumper", "front_left_door",
-                    "rear_left_door", "hood", "wheel", "front_left_wing", "rear_left_wing",
-                    "trunk_lid", "windshield", "roof" };
-        }
-        return new String[]{};
-    }
-*/
 
     @Override
     public void onResume() {
@@ -546,123 +515,115 @@ public class DetailsListActivity extends AppCompatActivity {
          * Получить заранее определенные соответствующие координаты каждой детали
          * Присвоить к parent
          * */
-        String fName = "m3d_vw6_sed_x033_" + sideView + "_" + detailCode;
+        String prefixImg = Const.IMG_PREFIX_033 + sideView+"_";
+        String fName = prefixImg + detailCode;
         if(sideView.equals(Const.VIEW_RIGHT_FRONT)){
-            if(detailCode.equals("front_bumper")){ initDetail(fName, 190,  160, part_name, article, part_name_rus);}
-            else if(detailCode.equals("front_right_door")){ initDetail(fName, 97,  customBiasValue(68, -2), part_name, article, part_name_rus);}
-            else if(detailCode.equals("front_right_wing")){ initDetail(fName, 150,  110, part_name, article, part_name_rus);}
-            else if(detailCode.equals("hood")){ initDetail(fName, 174,  customBiasValue(110, 2), part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_right_wing")){ initDetail(fName, 42, 79, part_name, article, part_name_rus);}
-            else if(detailCode.equals("windshield")){ initDetail(fName, 144,  72, part_name, article, part_name_rus);}
-            else if(detailCode.equals("front_right_headlight")){ initDetail(fName, 212,  147, part_name, article, part_name_rus);}
-            else if(detailCode.equals("roof")){ initDetail(fName, 75,  65, part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_right_door")){ initDetail(fName, 64, 103, part_name, article, part_name_rus);}
-            else if(detailCode.equals("wheel")){
-                initDetail("front_wheel", 160,  163, part_name, article, part_name_rus);
-                initDetail("rear_wheel", 51,  138, part_name, article, part_name_rus);
-            }
+            initDetail( prefixImg+"roof", 75,  65, "roof", "6RU817111B", "Крыша" );
+            initDetail( prefixImg+"hood", 174,  customBiasValue(110,  2), "hood", "6RU823031C", "Капот" );
+            initDetail( prefixImg+"front_bumper", 190,  160, "front_bumper", "6RU807221A", "Бампер передний" );
+            initDetail( prefixImg+"windshield", 144,  72, "windshield", "6RU845011J", "Лобовое стекло" );
+            initDetail( prefixImg+"central_bumper_grille", 273, 146, "central_bumper_grille", "6RU853651D", "Решетка бампера центральная" );
+            initDetail( prefixImg+"front_right_door", 97,  customBiasValue(68, -2 ), "front_right_door", "6RU831056J", "Дверь передняя правая" );
+            initDetail( prefixImg+"front_right_wing", 150, 110, "front_right_wing", "6RU821106C", "Крыло переднее правое" );
+            initDetail( prefixImg+"front_right_headlight", 212,  147, "front_right_headlight", "6RU941016", "Фара передняя правая" );
+            initDetail( prefixImg+"rear_right_wing", 42, 79, "rear_right_wing", "6RU809605A", "Крыло заднее правое" );
+            initDetail( prefixImg+"rear_right_door", 64, 103, "rear_right_door", "6RU833056D", "Дверь задняя правая" );
+            initDetail( prefixImg+"front_wheel", 160,  163, "front_wheel", "6Q0601027AC", "Колесо" );
+            initDetail( prefixImg+"rear_wheel", 51,  138, "rear_wheel", "6Q0601027AC", "Колесо" );
         }else if(sideView.equals(Const.VIEW_FRONT_FRONT)){
-            if(detailCode.equals("front_bumper")){ initDetail(fName, 76, 160, part_name, article, part_name_rus);}
-            else if(detailCode.equals("hood")){ initDetail(fName, 95,  100, part_name, article, part_name_rus);}
-            else if(detailCode.equals("roof")){ initDetail(fName, 110,  48, part_name, article, part_name_rus);}
-            else if(detailCode.equals("windshield")){ initDetail(fName, 111,  55, part_name, article, part_name_rus);}
-            else if(detailCode.equals("front_left_headlight")){ initDetail(fName, 260,  139, part_name, article, part_name_rus);}
-            else if(detailCode.equals("front_right_headlight")){ initDetail(fName, 83,  139, part_name, article, part_name_rus);}
+            initDetail( prefixImg+"hood", 95,  100, "hood", "6RU823031C", "Капот" );
+            initDetail( prefixImg+"roof", 111,  48, "roof", "6RU817111B", "Крыша" );
+            initDetail( prefixImg+"front_bumper", 76, 160, "front_bumper", "6RU807221A", "Бампер передний" );
+            initDetail( prefixImg+"windshield", 111,  55, "windshield", "6RU845011J", "Лобовое стекло" );
+            initDetail( prefixImg+"central_bumper_grille", 118, 159, "central_bumper_grille", "6RU853651D", "Решетка бампера центральная" );
+            initDetail( prefixImg+"front_left_headlight", 260,  139, "front_left_headlight", "6RU941015", "Фара передняя левая" );
+            initDetail( prefixImg+"front_right_headlight", 83,  139, "front_right_headlight", "6RU941016", "Фара передняя правая" );
         }else if(sideView.equals(Const.VIEW_LEFT_FRONT)){
-            if(detailCode.equals("front_bumper")){ initDetail(fName, 34, 160, part_name, article, part_name_rus);}
-            else if(detailCode.equals("front_left_door")){ initDetail(fName, 240,  customBiasValue(74, -3), part_name, article, part_name_rus);}
-            else if(detailCode.equals("front_left_wing")){ initDetail(fName, 162,  customBiasValue(112, -2), part_name, article, part_name_rus);}
-            else if(detailCode.equals("hood")){ initDetail(fName, 49,  112, part_name, article, part_name_rus);}
-            else if(detailCode.equals("roof")){ initDetail(fName, 119,  customBiasValue(65, 2), part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_left_door")){ initDetail(fName, 295,  103, part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_left_wing")){ initDetail(fName, 318, customBiasValue(81, -2), part_name, article, part_name_rus);}
-            else if(detailCode.equals("front_left_headlight")){ initDetail(fName, 114,  148, part_name, article, part_name_rus);}
-            else if(detailCode.equals("windshield")){ initDetail(fName, 117,  75, part_name, article, part_name_rus);}
-            else if(detailCode.equals("wheel")){
-                initDetail("front_wheel", 193,  168, part_name, article, part_name_rus);
-                initDetail("rear_wheel", 138,  315, part_name, article, part_name_rus);
-            }
+            initDetail( prefixImg+"hood", 49,  112, "hood", "6RU823031C", "Капот");
+            initDetail( prefixImg+"roof", 119,  customBiasValue(65,2),"roof", "6RU817111B", "Крыша");
+            initDetail( prefixImg+"windshield", 117,  75, "windshield", "6RU845011J", "Лобовое стекло");
+            initDetail( prefixImg+"front_bumper", 34, 160, "front_bumper", "6RU807221A", "Бампер передний");
+            initDetail( prefixImg+"central_bumper_grille", 43, 147, "central_bumper_grille", "6RU853651D", "Решетка бампера центральная");
+            initDetail( prefixImg+"front_left_door", 240,  customBiasValue(74,-3),"front_left_door", "6RU831055J", "Дверь передняя левая");
+            initDetail( prefixImg+"front_left_wing", 162,  customBiasValue(112,-2),"front_left_wing", "6RU821105C", "Крыло переднее левое");
+            initDetail( prefixImg+"front_left_headlight", 114,  148, "front_left_headlight", "6RU941015", "Фара передняя левая");
+            initDetail( prefixImg+"rear_left_wing", 318, customBiasValue(81,-2),"rear_left_wing", "6RU809605A", "Крыло заднее левое");
+            initDetail( prefixImg+"rear_left_door", 295,  103, "rear_left_door", "6RU833055D", "Дверь задняя левая");
+            initDetail( prefixImg+"front_wheel", 193,  168, "front_wheel", "6Q0601027AC", "Колесо");
+            initDetail( prefixImg+"rear_wheel", 319,  138, "rear_wheel", "6Q0601027AC", "Колесо");
         }else if(sideView.equals(Const.VIEW_LEFT_LEFT)){
-            if(detailCode.equals("front_bumper")){ initDetail(fName, 16, 186, part_name, article, part_name_rus);}
-            else if(detailCode.equals("front_left_door")){ initDetail(fName, 117,  117, part_name, article, part_name_rus);}
-            else if(detailCode.equals("front_left_wing")){ initDetail(fName, 36,  149, part_name, article, part_name_rus);}
-            else if(detailCode.equals("front_left_headlight")){ initDetail(fName, 363,  153, part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_left_headlight")){ initDetail(fName, 21,  172, part_name, article, part_name_rus);}
-            else if(detailCode.equals("hood")){ initDetail(fName, 26,  142, part_name, article, part_name_rus);}
-            else if(detailCode.equals("roof")){ initDetail(fName, 113,  108, part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_bumper")){ initDetail(fName, 336,  173, part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_left_door")){ initDetail(fName, 213,  115, part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_left_wing")){ initDetail(fName, 263, customBiasValue(123, -2), part_name, article, part_name_rus);}
-            else if(detailCode.equals("wheel")){
-                initDetail("front_wheel", 50,  190, part_name, article, part_name_rus);
-                initDetail("rear_wheel", customBiasValue(284, 2),  customBiasValue(186, -2), part_name, article, part_name_rus);
-            }
+            initDetail( prefixImg+"front_bumper", 16, 186, "front_bumper", "6RU807221A", "Бампер передний");
+            initDetail( prefixImg+"front_left_door", 117,  117, "front_left_door", "6RU831055J", "Дверь передняя левая");
+            initDetail( prefixImg+"front_left_wing", 36,  149, "front_left_wing", "6RU821105C", "Крыло переднее левое");
+            initDetail( prefixImg+"front_left_headlight", 363,  153, "front_left_headlight", "6RU941015", "Фара передняя левая");
+            initDetail( prefixImg+"rear_left_light", 21,  172, "rear_left_light", "6RU945095M", "Фонарь задний левый");
+            initDetail( prefixImg+"hood", 26,  142, "hood", "6RU823031C", "Капот");
+            initDetail( prefixImg+"roof", 113,  108, "roof", "6RU817111B", "Крыша");
+            initDetail( prefixImg+"rear_bumper", 336,  173, "rear_bumper", "6RU807421FGRU", "Бампер задний");
+            initDetail( prefixImg+"rear_left_door", 213,  115, "rear_left_door", "6RU833055D", "Дверь задняя левая");
+            initDetail( prefixImg+"rear_left_wing", 263, customBiasValue(123, -2), "rear_left_wing", "6RU809605A", "Крыло заднее левое");
+            initDetail( prefixImg+"front_wheel", 50,  190, "front_wheel", "6Q0601027AC", "Колесо");
+            initDetail( prefixImg+"rear_wheel", customBiasValue(284, 2),  customBiasValue(186, -2), "rear_wheel", "6Q0601027AC", "Колесо");
         }else if(sideView.equals(Const.VIEW_LEFT_BACK)){
-            if(detailCode.equals("front_left_wing")){ initDetail(fName, 24, customBiasValue(121, -2), part_name, article, part_name_rus);}
-            else if(detailCode.equals("front_left_door")){ initDetail(fName, 47,  customBiasValue(80, -2), part_name, article, part_name_rus);}
-            else if(detailCode.equals("roof")){ initDetail(fName, 77,  customBiasValue(69, 1), part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_bumper")){ initDetail(fName, 166,  155, part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_left_door")){ initDetail(fName, 85,  customBiasValue(77, -2), part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_left_wing")){ initDetail(fName, 119, customBiasValue(82, -3), part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_body_glass")){ initDetail(fName, 166,  77, part_name, article, part_name_rus);}
-            else if(detailCode.equals("trunk_lid")){ initDetail(fName, 205,  110, part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_left_headlight")){ initDetail(fName, 202,  135, part_name, article, part_name_rus);}
-            else if(detailCode.equals("wheel")){
-                initDetail("front_wheel", 26,  149, part_name, article, part_name_rus);
-                initDetail("rear_wheel", 133,  177, part_name, article, part_name_rus);
-            }
+            initDetail( prefixImg+"front_left_wing", 24, customBiasValue(121, -2), "front_left_wing", "6RU821105C", "Крыло переднее левое" );
+            initDetail( prefixImg+"front_left_door", 47,  customBiasValue(80, -2), "front_left_door", "6RU831055J", "Дверь передняя левая" );
+            initDetail( prefixImg+"roof", 77,  customBiasValue(69, -1), "roof", "6RU817111B", "Крыша" );
+            initDetail( prefixImg+"rear_bumper", 166,  155, "rear_bumper", "6RU807421FGRU", "Бампер задний" );
+            initDetail( prefixImg+"rear_left_door", 85,  customBiasValue(77, -2), "rear_left_door", "6RU833055D", "Дверь задняя левая" );
+            initDetail( prefixImg+"rear_left_wing", 119, customBiasValue(82, -3), "rear_left_wing", "6RU809605A", "Крыло заднее левое" );
+            initDetail( prefixImg+"rear_body_glass", 166,  customBiasValue(77, -2), "rear_body_glass", "6RU845051F", "Стекло кузова заднее" );
+            initDetail( prefixImg+"trunk_lid", 205,  110, "trunk_lid", "6RU827025F", "Крышка багажника" );
+            initDetail( prefixImg+"rear_left_light", 202,  135, "rear_left_light", "6RU945095M", "Фонарь задний левый" );
+            initDetail( prefixImg+"front_wheel", 26,  149, "front_wheel", "6Q0601027AC", "Колесо" );
+            initDetail( prefixImg+"rear_wheel", 133,  177, "rear_wheel", "6Q0601027AC", "Колесо" );
         }else if(sideView.equals(Const.VIEW_BACK_BACK)){
-            if(detailCode.equals("rear_body_glass")){ initDetail(fName, 106, 62, part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_bumper")){ initDetail(fName, 74,  160, part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_left_wing")){ initDetail(fName, 81,  82, part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_right_wing")){ initDetail(fName, 275, 82, part_name, article, part_name_rus);}
-            else if(detailCode.equals("roof")){ initDetail(fName, 111,  56, part_name, article, part_name_rus);}
-            else if(detailCode.equals("trunk_lid")){ initDetail(fName, 98,  98, part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_left_headlight")){ initDetail(fName, 77,  123, part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_right_headlight")){ initDetail(fName, 279,  123, part_name, article, part_name_rus);}
+            initDetail( prefixImg+"rear_body_glass", 106, 62, "rear_body_glass", "6RU845051F", "Стекло кузова заднее" );
+            initDetail( prefixImg+"rear_bumper", 74,  160, "rear_bumper", "6RU807421FGRU", "Бампер задний" );
+            initDetail( prefixImg+"rear_left_wing", 81,  82, "rear_left_wing", "6RU809605A", "Крыло заднее левое" );
+            initDetail( prefixImg+"rear_right_wing", 275, 82, "rear_right_wing", "6RU809605A", "Крыло заднее правое" );
+            initDetail( prefixImg+"roof", 111,  56, "roof", "6RU817111B", "Крыша" );
+            initDetail( prefixImg+"trunk_lid", 98,  98, "trunk_lid", "6RU827025F", "Крышка багажника" );
+            initDetail( prefixImg+"rear_left_light", 77,  123, "rear_left_light", "6RU945095M", "Фонарь задний левый" );
+            initDetail( prefixImg+"right_rear_light", 279,  123, "right_rear_light", "6RU945096K", "Фонарь задний правый" );
         }else if(sideView.equals(Const.VIEW_RIGHT_BACK)){
-            if(detailCode.equals("front_right_wing")){ initDetail(fName, 342, customBiasValue(119, -1), part_name, article, part_name_rus);}
-            else if(detailCode.equals("front_right_door")){ initDetail(fName, 285,  customBiasValue(79, -2), part_name, article, part_name_rus);}
-            else if(detailCode.equals("roof")){ initDetail(fName, 136,  70, part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_bumper")){ initDetail(fName, 27,  customBiasValue(157, -2), part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_right_door")){ initDetail(fName, 244,  customBiasValue(78, -2), part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_right_wing")){ initDetail(fName, 143, customBiasValue(82, -3), part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_body_glass")){ initDetail(fName, 82,  77, part_name, article, part_name_rus);}
-            else if(detailCode.equals("trunk_lid")){ initDetail(fName, 33,  110, part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_right_headlight")){ initDetail(fName, 133,  135, part_name, article, part_name_rus);}
-            else if(detailCode.equals("wheel")){
-                initDetail("front_wheel", 340,  149, part_name, article, part_name_rus);
-                initDetail("rear_wheel", 208,  175, part_name, article, part_name_rus);
-            }
+            initDetail( prefixImg+"front_right_wing", 342, customBiasValue(119, -1), "front_right_wing", "6RU821106C", "Крыло переднее правое");
+            initDetail( prefixImg+"front_right_door", 285,  customBiasValue(79, -2), "front_right_door", "6RU831056J", "Дверь передняя правая");
+            initDetail( prefixImg+"roof", 136,  70, "roof", "6RU817111B", "Крыша");
+            initDetail( prefixImg+"rear_bumper", 27,  customBiasValue(157, -2), "rear_bumper", "6RU807421FGRU", "Бампер задний");
+            initDetail( prefixImg+"rear_right_door", 244,  customBiasValue(78, -2), "rear_right_door", "6RU833056D", "Дверь задняя правая");
+            initDetail( prefixImg+"rear_right_wing", 143, customBiasValue(82, -3), "rear_right_wing", "6RU809605A", "Крыло заднее правое");
+            initDetail( prefixImg+"rear_body_glass", 82,  77, "rear_body_glass", "6RU845051F", "Стекло кузова заднее");
+            initDetail( prefixImg+"trunk_lid", 33,  110, "trunk_lid", "6RU827025F", "Крышка багажника");
+            initDetail( prefixImg+"rear_right_light", 133,  135, "rear_right_light", "6RU945096K", "Фонарь задний правый");
+            initDetail( prefixImg+"front_wheel", 340,  149, "front_wheel", "6Q0601027AC", "Колесо");
+            initDetail( prefixImg+"rear_wheel", 208,  175, "rear_wheel", "6Q0601027AC", "Колесо");
         }else if(sideView.equals(Const.VIEW_RIGHT_RIGHT)){
-            if(detailCode.equals("front_bumper")){ initDetail(fName, 352, 170, part_name, article, part_name_rus);}
-            else if(detailCode.equals("front_right_door")){ initDetail(fName, 190,  103, part_name, article, part_name_rus);}
-            else if(detailCode.equals("front_right_wing")){ initDetail(fName, 289,  138, part_name, article, part_name_rus);}
-            else if(detailCode.equals("front_right_headlight")){ initDetail(fName, 361,  158, part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_right_headlight")){ initDetail(fName, 15,  144, part_name, article, part_name_rus);}
-            else if(detailCode.equals("hood")){ initDetail(fName, 286,  130, part_name, article, part_name_rus);}
-            else if(detailCode.equals("roof")){ initDetail(fName, 96,  96, part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_bumper")){ initDetail(fName, 10,  166, part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_right_door")){ initDetail(fName, 98,  103, part_name, article, part_name_rus);}
-            else if(detailCode.equals("rear_right_wing")){ initDetail(fName, 15, customBiasValue(112, -2), part_name, article, part_name_rus);}
-            else if(detailCode.equals("wheel")){
-                initDetail("front_wheel", 303,  178, part_name, article, part_name_rus);
-                initDetail("rear_wheel", 62,  182, part_name, article, part_name_rus);
-            }
+            initDetail( prefixImg+"front_bumper", 352, 170, "front_bumper", "6RU807221A", "Бампер передний");
+            initDetail( prefixImg+"front_right_door", 190,  103, "front_right_door", "6RU831056J", "Дверь передняя правая");
+            initDetail( prefixImg+"front_right_wing", 289,  138, "front_right_wing", "6RU821106C", "Крыло переднее правое");
+            initDetail( prefixImg+"front_right_headlight", 361,  158, "front_right_headlight", "6RU941016", "Фара передняя правая");
+            initDetail( prefixImg+"rear_right_light", 15,  144, "rear_right_light", "6RU945096K", "Фонарь задний правый");
+            initDetail( prefixImg+"hood", 286,  130, "hood", "6RU823031C", "Капот");
+            initDetail( prefixImg+"roof", 96,  96, "roof", "6RU817111B", "Крыша");
+            initDetail( prefixImg+"rear_bumper", 10,  166, "rear_bumper", "6RU807421FGRU", "Бампер задний");
+            initDetail( prefixImg+"rear_right_door", 98,  103, "rear_right_door", "6RU833056D", "Дверь задняя правая");
+            initDetail( prefixImg+"rear_right_wing", 15, customBiasValue(112, -2), "rear_right_wing", "6RU809605A", "Крыло заднее правое");
+            initDetail( prefixImg+"front_wheel", 303,  178, "front_wheel", "6Q0601027AC", "Колесо");
+            initDetail( prefixImg+"rear_wheel", 62,  182, "rear_wheel", "6Q0601027AC", "Колесо");
         }
     }
-private int customBiasValue(int defaultValue, int bias){
-    Resources r = this.getResources();
-    int a =  r.getDisplayMetrics().widthPixels;
-    int b  = r.getDisplayMetrics().heightPixels;
-    if( a == 1080 && b == 2264
-            || a == 1080 && b == 2120
-            || a == 1080 && b == 2291
-    ){
-        return defaultValue + bias;
+    private int customBiasValue(int defaultValue, int bias){
+        Resources r = this.getResources();
+        int a =  r.getDisplayMetrics().widthPixels;
+        int b  = r.getDisplayMetrics().heightPixels;
+        if( a == 1080 && b == 2264
+                || a == 1080 && b == 2120
+                || a == 1080 && b == 2291
+        ){
+            return defaultValue + bias;
+        }
+        return defaultValue;
     }
-    return defaultValue;
-}
     private void initDetail(String fName, int leftDp, int topDp,  String part_name,  String article,  String part_name_rus){
         Resources r = this.getResources();
         float density = r.getDisplayMetrics().density;
@@ -730,6 +691,22 @@ private int customBiasValue(int defaultValue, int bias){
     }
 
 
+    public static  String getSideViewImage(String engSideView) {
+        return "m3d_vw6_sed_x033_"+engSideView;
+    }
+
+    public static  String getSideViewTitleRus(String engSideView) {
+        String rus = "Неопределено";
+        if(engSideView.equals("front_right")){ rus = "Спереди справа";}
+        else if (engSideView.equals("front_front")) { rus = "Спереди";}
+        else if (engSideView.equals("front_left")) { rus = "Спереди слева";}
+        else if (engSideView.equals("left_left")) { rus = "Слева";}
+        else if (engSideView.equals("right_right")) { rus = "Справа";}
+        else if (engSideView.equals("back_right")) { rus = "Сзади справа";}
+        else if (engSideView.equals("back_back")) { rus = "Сзади";}
+        else if (engSideView.equals("back_left")) { rus = "Сзади слева";}
+        return rus;
+    }
 
     private void calculateBias(){
         Resources r = this.getResources();
@@ -790,13 +767,17 @@ private int customBiasValue(int defaultValue, int bias){
             final Button detailButton = findViewById(context.getResources().getIdentifier("detail_prices_"+ String.valueOf(cntDA), "id", context.getPackageName()) );
             detailButton.setTextColor(Color.parseColor("#FFFFFF"));
             detailButton.setBackgroundColor(Color.parseColor("#F43934"));
+
             // set detail photo
             ImageView detailPhoto = findViewById(context.getResources().getIdentifier("detail_photo_"+ String.valueOf(cntDA), "id", context.getPackageName()) );
-            int detailImageId = context.getResources().getIdentifier("plate_"+getCodeFromName(part_name), "drawable", context.getPackageName());
-            if(detailImageId == 0){
-                detailImageId = context.getResources().getIdentifier("detail_noimage", "drawable", context.getPackageName());
+            int detailPhotoId = context.getResources().getIdentifier("photo_det_"+detail_article.toLowerCase(), "drawable", context.getPackageName());
+            if(detailPhotoId == 0) {
+                detailPhotoId = context.getResources().getIdentifier("plate_" + getCodeFromName(part_name), "drawable", context.getPackageName());
+                if (detailPhotoId == 0) {
+                    detailPhotoId = context.getResources().getIdentifier("detail_noimage", "drawable", context.getPackageName());
+                }
             }
-            detailPhoto.setImageResource(detailImageId);
+            detailPhoto.setImageResource(detailPhotoId);
 
             final String da = detail_article;
             final String ta = part_name;
@@ -846,58 +827,48 @@ private int customBiasValue(int defaultValue, int bias){
         setSharedValueStr("detail_minpice_article", mpa );
         setSharedValueStr("detail_minpice_final", mpf );
     }
-    private void addToCart(int minPrice){
-        // достаем сохраненные данные
-//        int cartSum = getSharedValueInt("cartSum"); // get saved summ
-//        int cartCnt = getSharedValueInt("cartCnt"); // get saved cnt
-//        int cartSumRepWork = getSharedValueInt("cartRepairWork"); // get saved cnt
-
-//        cartSumRepairs = cartSum + minPrice;
-//        cartSumRepairsWork = cartSumRepWork + getSumRepairsWork( getSharedValueStr("detail_article") );
-//        cartCntRepairs = cartCnt + 1;
-
+    private void addToCart(int detailPrice){
         // цена товара 1
-        cartSumRepairs = minPrice;
+        setSubDetailsVisible();
+        setSharedValueInt("repairMainDetailVisible", 1);
+        setSharedValueInt("repairSubDetailVisible", 0);
+        cartSumRepairs = detailPrice;
         cartSumRepairsWork = DataStore.getSumRepairsWork( getSharedValueStr("detail_article") );
         cartCntRepairs = 1;
 
         sumRepairs.setText(String.valueOf(cartSumRepairs));
         cntTotalItems.setText(String.valueOf(cartCntRepairs));
         sumRepairsWork.setText(String.valueOf(cartSumRepairsWork) );
-        setSharedValueInt("cartRepairWork", cartSumRepairsWork);
 
+        setSharedValueInt("cartRepairWork", cartSumRepairsWork);
         setSharedValueInt("cartSum", cartSumRepairs);
         setSharedValueInt("cartCnt", cartCntRepairs);
 
         Toast.makeText(DetailsListActivity.this, "Деталь добавлена в корзину", Toast.LENGTH_SHORT).show();
 
     }
-
-    private int getSumRepairsWork(String article){
-        int res = 0;
-        if(article.equals("6RU821105C")) res = (int) (0.5 + 1)*1200 + 419 + 0;
-        if(article.equals("6RU821106C")) res = (int) (0.5 + 1)*1200 + 466 + 0;
-        if(article.equals("6RU823031C")) res = (int) (0.5 + 1)*1200 + 0 + 0;
-        if(article.equals("6RU807221A GRU")) res = (int) (1 + 1.5)*1200 + 1200 + 0;
-        if(article.equals("6RU807421D GRU")) res = (int) (0.5 + 1)*1200 + 497 + 497;
-        if(article.equals("6RU809605А")) res = (int) (1 + 1)*1200 + 0 + 0;
-        if(article.equals("6RU809605А")) res = (int) (1.5 + 3)*1200 + 2095 + 0;
-        if(article.equals("6RU809606A")) res = (int) (1.5 + 3)*1200 + 2592 + 0;
-        if(article.equals("6RU833055D")) res = (int) (0.5 + 2)*1200 + 0 + 0;
-        if(article.equals("6RU833056D")) res = (int) (0.5 + 2)*1200 + 0 + 0;
-        if(article.equals("6RU831055J")) res = (int) (0.5 + 2)*1200 + 0 + 0;
-        if(article.equals("6RU831056J")) res = (int) (0.5 + 2)*1200 + 0 + 0;
-        if(article.equals("6RU827025F")) res = (int) (0.5 + 0.5)*1200 + 0 + 0;
-
-        if(article.equals("6RU809219")) res = (int) (1.5 + 2)*1200 + 0 + 0;
-        if(article.equals("6R4810609A")) res = (int) (1.5 + 2)*1200 + 0 + 0;
-        if(article.equals("6R4810609A")) res = (int) (1.5 + 2)*1200 + 0 + 0;
-        if(article.equals("6RU809220")) res = (int) (1.5 + 2)*1200 + 0 + 0;
-        if(article.equals("6R4810610A")) res = (int) (1.5 + 2)*1200 + 0 + 0;
-        if(article.equals("6RU809696A")) res = (int) (1.5 + 2)*1200 + 0 + 0;
-
-        return res;
+    public void openCloseNavigationDrawer(View view) {
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }else{
+            drawerLayout.openDrawer(GravityCompat.START);
+        }
+    }
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        DataStore.setMenuItems(item, DetailsListActivity.this);
+        return true;
     }
 
+    private void setSubDetailsVisible(){
+        ArrayList<String> subDetailsArticles = DataStore.getSubDetailsArticles(
+                getSharedValueStr("detail_article"));
+        for (int i = 1; i < 11; i++) {
+            if(i <= subDetailsArticles.size()+1) setSharedValueInt("subDetailVisible_" + String.valueOf(i), 1);
+            else  setSharedValueInt("subDetailVisible_" + String.valueOf(i), 0);
+
+            setSharedValueInt("subDetailBtnBuy_" + String.valueOf(i), 1);
+        }
+    }
 
 }

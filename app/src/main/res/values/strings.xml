@@ -2,4 +2,6 @@
     <string name="app_name">Bertum</string>
     <string name="msg_photo_added">Фотография добавлена</string>
     <string name="msg_detail_selected">Выбрана деталь - %1$s</string>
+    <string name="link_to_offer"><u>договора-офферты</u></string>
+    <string name="link_to_resms"><u>Запросить код повторно</u></string>
 </resources>

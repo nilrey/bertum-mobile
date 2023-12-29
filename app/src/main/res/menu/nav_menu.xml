@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn = "navigation_view">
+
+    <group
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ico_home"
+            android:title="Главная страница"
+            android:onClick="onNavigationItemSelected"
+            />
+
+        <item
+            android:id="@+id/nav_cart"
+            android:icon="@drawable/ico_cart"
+            android:title="Мои покупки"
+            android:onClick="onNavigationItemSelected"/>
+
+        <item
+            android:id="@+id/nav_details"
+            android:icon="@drawable/ico_details"
+            android:title="Запчасти"
+            android:onClick="onNavigationItemSelected"/>
+
+        <item
+            android:id="@+id/nav_favourite"
+            android:icon="@drawable/ico_favourite"
+            android:title="Избранное"/>
+
+        <item
+            android:id="@+id/nav_messages"
+            android:icon="@drawable/ico_messages"
+            android:title="Сообщения"/>
+
+        <item
+            android:id="@+id/nav_discount"
+            android:icon="@drawable/ico_discount"
+            android:title="Спецпредложения"/>
+
+        <item
+            android:id="@+id/nav_video"
+            android:icon="@drawable/ico_video"
+            android:title="Видеоиструкции"/>
+
+        <item
+            android:id="@+id/nav_dtp"
+            android:icon="@drawable/ico_dtp"
+            android:title="ДТП"/>
+
+        <item
+            android:id="@+id/nav_smeta"
+            android:icon="@drawable/ico_smeta"
+            android:title="Сметы и информация"/>
+
+    </group>
+    <item
+        android:title="">
+
+        <menu>
+            <item
+                android:id="@+id/nav_giude"
+                android:icon="@drawable/ico_favourite"
+                android:title="Гид по программе"
+                android:onClick="onNavigationItemSelected" />
+        </menu>
+
+    </item>
+
+</menu>

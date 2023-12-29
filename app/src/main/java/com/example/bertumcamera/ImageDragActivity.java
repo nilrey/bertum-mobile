@@ -6,12 +6,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.TypedValue;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -22,36 +29,42 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.lang.reflect.Method;
 
-public class ImageDragActivity extends AppCompatActivity {
+public class ImageDragActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor ed;
+    private DrawerLayout drawerLayout;
     private RelativeLayout blockCarRF_x033, blockCarRF_x050,
             blockCarFF_x050, blockCarFF_x033, blockCarLF_x050, blockCarLF_x033, blockCarLL_x050,
             blockCarLL_x033, blockCarLB_x050, blockCarLB_x033, blockCarBB_x050, blockCarBB_x033,
             blockCarRB_x050, blockCarBR_x033, blockCarRR_x050, blockCarRR_x033;
-    private ImageView layoutCarRF_x033, doorRightFrontRF_x033, wingRightFrontRF_x033, bumperRightFrontRF_x033,
-            layoutCarRF_x050, doorRightFrontRF_x050, wingRightFrontRF_x050, bumperRightFrontRF_x050, doorRightRearRF_x050,
-            front_right_roof, front_right_hood, front_right_rear_right_wing, front_right_front_right_headlight, front_right_windshield,
-            front_right_front_right_wheel, front_right_rear_right_wheel, front_front_windshield, front_front_front_bumper, front_front_front_left_headlight, front_front_front_right_headlight, front_front_roof, front_front_hood, front_left_rear_left_door, front_left_front_left_wing, front_left_front_left_door, front_left_front_bumper, front_left_hood, front_left_front_left_headlight, front_left_roof, front_left_rear_left_wing, front_left_front_left_wheel, front_left_rear_left_wheel, left_left_front_bumper, left_left_front_left_door, left_left_front_left_headlight, left_left_front_left_wing, left_left_front_wheel, left_left_hood, left_left_rear_bumper, left_left_rear_left_door, left_left_rear_left_headlight, left_left_rear_left_wing, left_left_roof, left_left_rear_wheel, back_left_front_left_wing, back_left_front_wheel, back_left_rear_body_glass, back_left_rear_bumper, back_left_rear_left_door, back_left_rear_left_headlight, back_left_rear_left_wing, back_left_rear_wheel, back_left_trunk_lid, back_left_roof, back_left_front_left_door, back_back_rear_body_glass, back_back_rear_bumper, back_back_rear_left_headlight, back_back_rear_left_wing, back_back_rear_right_headlight, back_back_rear_right_wing, back_back_roof, back_back_trunk_lid, back_right_front_right_door, back_right_front_right_wing, back_right_front_wheel, back_right_rear_body_glass, back_right_rear_bumper, back_right_rear_right_door, back_right_trunk_lid, back_right_rear_right_wing, back_right_rear_right_headlight, back_right_rear_wheel, back_right_roof, right_right_front_bumper, right_right_front_right_door, right_right_front_right_headlight, right_right_front_right_wing, right_right_front_wheel, right_right_hood, right_right_rear_bumper, right_right_rear_right_door, right_right_rear_right_headlight, right_right_rear_right_wing, right_right_rear_wheel, right_right_roof,
+    private ImageView layoutCarRF_x033,
+            layoutCarRF_x050, front_right_front_right_door, front_right_front_right_wing, front_right_front_bumper, front_right_rear_right_door,
+            front_right_roof, front_right_hood, front_right_rear_right_wing, front_right_front_right_headlight, front_right_windshield, front_right_front_right_wheel, front_right_rear_right_wheel, front_right_central_bumper_grille,
+            front_front_windshield, front_front_front_bumper, front_front_front_left_headlight, front_front_front_right_headlight, front_front_roof, front_front_hood, front_front_central_bumper_grille,
+            front_left_windshield, front_left_rear_left_door, front_left_front_left_wing, front_left_front_left_door, front_left_front_bumper, front_left_hood, front_left_front_left_headlight, front_left_roof, front_left_rear_left_wing, front_left_front_left_wheel, front_left_rear_left_wheel, front_left_central_bumper_grille,
+            left_left_front_bumper, left_left_front_left_door, left_left_front_left_headlight, left_left_front_left_wing, left_left_front_wheel, left_left_hood, left_left_rear_bumper, left_left_rear_left_door, left_left_rear_left_light, left_left_rear_left_wing, left_left_roof, left_left_rear_wheel,
+            back_left_front_left_wing, back_left_front_wheel, back_left_rear_body_glass, back_left_rear_bumper, back_left_rear_left_door, back_left_rear_left_light, back_left_rear_left_wing, back_left_rear_wheel, back_left_trunk_lid, back_left_roof, back_left_front_left_door,
+            back_back_rear_body_glass, back_back_rear_bumper, back_back_rear_left_light, back_back_rear_left_wing, back_back_rear_right_light, back_back_rear_right_wing, back_back_roof, back_back_trunk_lid,
+            back_right_front_right_door, back_right_front_right_wing, back_right_front_wheel, back_right_rear_body_glass, back_right_rear_bumper, back_right_rear_right_door, back_right_trunk_lid, back_right_rear_right_wing, back_right_rear_right_light, back_right_rear_wheel, back_right_roof,
+            right_right_front_bumper, right_right_front_right_door, right_right_front_right_headlight, right_right_front_right_wing, right_right_front_wheel, right_right_hood, right_right_rear_bumper, right_right_rear_right_door, right_right_rear_right_light, right_right_rear_right_wing, right_right_rear_wheel, right_right_roof,
             layoutCarFF_x050, layoutCarLF_x050, layoutCarLL_x050, layoutCarLB_x050,
             layoutCarBB_x050, layoutCarRB_x050, layoutCarRR_x050,
-            ico_cart
+            ico_cart, ico_menu
             ;
     private ImageButton arrowPlus, arrowMinus, arrowLeft, arrowRight;
     private TextView respView,
     cntTotalItems, sumRepairs, sumRepairsWork, linkToSmetaRepairs , linkToSmetaDetails, informer2;
-    private String msgDetailSelected, sideView=Const.VIEW_RIGHT_FRONT;
+    private String sideView=Const.VIEW_RIGHT_FRONT;
     float x, y, dx, dy;
-    private int bias=0, scaleValue = 1, setImageMiddle = 0;
-//    private int mTouchSlop;
-//    private boolean mIsScrolling;
-
+    private int bias=0, scaleValue = 1, setImageMiddle = 0, isActivateSideViewDetails = 0;
     long durationTouch = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_drag);
+        Window w = getWindow();
+        w.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         calculateBias();
         initAllSideViews();
@@ -59,7 +72,16 @@ public class ImageDragActivity extends AppCompatActivity {
         setItemsListBackPage();
         setSharedValueInt("countTry" , 0);
         informer2 = findViewById(R.id.informer2);
-
+        drawerLayout = findViewById(R.id.drawer_layout);
+        ico_menu = findViewById(R.id.ico_menu);
+        ico_menu.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openCloseNavigationDrawer(v);
+                    }
+                }
+        );
         // нижняя часть стоимость
         cntTotalItems = findViewById(R.id.cntTotalItems);
         sumRepairs = findViewById(R.id.sumRepairs);
@@ -68,28 +90,15 @@ public class ImageDragActivity extends AppCompatActivity {
         linkToSmetaRepairs = findViewById(R.id.linkToSmetaRepairs);
 
         // 3D model functions
-        doorRightFrontRF_x033 = findViewById(R.id.doorRightFrontRF_x033);
-        wingRightFrontRF_x033 = findViewById(R.id.wingRightFrontRF_x033);
-        bumperRightFrontRF_x033 = findViewById(R.id.bumperRightFrontRF_x033);
         layoutCarRF_x033 = findViewById(R.id.layoutCarRF_x033);
-
         layoutCarRF_x050 = findViewById(R.id.layoutCarRF_x050);
         initAllDetails2x();
 
-        layoutCarRF_x050 = findViewById(R.id.layoutCarRF_x050);
-        layoutCarFF_x050 = findViewById(R.id.layoutCarFF_x050);
-        layoutCarLF_x050 = findViewById(R.id.layoutCarLF_x050);
-        layoutCarLL_x050 = findViewById(R.id.layoutCarLL_x050);
-        layoutCarLB_x050 = findViewById(R.id.layoutCarLB_x050);
-        layoutCarBB_x050 = findViewById(R.id.layoutCarBB_x050);
-        layoutCarRB_x050 = findViewById(R.id.layoutCarRB_x050);
-        layoutCarRR_x050 = findViewById(R.id.layoutCarRR_x050);
 
         arrowPlus = findViewById(R.id.arrow_plus);
         arrowMinus = findViewById(R.id.arrow_minus);
         arrowRight = findViewById(R.id.arrow_right);
         arrowLeft = findViewById(R.id.arrow_left);
-        msgDetailSelected  =  getResources().getString(R.string.msg_detail_selected);
 
         respView = findViewById(R.id.respView);
 
@@ -168,28 +177,34 @@ public class ImageDragActivity extends AppCompatActivity {
         });
 
         // OnClick
-        genImageViewOnClick(doorRightFrontRF_x050, "6RU831055J", "Передняя правая дверь");
-        genImageViewOnClick(wingRightFrontRF_x050, "6RU821106C", "Переднее правое крыло");
-        genImageViewOnClick(bumperRightFrontRF_x050, "6RU807221A", "Бампер передний");
-        genImageViewOnClick(doorRightRearRF_x050, "6RU807221A", "Бампер передний");
+        genImageViewOnClick(front_right_front_right_door, "6RU831056J", "Дверь передняя правая");
+        genImageViewOnClick(front_right_front_right_wing, "6RU821106C", "Переднее правое крыло");
+        genImageViewOnClick(front_right_front_bumper, "6RU807221A", "Бампер передний");
+        genImageViewOnClick(front_right_rear_right_door, "6RU833056D", "Дверь задняя правая");
         genImageViewOnClick(front_right_roof, "6RU817111B", "Крыша");
         genImageViewOnClick(front_right_hood, "6RU823031C", "Капот");
-        genImageViewOnClick(front_right_rear_right_wing, "6RU821106C", "Крыло переднее правое");
+        genImageViewOnClick(front_right_rear_right_wing, "6RU809605A", "Крыло заднее правое");
         genImageViewOnClick(front_right_windshield, "6RU845011J", "Лобовое стекло");
+        genImageViewOnClick(front_right_central_bumper_grille, "6RU853651D", "Решетка бампера центральная");
         genImageViewOnClick(front_right_front_right_headlight, "6RU941016", "Фара передняя правая");
         genImageViewOnClick(front_right_front_right_wheel, "6Q0601027AC", "Колесо");
         genImageViewOnClick(front_right_rear_right_wheel, "6Q0601027AC", "Колесо");
+
         genImageViewOnClick(front_front_windshield, "6RU845011J", "Лобовое стекло");
         genImageViewOnClick(front_front_front_bumper, "6RU807221A", "Бампер передний");
+        genImageViewOnClick(front_front_central_bumper_grille, "6RU853651D", "Решетка бампера центральная");
         genImageViewOnClick(front_front_front_left_headlight, "6RU941015", "Фара передняя левая");
-        //genImageViewOnClick(front_front_front_right_headlight, "6RU941016", "Фара передняя правая");
+        genImageViewOnClick(front_front_front_right_headlight, "6RU941016", "Фара передняя правая");
         genImageViewOnClick(front_front_roof, "6RU817111B", "Крыша");
         genImageViewOnClick(front_front_hood, "6RU823031C", "Капот");
+
+        genImageViewOnClick(front_left_windshield, "6RU845011J", "Лобовое стекло");
         genImageViewOnClick(front_left_rear_left_door, "6RU833055D", "Дверь задняя левая");
         genImageViewOnClick(front_left_front_left_wing, "6RU821105C", "Крыло переднее левое");
         genImageViewOnClick(front_left_front_left_door, "6RU831055J", "Дверь передняя левая");
         genImageViewOnClick(front_left_front_bumper, "6RU807221A", "Бампер передний");
         genImageViewOnClick(front_left_hood, "6RU823031C", "Капот");
+        genImageViewOnClick(front_left_central_bumper_grille, "6RU853651D", "Решетка бампера центральная");
         genImageViewOnClick(front_left_front_left_headlight, "6RU941015", "Фара передняя левая");
         genImageViewOnClick(front_left_roof, "6RU817111B", "Крыша");
         genImageViewOnClick(front_left_rear_left_wing, "6RU809605A", "Крыло заднее левое");
@@ -203,7 +218,7 @@ public class ImageDragActivity extends AppCompatActivity {
         genImageViewOnClick(left_left_hood, "6RU823031C", "Капот");
         genImageViewOnClick(left_left_rear_bumper, "6RU807421FGRU", "Бампер задний");
         genImageViewOnClick(left_left_rear_left_door, "6RU833055D", "Дверь задняя левая");
-        genImageViewOnClick(left_left_rear_left_headlight, "6RU945095M", "Фонарь задний левый");
+        genImageViewOnClick(left_left_rear_left_light, "6RU945095M", "Фонарь задний левый");
         genImageViewOnClick(left_left_rear_left_wing, "6RU809605A", "Крыло заднее левое");
         genImageViewOnClick(left_left_roof, "6RU817111B", "Крыша");
         genImageViewOnClick(left_left_rear_wheel, "6Q0601027AC", "Колесо");
@@ -212,7 +227,7 @@ public class ImageDragActivity extends AppCompatActivity {
         genImageViewOnClick(back_left_rear_body_glass, "6RU845051F", "Стекло кузова заднее");
         genImageViewOnClick(back_left_rear_bumper, "6RU807421FGRU", "Бампер задний");
         genImageViewOnClick(back_left_rear_left_door, "6RU833055D", "Дверь задняя левая");
-        genImageViewOnClick(back_left_rear_left_headlight, "6RU945095M", "Фонарь задний левый");
+        genImageViewOnClick(back_left_rear_left_light, "6RU945095M", "Фонарь задний левый");
         genImageViewOnClick(back_left_rear_left_wing, "6RU809605A", "Крыло заднее левое");
         genImageViewOnClick(back_left_rear_wheel, "6Q0601027AC", "Колесо");
         genImageViewOnClick(back_left_trunk_lid, "6RU827025F", "Крышка багажника");
@@ -220,9 +235,9 @@ public class ImageDragActivity extends AppCompatActivity {
         genImageViewOnClick(back_left_front_left_door, "6RU831055J", "Дверь передняя левая");
         genImageViewOnClick(back_back_rear_body_glass, "6RU845051F", "Стекло кузова заднее");
         genImageViewOnClick(back_back_rear_bumper, "6RU807421FGRU", "Бампер задний");
-        genImageViewOnClick(back_back_rear_left_headlight, "6RU945095M", "Фонарь задний левый");
+        genImageViewOnClick(back_back_rear_left_light, "6RU945095M", "Фонарь задний левый");
         genImageViewOnClick(back_back_rear_left_wing, "6RU809605A", "Крыло заднее левое");
-        genImageViewOnClick(back_back_rear_right_headlight, "6RU945096K", "Фонарь задний правый");
+        genImageViewOnClick(back_back_rear_right_light, "6RU945096K", "Фонарь задний правый");
         genImageViewOnClick(back_back_rear_right_wing, "6RU821106C", "Крыло переднее правое");
         genImageViewOnClick(back_back_roof, "6RU817111B", "Крыша");
         genImageViewOnClick(back_back_trunk_lid, "6RU827025F", "Крышка багажника");
@@ -234,7 +249,7 @@ public class ImageDragActivity extends AppCompatActivity {
         genImageViewOnClick(back_right_rear_right_door, "6RU833056D", "Дверь задняя правая");
         genImageViewOnClick(back_right_trunk_lid, "6RU827025F", "Крышка багажника");
         genImageViewOnClick(back_right_rear_right_wing, "6RU821106C", "Крыло переднее правое");
-        genImageViewOnClick(back_right_rear_right_headlight, "6RU945096K", "Фонарь задний правый");
+        genImageViewOnClick(back_right_rear_right_light, "6RU945096K", "Фонарь задний правый");
         genImageViewOnClick(back_right_rear_wheel, "6Q0601027AC", "Колесо");
         genImageViewOnClick(back_right_roof, "6RU817111B", "Крыша");
         genImageViewOnClick(right_right_front_bumper, "6RU807221A", "Бампер передний");
@@ -245,7 +260,7 @@ public class ImageDragActivity extends AppCompatActivity {
         genImageViewOnClick(right_right_hood, "6RU823031C", "Капот");
         genImageViewOnClick(right_right_rear_bumper, "6RU807421FGRU", "Бампер задний");
         genImageViewOnClick(right_right_rear_right_door, "6RU833056D", "Дверь задняя правая");
-        genImageViewOnClick(right_right_rear_right_headlight, "6RU945096K", "Фонарь задний правый");
+        genImageViewOnClick(right_right_rear_right_light, "6RU945096K", "Фонарь задний правый");
         genImageViewOnClick(right_right_rear_right_wing, "6RU821106C", "Крыло переднее правое");
         genImageViewOnClick(right_right_rear_wheel, "6Q0601027AC", "Колесо");
         genImageViewOnClick(right_right_roof, "6RU817111B", "Крыша");
@@ -260,31 +275,32 @@ public class ImageDragActivity extends AppCompatActivity {
         genImageViewOnClickEmpty(layoutCarRR_x050);
 
         // OnTouch
-//        genImageViewOnTouch(doorRightFrontRF_x033);
-        genImageViewOnTouch(doorRightFrontRF_x050);
-//        genImageViewOnTouch(wingRightFrontRF_x033);
-        genImageViewOnTouch(wingRightFrontRF_x050);
-//        genImageViewOnTouch(bumperRightFrontRF_x033);
-        genImageViewOnTouch(bumperRightFrontRF_x050);
-        genImageViewOnTouch(doorRightRearRF_x050);
+        genImageViewOnTouch(front_right_front_right_door);
+        genImageViewOnTouch(front_right_front_right_wing);
+        genImageViewOnTouch(front_right_front_bumper);
+        genImageViewOnTouch(front_right_rear_right_door);
         genImageViewOnTouch(front_right_roof);
         genImageViewOnTouch(front_right_hood);
         genImageViewOnTouch(front_right_rear_right_wing);
         genImageViewOnTouch(front_right_windshield);
+        genImageViewOnTouch(front_right_central_bumper_grille);
         genImageViewOnTouch(front_right_front_right_headlight);
         genImageViewOnTouch(front_right_front_right_wheel);
         genImageViewOnTouch(front_right_rear_right_wheel);
         genImageViewOnTouch(front_front_windshield);
         genImageViewOnTouch(front_front_front_bumper);
+        genImageViewOnTouch(front_front_central_bumper_grille);
         genImageViewOnTouch(front_front_front_left_headlight);
         genImageViewOnTouch(front_front_front_right_headlight);
         genImageViewOnTouch(front_front_roof);
         genImageViewOnTouch(front_front_hood);
         genImageViewOnTouch(front_left_rear_left_door);
+        genImageViewOnTouch(front_left_windshield);
         genImageViewOnTouch(front_left_front_left_wing);
         genImageViewOnTouch(front_left_front_left_door);
         genImageViewOnTouch(front_left_front_bumper);
         genImageViewOnTouch(front_left_hood);
+        genImageViewOnTouch(front_left_central_bumper_grille);
         genImageViewOnTouch(front_left_front_left_headlight);
         genImageViewOnTouch(front_left_roof);
         genImageViewOnTouch(front_left_rear_left_wing);
@@ -298,7 +314,7 @@ public class ImageDragActivity extends AppCompatActivity {
         genImageViewOnTouch(left_left_hood);
         genImageViewOnTouch(left_left_rear_bumper);
         genImageViewOnTouch(left_left_rear_left_door);
-        genImageViewOnTouch(left_left_rear_left_headlight);
+        genImageViewOnTouch(left_left_rear_left_light);
         genImageViewOnTouch(left_left_rear_left_wing);
         genImageViewOnTouch(left_left_roof);
         genImageViewOnTouch(left_left_rear_wheel);
@@ -307,7 +323,7 @@ public class ImageDragActivity extends AppCompatActivity {
         genImageViewOnTouch(back_left_rear_body_glass);
         genImageViewOnTouch(back_left_rear_bumper);
         genImageViewOnTouch(back_left_rear_left_door);
-        genImageViewOnTouch(back_left_rear_left_headlight);
+        genImageViewOnTouch(back_left_rear_left_light);
         genImageViewOnTouch(back_left_rear_left_wing);
         genImageViewOnTouch(back_left_rear_wheel);
         genImageViewOnTouch(back_left_trunk_lid);
@@ -315,9 +331,9 @@ public class ImageDragActivity extends AppCompatActivity {
         genImageViewOnTouch(back_left_front_left_door);
         genImageViewOnTouch(back_back_rear_body_glass);
         genImageViewOnTouch(back_back_rear_bumper);
-        genImageViewOnTouch(back_back_rear_left_headlight);
+        genImageViewOnTouch(back_back_rear_left_light);
         genImageViewOnTouch(back_back_rear_left_wing);
-        genImageViewOnTouch(back_back_rear_right_headlight);
+        genImageViewOnTouch(back_back_rear_right_light);
         genImageViewOnTouch(back_back_rear_right_wing);
         genImageViewOnTouch(back_back_roof);
         genImageViewOnTouch(back_back_trunk_lid);
@@ -329,7 +345,7 @@ public class ImageDragActivity extends AppCompatActivity {
         genImageViewOnTouch(back_right_rear_right_door);
         genImageViewOnTouch(back_right_trunk_lid);
         genImageViewOnTouch(back_right_rear_right_wing);
-        genImageViewOnTouch(back_right_rear_right_headlight);
+        genImageViewOnTouch(back_right_rear_right_light);
         genImageViewOnTouch(back_right_rear_wheel);
         genImageViewOnTouch(back_right_roof);
         genImageViewOnTouch(right_right_front_bumper);
@@ -340,7 +356,7 @@ public class ImageDragActivity extends AppCompatActivity {
         genImageViewOnTouch(right_right_hood);
         genImageViewOnTouch(right_right_rear_bumper);
         genImageViewOnTouch(right_right_rear_right_door);
-        genImageViewOnTouch(right_right_rear_right_headlight);
+        genImageViewOnTouch(right_right_rear_right_light);
         genImageViewOnTouch(right_right_rear_right_wing);
         genImageViewOnTouch(right_right_rear_wheel);
         genImageViewOnTouch(right_right_roof);
@@ -360,6 +376,19 @@ public class ImageDragActivity extends AppCompatActivity {
                 // initiate to drag car image, but it shouldn't be clickable
             }
         });*/
+    }
+
+    public void openCloseNavigationDrawer(View view) {
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }else{
+            drawerLayout.openDrawer(GravityCompat.START);
+        }
+    }
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        DataStore.setMenuItems(item, ImageDragActivity.this);
+        return true;
     }
 
     private void calculateBias(){
@@ -447,10 +476,19 @@ public class ImageDragActivity extends AppCompatActivity {
         });
     }
     private void initAllDetails2x() {
-        doorRightFrontRF_x050 = findViewById(R.id.doorRightFrontRF_x050);
-        wingRightFrontRF_x050 = findViewById(R.id.wingRightFrontRF_x050);
-        bumperRightFrontRF_x050 = findViewById(R.id.bumperRightFrontRF_x050);
-        doorRightRearRF_x050 = findViewById(R.id.doorRightRearRF_x050);
+        layoutCarRF_x050 = findViewById(R.id.layoutCarRF_x050);
+        layoutCarFF_x050 = findViewById(R.id.layoutCarFF_x050);
+        layoutCarLF_x050 = findViewById(R.id.layoutCarLF_x050);
+        layoutCarLL_x050 = findViewById(R.id.layoutCarLL_x050);
+        layoutCarLB_x050 = findViewById(R.id.layoutCarLB_x050);
+        layoutCarBB_x050 = findViewById(R.id.layoutCarBB_x050);
+        layoutCarRB_x050 = findViewById(R.id.layoutCarRB_x050);
+        layoutCarRR_x050 = findViewById(R.id.layoutCarRR_x050);
+
+        front_right_front_right_door = findViewById(R.id.front_right_front_right_door);
+        front_right_front_right_wing = findViewById(R.id.front_right_front_right_wing);
+        front_right_front_bumper = findViewById(R.id.front_right_front_bumper);
+        front_right_rear_right_door = findViewById(R.id.front_right_rear_right_door);
         front_right_roof = findViewById(R.id.front_right_roof);
         front_right_hood = findViewById(R.id.front_right_hood);
         front_right_windshield = findViewById(R.id.front_right_windshield);
@@ -458,7 +496,7 @@ public class ImageDragActivity extends AppCompatActivity {
         front_right_front_right_headlight = findViewById(R.id.front_right_front_right_headlight);
         front_right_front_right_wheel = findViewById(R.id.front_right_front_right_wheel);
         front_right_rear_right_wheel = findViewById(R.id.front_right_rear_right_wheel);
-
+        front_right_central_bumper_grille = findViewById(R.id.front_right_central_bumper_grille);
 
         front_front_windshield  = findViewById(R.id.front_front_windshield);
         front_front_front_bumper  = findViewById(R.id.front_front_front_bumper);
@@ -466,7 +504,9 @@ public class ImageDragActivity extends AppCompatActivity {
         front_front_front_right_headlight  = findViewById(R.id.front_front_front_right_headlight);
         front_front_roof  = findViewById(R.id.front_front_roof);
         front_front_hood  = findViewById(R.id.front_front_hood);
+        front_front_central_bumper_grille = findViewById(R.id.front_front_central_bumper_grille);
         front_left_rear_left_door  = findViewById(R.id.front_left_rear_left_door);
+        front_left_windshield = findViewById(R.id.front_left_windshield);
         front_left_front_left_wing  = findViewById(R.id.front_left_front_left_wing);
         front_left_front_left_door  = findViewById(R.id.front_left_front_left_door);
         front_left_front_bumper  = findViewById(R.id.front_left_front_bumper);
@@ -476,6 +516,7 @@ public class ImageDragActivity extends AppCompatActivity {
         front_left_rear_left_wing  = findViewById(R.id.front_left_rear_left_wing);
         front_left_front_left_wheel  = findViewById(R.id.front_left_front_left_wheel);
         front_left_rear_left_wheel  = findViewById(R.id.front_left_rear_left_wheel);
+        front_left_central_bumper_grille = findViewById(R.id.front_left_central_bumper_grille);
         left_left_front_bumper  = findViewById(R.id.left_left_front_bumper);
         left_left_front_left_door  = findViewById(R.id.left_left_front_left_door);
         left_left_front_left_headlight  = findViewById(R.id.left_left_front_left_headlight);
@@ -484,7 +525,7 @@ public class ImageDragActivity extends AppCompatActivity {
         left_left_hood  = findViewById(R.id.left_left_hood);
         left_left_rear_bumper  = findViewById(R.id.left_left_rear_bumper);
         left_left_rear_left_door  = findViewById(R.id.left_left_rear_left_door);
-        left_left_rear_left_headlight  = findViewById(R.id.left_left_rear_left_headlight);
+        left_left_rear_left_light  = findViewById(R.id.left_left_rear_left_light);
         left_left_rear_left_wing  = findViewById(R.id.left_left_rear_left_wing);
         left_left_roof  = findViewById(R.id.left_left_roof);
         left_left_rear_wheel  = findViewById(R.id.left_left_rear_wheel);
@@ -493,7 +534,7 @@ public class ImageDragActivity extends AppCompatActivity {
         back_left_rear_body_glass  = findViewById(R.id.back_left_rear_body_glass);
         back_left_rear_bumper  = findViewById(R.id.back_left_rear_bumper);
         back_left_rear_left_door  = findViewById(R.id.back_left_rear_left_door);
-        back_left_rear_left_headlight  = findViewById(R.id.back_left_rear_left_headlight);
+        back_left_rear_left_light  = findViewById(R.id.back_left_rear_left_light);
         back_left_rear_left_wing  = findViewById(R.id.back_left_rear_left_wing);
         back_left_rear_wheel  = findViewById(R.id.back_left_rear_wheel);
         back_left_trunk_lid  = findViewById(R.id.back_left_trunk_lid);
@@ -501,9 +542,9 @@ public class ImageDragActivity extends AppCompatActivity {
         back_left_front_left_door  = findViewById(R.id.back_left_front_left_door);
         back_back_rear_body_glass  = findViewById(R.id.back_back_rear_body_glass);
         back_back_rear_bumper  = findViewById(R.id.back_back_rear_bumper);
-        back_back_rear_left_headlight  = findViewById(R.id.back_back_rear_left_headlight);
+        back_back_rear_left_light  = findViewById(R.id.back_back_rear_left_light);
         back_back_rear_left_wing  = findViewById(R.id.back_back_rear_left_wing);
-        back_back_rear_right_headlight  = findViewById(R.id.back_back_rear_right_headlight);
+        back_back_rear_right_light  = findViewById(R.id.back_back_rear_right_light);
         back_back_rear_right_wing  = findViewById(R.id.back_back_rear_right_wing);
         back_back_roof  = findViewById(R.id.back_back_roof);
         back_back_trunk_lid  = findViewById(R.id.back_back_trunk_lid);
@@ -515,7 +556,7 @@ public class ImageDragActivity extends AppCompatActivity {
         back_right_rear_right_door  = findViewById(R.id.back_right_rear_right_door);
         back_right_trunk_lid  = findViewById(R.id.back_right_trunk_lid);
         back_right_rear_right_wing  = findViewById(R.id.back_right_rear_right_wing);
-        back_right_rear_right_headlight  = findViewById(R.id.back_right_rear_right_headlight);
+        back_right_rear_right_light  = findViewById(R.id.back_right_rear_right_light);
         back_right_rear_wheel  = findViewById(R.id.back_right_rear_wheel);
         back_right_roof  = findViewById(R.id.back_right_roof);
         right_right_front_bumper  = findViewById(R.id.right_right_front_bumper);
@@ -526,7 +567,7 @@ public class ImageDragActivity extends AppCompatActivity {
         right_right_hood  = findViewById(R.id.right_right_hood);
         right_right_rear_bumper  = findViewById(R.id.right_right_rear_bumper);
         right_right_rear_right_door  = findViewById(R.id.right_right_rear_right_door);
-        right_right_rear_right_headlight  = findViewById(R.id.right_right_rear_right_headlight);
+        right_right_rear_right_light  = findViewById(R.id.right_right_rear_right_light);
         right_right_rear_right_wing  = findViewById(R.id.right_right_rear_right_wing);
         right_right_rear_wheel  = findViewById(R.id.right_right_rear_wheel);
         right_right_roof  = findViewById(R.id.right_right_roof);
@@ -604,14 +645,11 @@ public class ImageDragActivity extends AppCompatActivity {
             elem.setVisibility(View.VISIBLE);
         }else{
             elem_default.setVisibility(View.VISIBLE);
-            setDetailPosition(wingRightFrontRF_x033, 160, 111);
-            setDetailPosition(doorRightFrontRF_x033, 106, 72);
-            setDetailPosition(bumperRightFrontRF_x033, 200, 161);
         }
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         hideAllSideViews();
         blockCarRF_x033.setVisibility(View.VISIBLE);
@@ -661,46 +699,33 @@ public class ImageDragActivity extends AppCompatActivity {
 //                }else if(layoutCarRF_x050.getX() < Math.abs(getImageMiddle())*(-1)) {
 //                    dx = Math.abs(layoutCarRF_x050.getX() + getImageMiddle() - 1 ) ;
 //                }
-                    layoutCarRF_x050.setX(layoutCarRF_x050.getX() + dx);
-                    informer2.setText(String.valueOf(layoutCarRF_x050.getX()));
-                    //                layoutCarRF_x050.setY(layoutCarRF_x050.getY() + dy);
-
-                    doorRightFrontRF_x050.setX(doorRightFrontRF_x050.getX() + dx);
-                    //                doorRightFrontRF_x050.setY(doorRightFrontRF_x050.getY() + dy);
-                    wingRightFrontRF_x050.setX(wingRightFrontRF_x050.getX() + dx);
-                    //                wingRightFrontRF_x050.setY(wingRightFrontRF_x050.getY() + dy);
-                    bumperRightFrontRF_x050.setX(bumperRightFrontRF_x050.getX() + dx);
-                    //                bumperRightFrontRF_x050.setY(bumperRightFrontRF_x050.getY() + dy);
-                    //                setNewCoordinates(doorRightRearRF_x050, dx, dy);
-
-                    doorRightRearRF_x050.setX(doorRightRearRF_x050.getX() + dx);
-                    //                doorRightRearRF_x050.setY(doorRightRearRF_x050.getY() + dy);
-                    front_right_roof.setX(front_right_roof.getX() + dx);
-                    front_right_hood.setX(front_right_hood.getX() + dx);
-                    front_right_rear_right_wing.setX(front_right_rear_right_wing.getX() + dx);
-                    front_right_front_right_headlight.setX(front_right_front_right_headlight.getX() + dx);
-                    front_right_front_right_wheel.setX(front_right_front_right_wheel.getX() + dx);
-                    front_right_rear_right_wheel.setX(front_right_rear_right_wheel.getX() + dx);
-                    //                front_right_roof.setY(front_right_roof.getY()+dy);
-                    //                front_right_hood.setY(front_right_hood.getY()+dy);
-                    //                front_right_rear_right_wing.setY(front_right_rear_right_wing.getY()+dy);
-                    //                front_right_front_right_headlight.setY(front_right_front_right_headlight.getY()+dy);
-                    //                front_right_front_right_wheel.setY(front_right_front_right_wheel.getY()+dy);
-                    //                front_right_rear_right_wheel.setY(front_right_rear_right_wheel.getY()+dy);
-
+                layoutCarRF_x050.setX(layoutCarRF_x050.getX() + dx);
+                front_right_front_right_door.setX(front_right_front_right_door.getX() + dx);
+                front_right_front_right_wing.setX(front_right_front_right_wing.getX() + dx);
+                front_right_front_bumper.setX(front_right_front_bumper.getX() + dx);
+                front_right_rear_right_door.setX(front_right_rear_right_door.getX() + dx);
+                front_right_roof.setX(front_right_roof.getX() + dx);
+                front_right_hood.setX(front_right_hood.getX() + dx);
+                front_right_windshield.setX(front_right_windshield.getX() + dx);
+                front_right_central_bumper_grille.setX(front_right_central_bumper_grille.getX() + dx);
+                front_right_rear_right_wing.setX(front_right_rear_right_wing.getX() + dx);
+                front_right_front_right_headlight.setX(front_right_front_right_headlight.getX() + dx);
+                front_right_front_right_wheel.setX(front_right_front_right_wheel.getX() + dx);
+                front_right_rear_right_wheel.setX(front_right_rear_right_wheel.getX() + dx);
             } else if (sideView == Const.VIEW_FRONT_FRONT) {
                 layoutCarFF_x050.setX(layoutCarFF_x050.getX() + dx);
-//                layoutCarFF_x050.setY(layoutCarFF_x050.getY() + dy);
                 front_front_windshield.setX(front_front_windshield.getX() + dx);
                 front_front_front_bumper.setX(front_front_front_bumper.getX() + dx);
+                front_front_central_bumper_grille.setX(front_front_central_bumper_grille.getX() + dx);
                 front_front_front_left_headlight.setX(front_front_front_left_headlight.getX() + dx);
                 front_front_front_right_headlight.setX(front_front_front_right_headlight.getX() + dx);
                 front_front_roof.setX(front_front_roof.getX() + dx);
                 front_front_hood.setX(front_front_hood.getX() + dx);
             } else if (sideView == Const.VIEW_LEFT_FRONT) {
                 layoutCarLF_x050.setX(layoutCarLF_x050.getX() + dx);
-//                layoutCarLF_x050.setY(layoutCarLF_x050.getY() + dy);
                 front_left_rear_left_door.setX( front_left_rear_left_door.getX() + dx);
+                front_left_windshield.setX( front_left_windshield.getX() + dx);
+                front_left_central_bumper_grille.setX(front_left_central_bumper_grille.getX() + dx);
                 front_left_front_left_wing.setX( front_left_front_left_wing.getX() + dx);
                 front_left_front_left_door.setX( front_left_front_left_door.getX() + dx);
                 front_left_front_bumper.setX( front_left_front_bumper.getX() + dx);
@@ -712,7 +737,6 @@ public class ImageDragActivity extends AppCompatActivity {
                 front_left_rear_left_wheel.setX( front_left_rear_left_wheel.getX() + dx);
             } else if (sideView == Const.VIEW_LEFT_LEFT) {
                 layoutCarLL_x050.setX(layoutCarLL_x050.getX() + dx);
-//                layoutCarLL_x050.setY(layoutCarLL_x050.getY() + dy);
                 left_left_front_bumper.setX( left_left_front_bumper.getX() + dx);
                 left_left_front_left_door.setX( left_left_front_left_door.getX() + dx);
                 left_left_front_left_headlight.setX( left_left_front_left_headlight.getX() + dx);
@@ -721,19 +745,18 @@ public class ImageDragActivity extends AppCompatActivity {
                 left_left_hood.setX( left_left_hood.getX() + dx);
                 left_left_rear_bumper.setX( left_left_rear_bumper.getX() + dx);
                 left_left_rear_left_door.setX( left_left_rear_left_door.getX() + dx);
-                left_left_rear_left_headlight.setX( left_left_rear_left_headlight.getX() + dx);
+                left_left_rear_left_light.setX( left_left_rear_left_light.getX() + dx);
                 left_left_rear_left_wing.setX( left_left_rear_left_wing.getX() + dx);
                 left_left_roof.setX( left_left_roof.getX() + dx);
                 left_left_rear_wheel.setX( left_left_rear_wheel.getX() + dx);
             } else if (sideView == Const.VIEW_LEFT_BACK) {
                 layoutCarLB_x050.setX(layoutCarLB_x050.getX() + dx);
-//                layoutCarLB_x050.setY(layoutCarLB_x050.getY() + dy);
                 back_left_front_left_wing.setX( back_left_front_left_wing.getX() + dx);
                 back_left_front_wheel.setX( back_left_front_wheel.getX() + dx);
                 back_left_rear_body_glass.setX( back_left_rear_body_glass.getX() + dx);
                 back_left_rear_bumper.setX( back_left_rear_bumper.getX() + dx);
                 back_left_rear_left_door.setX( back_left_rear_left_door.getX() + dx);
-                back_left_rear_left_headlight.setX( back_left_rear_left_headlight.getX() + dx);
+                back_left_rear_left_light.setX( back_left_rear_left_light.getX() + dx);
                 back_left_rear_left_wing.setX( back_left_rear_left_wing.getX() + dx);
                 back_left_rear_wheel.setX( back_left_rear_wheel.getX() + dx);
                 back_left_trunk_lid.setX( back_left_trunk_lid.getX() + dx);
@@ -741,18 +764,16 @@ public class ImageDragActivity extends AppCompatActivity {
                 back_left_front_left_door.setX( back_left_front_left_door.getX() + dx);
             } else if (sideView == Const.VIEW_BACK_BACK) {
                 layoutCarBB_x050.setX(layoutCarBB_x050.getX() + dx);
-//                layoutCarBB_x050.setY(layoutCarBB_x050.getY() + dy);
                 back_back_rear_body_glass.setX( back_back_rear_body_glass.getX() + dx);
                 back_back_rear_bumper.setX( back_back_rear_bumper.getX() + dx);
-                back_back_rear_left_headlight.setX( back_back_rear_left_headlight.getX() + dx);
+                back_back_rear_left_light.setX( back_back_rear_left_light.getX() + dx);
                 back_back_rear_left_wing.setX( back_back_rear_left_wing.getX() + dx);
-                back_back_rear_right_headlight.setX( back_back_rear_right_headlight.getX() + dx);
+                back_back_rear_right_light.setX( back_back_rear_right_light.getX() + dx);
                 back_back_rear_right_wing.setX( back_back_rear_right_wing.getX() + dx);
                 back_back_roof.setX( back_back_roof.getX() + dx);
                 back_back_trunk_lid.setX( back_back_trunk_lid.getX() + dx);
             } else if (sideView == Const.VIEW_RIGHT_BACK) {
                 layoutCarRB_x050.setX(layoutCarRB_x050.getX() + dx);
-//                layoutCarRB_x050.setY(layoutCarRB_x050.getY() + dy);
                 back_right_front_right_door.setX( back_right_front_right_door.getX() + dx);
                 back_right_front_right_wing.setX( back_right_front_right_wing.getX() + dx);
                 back_right_front_wheel.setX( back_right_front_wheel.getX() + dx);
@@ -761,12 +782,11 @@ public class ImageDragActivity extends AppCompatActivity {
                 back_right_rear_right_door.setX( back_right_rear_right_door.getX() + dx);
                 back_right_trunk_lid.setX( back_right_trunk_lid.getX() + dx);
                 back_right_rear_right_wing.setX( back_right_rear_right_wing.getX() + dx);
-                back_right_rear_right_headlight.setX( back_right_rear_right_headlight.getX() + dx);
+                back_right_rear_right_light.setX( back_right_rear_right_light.getX() + dx);
                 back_right_rear_wheel.setX( back_right_rear_wheel.getX() + dx);
                 back_right_roof.setX( back_right_roof.getX() + dx);
             } else if (sideView == Const.VIEW_RIGHT_RIGHT) {
                 layoutCarRR_x050.setX(layoutCarRR_x050.getX() + dx);
-//                layoutCarRR_x050.setY(layoutCarRR_x050.getY() + dy);
                 right_right_front_bumper.setX( right_right_front_bumper.getX() + dx);
                 right_right_front_right_door.setX( right_right_front_right_door.getX() + dx);
                 right_right_front_right_headlight.setX( right_right_front_right_headlight.getX() + dx);
@@ -775,11 +795,10 @@ public class ImageDragActivity extends AppCompatActivity {
                 right_right_hood.setX( right_right_hood.getX() + dx);
                 right_right_rear_bumper.setX( right_right_rear_bumper.getX() + dx);
                 right_right_rear_right_door.setX( right_right_rear_right_door.getX() + dx);
-                right_right_rear_right_headlight.setX( right_right_rear_right_headlight.getX() + dx);
+                right_right_rear_right_light.setX( right_right_rear_right_light.getX() + dx);
                 right_right_rear_right_wing.setX( right_right_rear_right_wing.getX() + dx);
                 right_right_rear_wheel.setX( right_right_rear_wheel.getX() + dx);
                 right_right_roof.setX( right_right_roof.getX() + dx);
-
             }
             x = event.getX();
             y = event.getY();
@@ -816,15 +835,10 @@ public class ImageDragActivity extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if(scaleValue < 2) {
-            activateSideViewDetails();
-//            activateSideViewDetails(Const.VIEW_RIGHT_FRONT);
-//            activateSideViewDetails(Const.VIEW_FRONT_FRONT);
-//            activateSideViewDetails(Const.VIEW_LEFT_FRONT);
-//            activateSideViewDetails(Const.VIEW_LEFT_LEFT);
-//            activateSideViewDetails(Const.VIEW_LEFT_BACK);
-//            activateSideViewDetails(Const.VIEW_BACK_BACK);
-//            activateSideViewDetails(Const.VIEW_RIGHT_BACK);
-//            activateSideViewDetails(Const.VIEW_RIGHT_RIGHT);
+            if(isActivateSideViewDetails == 0){
+                activateSideViewDetails();
+                isActivateSideViewDetails = 1;
+            }
         }
     }
 
@@ -856,7 +870,8 @@ public class ImageDragActivity extends AppCompatActivity {
         initDetail( parent_layout, prefixImg+"hood", 174,  customBiasValue(110,  2), "hood", "6RU823031C", "Капот", 75000000 + 15 );
         initDetail( parent_layout, prefixImg+"front_bumper", 190,  160, "front_bumper", "6RU807221A", "Бампер передний", 75000000 + 12 );
         initDetail( parent_layout, prefixImg+"windshield", 144,  72, "windshield", "6RU845011J", "Лобовое стекло", 75000000 + 17 );
-        initDetail( parent_layout, prefixImg+"front_right_door", 97,  customBiasValue(68, -2 ), "front_right_door", "6RU831055J", "Дверь передняя правая" , 75000000 + 13 );
+        initDetail( parent_layout, prefixImg+"central_bumper_grille", 273, 146, "central_bumper_grille", "6RU853651D", "Решетка бампера центральная", 75000000 + 225 );
+        initDetail( parent_layout, prefixImg+"front_right_door", 97,  customBiasValue(68, -2 ), "front_right_door", "6RU831056J", "Дверь передняя правая" , 75000000 + 13 );
         initDetail( parent_layout, prefixImg+"front_right_wing", 150, 110, "front_right_wing", "6RU821106C", "Крыло переднее правое", 75000000 + 14 );
         initDetail( parent_layout, prefixImg+"front_right_headlight", 212,  147, "front_right_headlight", "6RU941016", "Фара передняя правая", 75000000 + 19 );
         initDetail( parent_layout, prefixImg+"rear_right_wing", 42, 79, "rear_right_wing", "6RU809605A", "Крыло заднее правое", 75000000 + 16 );
@@ -870,6 +885,7 @@ public class ImageDragActivity extends AppCompatActivity {
         initDetail( parent_layout, prefixImg+"roof", 111,  48, "roof", "6RU817111B", "Крыша", 75000000 + 103 );
         initDetail( parent_layout, prefixImg+"front_bumper", 76, 160, "front_bumper", "6RU807221A", "Бампер передний", 75000000 + 101 );
         initDetail( parent_layout, prefixImg+"windshield", 111,  55, "windshield", "6RU845011J", "Лобовое стекло", 75000000 + 104 );
+        initDetail( parent_layout, prefixImg+"central_bumper_grille", 118, 159, "central_bumper_grille", "6RU853651D", "Решетка бампера центральная", 75000000 + 225 );
         initDetail( parent_layout, prefixImg+"front_left_headlight", 260,  139, "front_left_headlight", "6RU941015", "Фара передняя левая", 75000000 + 105 );
         initDetail( parent_layout, prefixImg+"front_right_headlight", 83,  139, "front_right_headlight", "6RU941016", "Фара передняя правая", 75000000 + 106 );
 //        }else if(sideView.equals(Const.VIEW_LEFT_FRONT)){
@@ -879,13 +895,14 @@ public class ImageDragActivity extends AppCompatActivity {
         initDetail( parent_layout, prefixImg+"roof", 119,  customBiasValue(65,2),"roof", "6RU817111B", "Крыша", 75000000 + 205 );
         initDetail( parent_layout, prefixImg+"windshield", 117,  75, "windshield", "6RU845011J", "Лобовое стекло", 75000000 + 209 );
         initDetail( parent_layout, prefixImg+"front_bumper", 34, 160, "front_bumper", "6RU807221A", "Бампер передний", 75000000 + 201 );
+        initDetail( parent_layout, prefixImg+"central_bumper_grille", 43, 147, "central_bumper_grille", "6RU853651D", "Решетка бампера центральная", 75000000 + 225 );
         initDetail( parent_layout, prefixImg+"front_left_door", 240,  customBiasValue(74,-3),"front_left_door", "6RU831055J", "Дверь передняя левая", 75000000 + 202 );
         initDetail( parent_layout, prefixImg+"front_left_wing", 162,  customBiasValue(112,-2),"front_left_wing", "6RU821105C", "Крыло переднее левое", 75000000 + 203 );
         initDetail( parent_layout, prefixImg+"front_left_headlight", 114,  148, "front_left_headlight", "6RU941015", "Фара передняя левая", 75000000 + 208 );
         initDetail( parent_layout, prefixImg+"rear_left_wing", 318, customBiasValue(81,-2),"rear_left_wing", "6RU809605A", "Крыло заднее левое", 75000000 + 207 );
         initDetail( parent_layout, prefixImg+"rear_left_door", 295,  103, "rear_left_door", "6RU833055D", "Дверь задняя левая", 75000000 + 206 );
         initDetail( parent_layout, prefixImg+"front_wheel", 193,  168, "front_wheel", "6Q0601027AC", "Колесо", 75000000 + 222 );
-        initDetail( parent_layout, prefixImg+"rear_wheel", 138,  315, "rear_wheel", "6Q0601027AC", "Колесо", 75000000 + 223 );
+        initDetail( parent_layout, prefixImg+"rear_wheel", 319,  138, "rear_wheel", "6Q0601027AC", "Колесо", 75000000 + 223 );
 //        }else if(sideView.equals(Const.VIEW_LEFT_LEFT)){
         prefixImg = getScaleImagePrefix(Const.VIEW_LEFT_LEFT, 1);
         parent_layout = blockCarLL_x033;
@@ -893,7 +910,7 @@ public class ImageDragActivity extends AppCompatActivity {
         initDetail( parent_layout, prefixImg+"front_left_door", 117,  117, "front_left_door", "6RU831055J", "Дверь передняя левая", 75000000 + 602 );
         initDetail( parent_layout, prefixImg+"front_left_wing", 36,  149, "front_left_wing", "6RU821105C", "Крыло переднее левое", 75000000 + 603 );
         initDetail( parent_layout, prefixImg+"front_left_headlight", 363,  153, "front_left_headlight", "6RU941015", "Фара передняя левая", 75000000 + 604 );
-        initDetail( parent_layout, prefixImg+"rear_left_headlight", 21,  172, "rear_left_headlight", "6RU945095M", "Фонарь задний левый", 75000000 + 605 );
+        initDetail( parent_layout, prefixImg+"rear_left_light", 21,  172, "rear_left_light", "6RU945095M", "Фонарь задний левый", 75000000 + 605 );
         initDetail( parent_layout, prefixImg+"hood", 26,  142, "hood", "6RU823031C", "Капот", 75000000 + 606 );
         initDetail( parent_layout, prefixImg+"roof", 113,  108, "roof", "6RU817111B", "Крыша", 75000000 + 607 );
         initDetail( parent_layout, prefixImg+"rear_bumper", 336,  173, "rear_bumper", "6RU807421FGRU", "Бампер задний", 75000000 + 608 );
@@ -912,7 +929,7 @@ public class ImageDragActivity extends AppCompatActivity {
         initDetail( parent_layout, prefixImg+"rear_left_wing", 119, customBiasValue(82, -3), "rear_left_wing", "6RU809605A", "Крыло заднее левое", 75000000 + 706 );
         initDetail( parent_layout, prefixImg+"rear_body_glass", 166,  customBiasValue(77, -2), "rear_body_glass", "6RU845051F", "Стекло кузова заднее", 75000000 + 707 );
         initDetail( parent_layout, prefixImg+"trunk_lid", 205,  110, "trunk_lid", "6RU827025F", "Крышка багажника", 75000000 + 708 );
-        initDetail( parent_layout, prefixImg+"rear_left_headlight", 202,  135, "rear_left_headlight", "6RU945095M", "Фонарь задний левый", 75000000 + 709 );
+        initDetail( parent_layout, prefixImg+"rear_left_light", 202,  135, "rear_left_light", "6RU945095M", "Фонарь задний левый", 75000000 + 709 );
         initDetail( parent_layout, prefixImg+"front_wheel", 26,  149, "front_wheel", "6Q0601027AC", "Колесо", 75000000 + 710 );
         initDetail( parent_layout, prefixImg+"rear_wheel", 133,  177, "rear_wheel", "6Q0601027AC", "Колесо", 75000000 + 711 );
 //        }else if(sideView.equals(Const.VIEW_BACK_BACK)){
@@ -924,30 +941,30 @@ public class ImageDragActivity extends AppCompatActivity {
         initDetail( parent_layout, prefixImg+"rear_right_wing", 275, 82, "rear_right_wing", "6RU809605A", "Крыло заднее правое", 75000000 + 306 );
         initDetail( parent_layout, prefixImg+"roof", 111,  56, "roof", "6RU817111B", "Крыша", 75000000 + 307 );
         initDetail( parent_layout, prefixImg+"trunk_lid", 98,  98, "trunk_lid", "6RU827025F", "Крышка багажника", 75000000 + 308 );
-        initDetail( parent_layout, prefixImg+"rear_left_headlight", 77,  123, "rear_left_headlight", "6RU945095M", "Фонарь задний левый", 75000000 + 309 );
-        initDetail( parent_layout, prefixImg+"rear_right_headlight", 279,  123, "rear_right_headlight", "6RU945096K", "Фонарь задний правый", 75000000 + 310 );
+        initDetail( parent_layout, prefixImg+"rear_left_light", 77,  123, "rear_left_light", "6RU945095M", "Фонарь задний левый", 75000000 + 309 );
+        initDetail( parent_layout, prefixImg+"right_rear_light", 279,  123, "right_rear_light", "6RU945096K", "Фонарь задний правый", 75000000 + 310 );
 //        }else if(sideView.equals(Const.VIEW_RIGHT_BACK)){
         prefixImg = getScaleImagePrefix(Const.VIEW_RIGHT_BACK, 1);
         parent_layout = blockCarBR_x033;
         initDetail( parent_layout, prefixImg+"front_right_wing", 342, customBiasValue(119, -1), "front_right_wing", "6RU821106C", "Крыло переднее правое", 75000000 + 401 );
-        initDetail( parent_layout, prefixImg+"front_right_door", 285,  customBiasValue(79, -2), "front_right_door", "6RU831055J", "Дверь передняя правая", 75000000 + 402 );
+        initDetail( parent_layout, prefixImg+"front_right_door", 285,  customBiasValue(79, -2), "front_right_door", "6RU831056J", "Дверь передняя правая", 75000000 + 402 );
         initDetail( parent_layout, prefixImg+"roof", 136,  70, "roof", "6RU817111B", "Крыша", 75000000 + 403 );
         initDetail( parent_layout, prefixImg+"rear_bumper", 27,  customBiasValue(157, -2), "rear_bumper", "6RU807421FGRU", "Бампер задний", 75000000 + 404 );
         initDetail( parent_layout, prefixImg+"rear_right_door", 244,  customBiasValue(78, -2), "rear_right_door", "6RU833056D", "Дверь задняя правая", 75000000 + 405 );
         initDetail( parent_layout, prefixImg+"rear_right_wing", 143, customBiasValue(82, -3), "rear_right_wing", "6RU809605A", "Крыло заднее правое", 75000000 + 406 );
         initDetail( parent_layout, prefixImg+"rear_body_glass", 82,  77, "rear_body_glass", "6RU845051F", "Стекло кузова заднее", 75000000 + 407 );
         initDetail( parent_layout, prefixImg+"trunk_lid", 33,  110, "trunk_lid", "6RU827025F", "Крышка багажника", 75000000 + 408 );
-        initDetail( parent_layout, prefixImg+"rear_right_headlight", 133,  135, "rear_right_headlight", "6RU945096K", "Фонарь задний правый", 75000000 + 409 );
+        initDetail( parent_layout, prefixImg+"rear_right_light", 133,  135, "rear_right_light", "6RU945096K", "Фонарь задний правый", 75000000 + 409 );
         initDetail( parent_layout, prefixImg+"front_wheel", 340,  149, "front_wheel", "6Q0601027AC", "Колесо", 75000000 + 410 );
         initDetail( parent_layout, prefixImg+"rear_wheel", 208,  175, "rear_wheel", "6Q0601027AC", "Колесо", 75000000 + 411 );
 //        }else if(sideView.equals(Const.VIEW_RIGHT_RIGHT)){
         prefixImg = getScaleImagePrefix(Const.VIEW_RIGHT_RIGHT, 1);
         parent_layout = blockCarRR_x033;
         initDetail( parent_layout, prefixImg+"front_bumper", 352, 170, "front_bumper", "6RU807221A", "Бампер передний", 75000000 + 501 );
-        initDetail( parent_layout, prefixImg+"front_right_door", 190,  103, "front_right_door", "6RU831055J", "Дверь передняя правая", 75000000 + 502 );
+        initDetail( parent_layout, prefixImg+"front_right_door", 190,  103, "front_right_door", "6RU831056J", "Дверь передняя правая", 75000000 + 502 );
         initDetail( parent_layout, prefixImg+"front_right_wing", 289,  138, "front_right_wing", "6RU821106C", "Крыло переднее правое", 75000000 + 503 );
         initDetail( parent_layout, prefixImg+"front_right_headlight", 361,  158, "front_right_headlight", "6RU941016", "Фара передняя правая", 75000000 + 504 );
-        initDetail( parent_layout, prefixImg+"rear_right_headlight", 15,  144, "rear_right_headlight", "6RU945096K", "Фонарь задний правый", 75000000 + 505 );
+        initDetail( parent_layout, prefixImg+"rear_right_light", 15,  144, "rear_right_light", "6RU945096K", "Фонарь задний правый", 75000000 + 505 );
         initDetail( parent_layout, prefixImg+"hood", 286,  130, "hood", "6RU823031C", "Капот", 75000000 + 506 );
         initDetail( parent_layout, prefixImg+"roof", 96,  96, "roof", "6RU817111B", "Крыша", 75000000 + 507 );
         initDetail( parent_layout, prefixImg+"rear_bumper", 10,  166, "rear_bumper", "6RU807421FGRU", "Бампер задний", 75000000 + 508 );
@@ -956,21 +973,6 @@ public class ImageDragActivity extends AppCompatActivity {
         initDetail( parent_layout, prefixImg+"front_wheel", 303,  178, "front_wheel", "6Q0601027AC", "Колесо", 75000000 + 511 );
         initDetail( parent_layout, prefixImg+"rear_wheel", 62,  182, "rear_wheel", "6Q0601027AC", "Колесо", 75000000 + 512 );
 
-//        prefixImg = getScaleImagePrefix(Const.VIEW_RIGHT_FRONT, 2);
-//        parent_layout = blockCarRF_x050;
-//        initDetail( parent_layout, prefixImg+"front_bumper", scaleValueTo050(190),  scaleValueTo050(160), "front_bumper", "6RU807221A", "Бампер передний", 33000000 + 12 );
-//        initDetail( parent_layout, prefixImg+"front_right_door", scaleValueTo050(97),  scaleValueTo050(72), "front_right_door", "6RU831055J", "Дверь передняя правая" , 33000000 + 13 );
-//        initDetail( parent_layout, prefixImg+"front_right_wing", 150, 110, "front_right_wing", "6RU821106C", "Крыло переднее правое", 33000000 + 14 );
-//        initDetail( parent_layout, prefixImg+"hood", 174,  customBiasValue(110,  2), "hood", "6RU823031C", "Капот", 33000000 + 15 );
-//        initDetail( parent_layout, prefixImg+"rear_right_wing", 42, 79, "rear_right_wing", "6RU809605A", "Крыло заднее правое", 33000000 + 16 );
-//        initDetail( parent_layout, prefixImg+"windshield", 144,  72, "windshield", "6RU845011J", "Лобовое стекло", 33000000 + 17 );
-//        initDetail( parent_layout, prefixImg+"front_right_headlight", 212,  147, "front_right_headlight", "6RU941016", "Фара передняя правая", 33000000 + 19 );
-//        initDetail( parent_layout, prefixImg+"roof", 75,  65, "roof", "6RU817111B", "Крыша", 33000000 + 21 );
-//        initDetail( parent_layout, prefixImg+"rear_right_door", 64, 103, "rear_right_door", "6RU833056D", "Дверь задняя правая", 33000000 + 11 );
-//        initDetail( parent_layout, prefixImg+"front_wheel", 160,  163, "front_wheel", "6Q0601027AC", "Колесо", 33000000 + 22 );
-//        initDetail( parent_layout, prefixImg+"rear_wheel", 51,  138, "rear_wheel", "6Q0601027AC", "Колесо", 33000000 + 23 );
-
-//        }
     }
 
     private int scaleValueTo050(int def){
@@ -982,7 +984,6 @@ public class ImageDragActivity extends AppCompatActivity {
         double wCar = layoutCarRF_x033.getWidth();
         double hCar = layoutCarRF_x033.getHeight();
 
-//        fName = "m3d_vw6_sed_x033_front_right_front_bumper";
         Context context = layoutCarRF_x033.getContext();
         String tmpDetailName = null;
         try {
@@ -1102,4 +1103,4 @@ public class ImageDragActivity extends AppCompatActivity {
     }
 
 
-} // \ImageDragActivity
+}

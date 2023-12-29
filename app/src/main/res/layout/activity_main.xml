@@ -1,198 +1,218 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/drawer_layout"
     android:background="#FFFFFF"
     tools:context=".MainActivity">
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/layout_top_menu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="top|fill_horizontal"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-        <ImageView
-            android:id="@+id/ico_menu"
-            android:layout_width="35dp"
-            android:layout_height="38dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="28dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ico_menu" />
-        <ImageView
-            android:id="@+id/vw_logo_full"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/vw_logo_full" />
-        <ImageView
-            android:id="@+id/ico_dtp2"
-            android:layout_width="53dp"
-            android:layout_height="69dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="13dp"
-            app:layout_constraintStart_toEndOf="@+id/vw_logo_full"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ico_dtp2" />
+            app:layout_constraintStart_toStartOf="parent">
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/top_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/ico_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/imageView6"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ico_menu" />
+
+                <ImageView
+                    android:id="@+id/imageView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/vw_logo_full" />
+
+                <ImageView
+                    android:id="@+id/ico_dtp2"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageView6"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ico_zero" />
+
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp">
+
+            <!-- CONTENT -->
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFFFFF"
+                android:layout_marginTop="12dp">
+
+                <ImageButton
+                    android:id="@+id/block_add_photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_x="34dp"
+                    android:layout_y="212dp"
+                    android:background="@android:color/transparent"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/layout_top_menu"
+                    app:srcCompat="@drawable/block_grey" />
+
+                <TextView
+                    android:id="@+id/selectFileMedia"
+                    android:layout_width="328dp"
+                    android:layout_height="124dp"
+                    android:layout_marginTop="24dp"
+                    android:gravity="center"
+                    android:text="Нажмите сюда\nдля добавления\nфотографии из галереи"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@+id/block_add_photo"
+                    app:layout_constraintTop_toTopOf="@+id/block_add_photo"
+                    app:lineHeight="28dp" />
+
+                <Button
+                    android:id="@+id/selectCamera"
+                    android:layout_width="145dp"
+                    android:layout_height="61dp"
+                    android:layout_marginStart="88dp"
+                    android:layout_marginTop="168dp"
+                    android:autoText="false"
+                    android:background="#FE605C"
+                    android:capitalize="none"
+                    android:text="Сделать фото"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintStart_toStartOf="@+id/block_add_photo"
+                    app:layout_constraintTop_toTopOf="@+id/block_add_photo" />
+
+                <ImageButton
+                    android:id="@+id/btnStartDisbld"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/block_add_photo"
+                    android:layout_marginTop="16dp"
+                    android:layout_x="7dp"
+                    android:layout_y="148dp"
+                    android:background="@android:color/transparent"
+                    android:text="Post Data"
+                    android:textAllCaps="false"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/block_add_photo"
+                    app:srcCompat="@drawable/block_start_send_photo_grey" />
+
+                <ImageButton
+                    android:id="@+id/idBtnPostData2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/block_add_photo"
+                    android:layout_marginTop="16dp"
+                    android:layout_x="7dp"
+                    android:layout_y="148dp"
+                    android:background="@android:color/transparent"
+                    android:text="Post Data"
+                    android:textAllCaps="false"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/block_add_photo"
+                    app:srcCompat="@drawable/block_start_send_photo_red2" />
+
+
+                <ImageView
+                    android:id="@+id/m3d_car_front_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/selectCamera"
+                    app:layout_constraintVertical_bias="0.549"
+                    app:srcCompat="@drawable/car_on_main" />
+
+                <TextView
+                    android:id="@+id/cntPhoto"
+                    android:layout_width="28dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="20dp"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textColor="#FFFFFF"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="@+id/btnStartDisbld"
+                    app:layout_constraintTop_toBottomOf="@+id/block_add_photo" />
+
+                <TextView
+                    android:id="@+id/cntVideo"
+                    android:layout_width="30dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="20dp"
+                    android:text="0"
+                    android:textAlignment="center"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintEnd_toEndOf="@+id/btnStartDisbld"
+                    app:layout_constraintTop_toBottomOf="@+id/block_add_photo" />
+
+                <ImageView
+                    android:id="@+id/ico3d"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    app:layout_constraintEnd_toEndOf="@id/m3d_car_front_right"
+                    app:layout_constraintTop_toTopOf="@id/m3d_car_front_right"
+                    app:srcCompat="@drawable/ico3d" />
+
     </android.support.constraint.ConstraintLayout>
 
-    <ImageButton
-        android:id="@+id/block_add_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_x="34dp"
-        android:layout_y="212dp"
-        android:background="@android:color/transparent"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_top_menu"
-        app:srcCompat="@drawable/block_grey" />
-
-    <TextView
-        android:id="@+id/selectFileMedia"
-        android:layout_width="328dp"
-        android:layout_height="124dp"
-        android:layout_marginTop="24dp"
-        android:gravity="center"
-        android:text="Нажмите сюда\nдля добавления\nфотографии из галереи"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/block_add_photo"
-        app:layout_constraintTop_toTopOf="@+id/block_add_photo"
-        app:lineHeight="28dp" />
-
-    <Button
-        android:id="@+id/selectCamera"
-        android:layout_width="145dp"
-        android:layout_height="61dp"
-        android:layout_marginStart="88dp"
-        android:layout_marginTop="168dp"
-        android:autoText="false"
-        android:background="#FE605C"
-        android:capitalize="none"
-        android:text="Сделать фото"
-        android:textColor="#FFFFFF"
-        app:layout_constraintStart_toStartOf="@+id/block_add_photo"
-        app:layout_constraintTop_toTopOf="@+id/block_add_photo" />
-
-    <ImageButton
-        android:id="@+id/btnStartDisbld"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/block_add_photo"
-        android:layout_marginTop="16dp"
-        android:layout_x="7dp"
-        android:layout_y="148dp"
-        android:background="@android:color/transparent"
-        android:text="Post Data"
-        android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/block_add_photo"
-        app:srcCompat="@drawable/block_start_send_photo_grey" />
-
-    <ImageButton
-        android:id="@+id/idBtnPostData2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/block_add_photo"
-        android:layout_marginTop="16dp"
-        android:layout_x="7dp"
-        android:layout_y="148dp"
-        android:background="@android:color/transparent"
-        android:text="Post Data"
-        android:textAllCaps="false"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/block_add_photo"
-        app:srcCompat="@drawable/block_start_send_photo_red2" />
-
-    <!--<ProgressBar
-        android:id="@+id/idPBLoading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:indeterminate="true"
-        android:visibility="gone" />
--->
-
-    <!--<ImageView
-        android:id="@+id/carOnMain"
-        android:layout_width="318dp"
-        android:layout_height="134dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/idBtnPostData"
-        app:srcCompat="@drawable/car_on_main" />
--->
-
-    <ImageView
-        android:id="@+id/m3d_car_front_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="400dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5"
-        app:srcCompat="@drawable/car_on_main" />
-
-
-    <TextView
-        android:id="@+id/cntPhoto"
-        android:layout_width="28dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="20dp"
-        android:text="0"
-        android:textAlignment="center"
-        android:textColor="#FFFFFF"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="@+id/btnStartDisbld"
-        app:layout_constraintTop_toBottomOf="@+id/block_add_photo" />
-
-    <TextView
-        android:id="@+id/cntVideo"
-        android:layout_width="30dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="20dp"
-        android:text="0"
-        android:textAlignment="center"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="@+id/btnStartDisbld"
-        app:layout_constraintTop_toBottomOf="@+id/block_add_photo" />
-
-    <ImageView
-        android:id="@+id/ico3d"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="@id/m3d_car_front_right"
-        app:layout_constraintTop_toTopOf="@id/m3d_car_front_right"
-        app:srcCompat="@drawable/ico3d" />
+            <!-- \ CONTENT -->
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="bottom|fill_horizontal"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:text="TextView"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/bottomPrices"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/bottomPrices"
@@ -218,27 +238,35 @@
 
         <TextView
             android:id="@+id/sumRepairs"
-            android:layout_width="60dp"
+            android:layout_width="80dp"
             android:layout_height="25dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="22dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
             android:text="0"
             android:textAlignment="textEnd"
-            android:textSize="20sp"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@+id/bottomPrices"
             app:layout_constraintTop_toTopOf="@+id/bottomPrices" />
 
         <TextView
             android:id="@+id/sumRepairsWork"
-            android:layout_width="60dp"
+            android:layout_width="80dp"
             android:layout_height="25dp"
-            android:layout_marginTop="22dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="57dp"
             android:text="0"
             android:textAlignment="textEnd"
-            android:textSize="20sp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="@+id/bottomPrices"
             app:layout_constraintTop_toTopOf="@+id/bottomPrices" />
+
+        <TextView
+            android:id="@+id/respView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/linkToSmetaDetails"
@@ -264,4 +292,19 @@
 
     </android.support.constraint.ConstraintLayout>
 
+
 </android.support.constraint.ConstraintLayout>
+
+    </LinearLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.design.widget.NavigationView
+        android:layout_width="330dp"
+        android:layout_height="match_parent"
+        android:id="@+id/nav_view"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/nav_menu" />
+
+</android.support.v4.widget.DrawerLayout>
