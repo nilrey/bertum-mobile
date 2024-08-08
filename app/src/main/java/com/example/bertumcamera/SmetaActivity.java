@@ -64,7 +64,8 @@ public class SmetaActivity extends AppCompatActivity implements NavigationView.O
 
     private String detail_article_orig ="", detail_article = "", detail_title = "", detail_title_rus = "", detail_type = "",
             detail_price = "";
-    private ImageView smeta_tab_details, smeta_tab_repair, detail_close_1, repair_close_1, repair_close_2, ico_cart, button_cart,
+    private ImageView smeta_tab_details, smeta_tab_repair, map_service_place, move_detail_service,
+            detail_close_1, repair_close_1, repair_close_2, ico_cart, button_cart,
             detail_photo_1, detail_photo_2, detail_photo_3, detail_photo_4, detail_photo_5,
             detail_photo_6, detail_photo_7, detail_photo_8, detail_photo_9, detail_photo_10;
     private Button detail_buy_2, detail_buy_3, detail_buy_4, detail_buy_5, detail_buy_6,
@@ -101,6 +102,8 @@ public class SmetaActivity extends AppCompatActivity implements NavigationView.O
         linkToMainpage = findViewById(R.id.linkToMainpage);
         smeta_tab_details = findViewById(R.id.smeta_tab_details);
         smeta_tab_repair = findViewById(R.id.smeta_tab_repair);
+        map_service_place = findViewById(R.id.map_service_place);
+        move_detail_service = findViewById(R.id.move_detail_service);
         ll_details = findViewById(R.id.ll_details);
         ll_repair = findViewById(R.id.ll_repair);
         rl_warn_subdetails = findViewById(R.id.rl_warn_subdetails);
@@ -136,6 +139,20 @@ public class SmetaActivity extends AppCompatActivity implements NavigationView.O
                 smeta_tab_repair.setImageResource(getImageId("smeta_tab_repair_active"));
             }
         });
+
+        map_service_place.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialog();
+            }
+        } );
+
+        move_detail_service.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialog();
+            }
+        } );
 
         if(getSharedValueInt("cartSum") > 0 ) {
             areaInformer.setVisibility(View.GONE);
@@ -487,6 +504,12 @@ public class SmetaActivity extends AppCompatActivity implements NavigationView.O
             }
         });
     }
+
+    public void openDialog() {
+        InfoDialog infoDialog = new InfoDialog();
+        infoDialog.show(getSupportFragmentManager(), "");
+    }
+
     private void initRepairBlocks(){
         rl_repair_1 = findViewById(R.id.rl_repair_1);
         rl_repair_2 = findViewById(R.id.rl_repair_2);

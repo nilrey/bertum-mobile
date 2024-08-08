@@ -193,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(MainActivity.this, SmetaActivity.class));
             }
         });
+
     }
 
     public void openCloseNavigationDrawer(View view) {
