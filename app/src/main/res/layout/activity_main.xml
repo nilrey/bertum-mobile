@@ -70,6 +70,7 @@
             <!-- CONTENT -->
 
             <android.support.constraint.ConstraintLayout
+                android:id="@+id/wraper_linearLayout3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#FFFFFF"
@@ -85,7 +86,7 @@
                     android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/layout_top_menu"
+                    app:layout_constraintTop_toTopOf="@+id/wraper_linearLayout3"
                     app:srcCompat="@drawable/block_grey" />
 
                 <TextView

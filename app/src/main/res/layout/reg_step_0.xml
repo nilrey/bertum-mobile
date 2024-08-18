@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/header_authorization"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="220dp"
+        android:text="Авторизация"
+        android:textColor="#4F565E"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/header_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:text="Логин"
+        android:textColor="#4F565E"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_authorization"
+        />
+
+    <EditText
+        android:id="@+id/input_login"
+        android:layout_width="324dp"
+        android:layout_height="51dp"
+        android:ems="10"
+        android:inputType="text"
+        android:maxLength="12"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/check_agee"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_login"
+        />
+
+    <TextView
+        android:id="@+id/header_pass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:text="Пароль"
+        android:textColor="#4F565E"
+        android:textSize="14sp"
+        android:textStyle="normal"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_login"
+        />
+
+    <EditText
+        android:id="@+id/input_pass"
+        android:inputType="textPassword"
+        android:layout_width="324dp"
+        android:layout_height="51dp"
+        android:ems="10"
+        android:maxLength="12"
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/check_agee"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_pass"
+        />
+
+
+    <ImageView
+        android:id="@+id/link_step_0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_authorization"
+        app:srcCompat="@drawable/reg_step_0_button"
+        />
+
+
+</android.support.constraint.ConstraintLayout>

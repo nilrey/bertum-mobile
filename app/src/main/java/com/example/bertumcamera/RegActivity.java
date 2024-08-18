@@ -1,6 +1,7 @@
 package com.example.bertumcamera;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -12,26 +13,32 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.app.AlertDialog;
 
 public class RegActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor ed;
-    private ImageView ico_menu, link_step_1,  link_step_2, link_step_3, link_step_4, link_step_5, link_step_6;
-    private EditText input_phone;
-    private View regstep1, regstep2, regstep3, regstep4, regstep5, regstep6;
+    private ImageView ico_menu, link_step_0, link_step_1,  link_step_2, link_step_3, link_step_4, link_step_5, link_step_6;
+    private EditText input_login, input_pass;
+    private View regstep0, regstep1, regstep2, regstep3, regstep4, regstep5, regstep6;
     private String lastChar = " ";
     float x, y, dx, dy;
-    long cntTouchImpulse = 0, cntSlide = 1, cntSlideLimit = 7;
+    long cntTouchImpulse = 0, cntSlide = 0, cntSlideLimit = 7;
     private ImageView slide_place;
+
+    private TextView header_authorization, header_login;
+
     private LinearLayout slider_holder;
 
     @Override
@@ -40,12 +47,14 @@ public class RegActivity extends AppCompatActivity {
         setContentView(R.layout.activity_reg);
 
         slider_holder = findViewById(R.id.slider_holder);
+        link_step_0 = findViewById(R.id.link_step_0);
         link_step_1 = findViewById(R.id.link_step_1);
         link_step_2 = findViewById(R.id.link_step_2);
         link_step_3 = findViewById(R.id.link_step_3);
         link_step_4 = findViewById(R.id.link_step_4);
         link_step_5 = findViewById(R.id.link_step_5);
         link_step_6 = findViewById(R.id.link_step_6);
+        regstep0 = findViewById(R.id.regstep0);
         regstep1 = findViewById(R.id.regstep1);
         regstep2 = findViewById(R.id.regstep2);
         regstep3 = findViewById(R.id.regstep3);
@@ -55,6 +64,10 @@ public class RegActivity extends AppCompatActivity {
 
         slide_place = findViewById(R.id.slide_place);
 
+        header_authorization = findViewById(R.id.header_authorization);
+        header_login = findViewById(R.id.header_login);
+        input_login = findViewById(R.id.input_login);
+        input_pass = findViewById(R.id.input_pass);
 
         slide_place.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,16 +82,32 @@ public class RegActivity extends AppCompatActivity {
                 return false;
             }
         });
-//        genImageViewOnTouch(slide_place);
-
-//        try {
-//            Thread.sleep(2000); // delay for 2 second
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
 
         setStepsOnclick();
 
+        if( cntSlide == 0 && getSharedValueInt("isFirstRun") == 1 ){
+            cntSlide = 1;
+            regstep0.setVisibility(View.GONE);
+            regstep1.setVisibility(View.VISIBLE);
+        }
+
+        link_step_0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if( input_login.getText().toString().equals("admin") && input_pass.getText().toString().equals("1111") ){
+                    setStep(regstep1);
+                }else{
+                    AlertDialog.Builder alert = new AlertDialog.Builder(RegActivity.this);
+                    alert.setMessage("Вы указали неверный логин/пароль");
+                    alert.setPositiveButton(android.R.string.ok, null);
+//                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //create a new one
+//                    layoutParams.gravity = Gravity.CENTER;
+                    AlertDialog dialog = alert.show();
+//                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setLayoutParams(layoutParams);
+
+                }
+            }
+        });
         link_step_6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,37 +115,16 @@ public class RegActivity extends AppCompatActivity {
                 startActivity(new Intent(RegActivity.this, MainActivity.class));
             }
         });
-        input_phone = findViewById(R.id.input_phone);
-        input_phone.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int digits = input_phone.getText().toString().length();
-                if (digits > 1){
-                    lastChar = input_phone.getText().toString().substring(digits-1);
-                }
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int digits = input_phone.getText().toString().length();
-                if (!lastChar.equals("-")) {
-                    if (digits == 3 || digits == 7) {
-                        input_phone.append("-");
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-
-        });
 
     }
 
     public void setStepsOnclick(){
-
+//        link_step_0.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                setStep(regstep1);
+//            }
+//        });
         link_step_1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,6 +163,7 @@ public class RegActivity extends AppCompatActivity {
         elem.setVisibility(View.VISIBLE);
     }
     public void hideAllSteps(){
+        regstep0.setVisibility(View.GONE);
         regstep1.setVisibility(View.GONE);
         regstep2.setVisibility(View.GONE);
         regstep3.setVisibility(View.GONE);
@@ -210,11 +219,17 @@ public class RegActivity extends AppCompatActivity {
                     if(cntSlide > cntSlideLimit) cntSlide = cntSlideLimit;
                 }else{ // prev slide
                     --cntSlide;
-                    if(cntSlide < 1) cntSlide = 1;
+                    if(cntSlide < 1) {
+                            cntSlide = 0;
+                    }
                 }
-                int detailImageId = getResources().getIdentifier("slide_"+String.valueOf(cntSlide), "drawable", getPackageName());
-                if(detailImageId > 0 ){
-                    slide_place.setImageResource(detailImageId);
+                if( cntSlide == 0 && getSharedValueInt("isFirstRun") == 1 ){
+                    cntSlide = 1;
+                }
+
+                int selectedSlideId = getResources().getIdentifier("slide_"+String.valueOf(cntSlide), "drawable", getPackageName());
+                if(selectedSlideId > 0 ){
+                    slide_place.setImageResource(selectedSlideId);
                 }
 
                 int slidePointActiveId = getResources().getIdentifier("reg_step_circle_red", "drawable", getPackageName());

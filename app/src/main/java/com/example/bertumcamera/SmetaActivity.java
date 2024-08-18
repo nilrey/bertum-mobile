@@ -506,8 +506,7 @@ public class SmetaActivity extends AppCompatActivity implements NavigationView.O
     }
 
     public void openDialog() {
-        InfoDialog infoDialog = new InfoDialog();
-        infoDialog.show(getSupportFragmentManager(), "");
+        startActivity(new Intent(SmetaActivity.this, Schedule.class));
     }
 
     private void initRepairBlocks(){
