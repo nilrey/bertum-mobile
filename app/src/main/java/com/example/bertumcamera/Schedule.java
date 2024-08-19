@@ -89,13 +89,17 @@ public class Schedule extends AppCompatActivity implements NavigationView.OnNavi
         linkToSmetaDetails = findViewById(R.id.linkToSmetaDetails);
         linkToSmetaRepairs = findViewById(R.id.linkToSmetaRepairs);
 
-        String [] data = {"Выберите автосервис", "Автосервис 1", "Автосервис 2"};
+        String [] autoservise_list = {"Выберите автосервис", "Автосервис #1", "Автосервис #2"};
         service_name =  findViewById(R.id.select_autoservice);
-        ArrayAdapter<String> adapter = new SpinnerAdapter(this, android.R.layout.simple_spinner_item, data);
+        ArrayAdapter<String> adapter = new SpinnerAdapter(this, android.R.layout.simple_spinner_item, autoservise_list);
         service_name.setAdapter(adapter);
         service_name.setSelection(0);
 
+        String [] servise_time_list = {"Выберите время визита", "9:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00" };
         Spinner service_time = findViewById(R.id.select_time);
+        adapter = new SpinnerAdapter(this, android.R.layout.simple_spinner_item, servise_time_list);
+        service_time.setAdapter(adapter);
+        service_time.setSelection(0);
 
         button_picker_date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +134,9 @@ public class Schedule extends AppCompatActivity implements NavigationView.OnNavi
                                     alert.show();
                                 } else{
                                     String month_name = getMonthName(monthOfYear);
-                                    holder_picker_date.setText(dayOfMonth + " " + month_name + " " + year);
+                                    String selected_date = dayOfMonth + " " + month_name + " " + year;
+                                    holder_picker_date.setText(selected_date);
+                                    button_picker_date.setText("Вы выбрали дату: " + selected_date);
                                 }
 
                                 // on below line we are setting date to our text view.
@@ -144,7 +150,7 @@ public class Schedule extends AppCompatActivity implements NavigationView.OnNavi
             }
 
         });
-
+/*
         service_name.setOnItemSelectedListener( new AdapterView.OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -154,6 +160,15 @@ public class Schedule extends AppCompatActivity implements NavigationView.OnNavi
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+        service_time.setOnItemSelectedListener( new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                spinnerChoise  = position;
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });*/
         ico_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,12 +179,23 @@ public class Schedule extends AppCompatActivity implements NavigationView.OnNavi
             @Override
             public void onClick(View v) {
 //                после нажатия на кнопку записаться выдать сообщение с выбранными параметрами записи на сервис: Сервис, Дата, Время
-                String selected_service_name = ((Spinner) findViewById(R.id.select_autoservice)).getSelectedItem().toString();
+                int selected_service = ((Spinner)findViewById(R.id.select_autoservice)).getSelectedItemPosition();
+                int selected_time = ((Spinner)findViewById(R.id.select_time)).getSelectedItemPosition();
+                String selected_service_name = String.valueOf(((Spinner)findViewById(R.id.select_autoservice)).getSelectedItem());
                 String selected_service_date =((TextView) findViewById(R.id.holder_picker_date)).getText().toString();
+                String selected_service_time = String.valueOf(((Spinner)findViewById(R.id.select_time)).getSelectedItem());
+                String alert_message = "Вы выбрали: \n\n"+ selected_service_name +" \n\nДата визита: "+ selected_service_date +"\n\nВремя: " + selected_service_time;
+                if(selected_service == 0){
+                    alert_message = "Пожалуйста, выберите автосервис для обращения";
+                }else if(selected_service_date.equals("") ){
+                    alert_message = "Пожалуйста, выберите дату записи";
+                }else if(selected_time == 0){
+                    alert_message = "Пожалуйста, выберите время записи";
+                }
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(Schedule.this);
-                alert.setMessage("Вы выбрали: \n"+ selected_service_name +" \nДата визита: "+ selected_service_date +"\nВремя: ");
-                alert.setPositiveButton(android.R.string.ok, null);
+                alert.setMessage(alert_message);
+                alert.setPositiveButton("Отправить заявку", null);
                 alert.show();
             }
         });

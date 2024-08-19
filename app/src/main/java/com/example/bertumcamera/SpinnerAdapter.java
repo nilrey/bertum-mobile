@@ -32,6 +32,7 @@ public class SpinnerAdapter extends ArrayAdapter<String> {
                 .findViewById(android.R.id.text1);
         tv.setText(items[position]);
         tv.setTextSize(18);
+        tv.setTextColor(0xFF333333);
         return convertView;
     }
 
