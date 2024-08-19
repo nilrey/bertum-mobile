@@ -1,5 +1,6 @@
 package com.example.bertumcamera;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,14 +9,31 @@ import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Spinner;
+
+
+import android.app.DatePickerDialog;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.TextView;
+//import androidx.appcompat.app.AppCompatActivity;
+import java.time.LocalDate;
+import java.util.Calendar;
 
 
 public class Schedule extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -28,6 +46,13 @@ public class Schedule extends AppCompatActivity implements NavigationView.OnNavi
     private TextView
             cntTotalItems, sumRepairs, sumRepairsWork, linkToSmetaRepairs , linkToSmetaDetails;
     private ImageView ico_cart, button_signup_service;
+    private Spinner service_name, service_time;
+
+    int DIALOG_DATE = 1;
+    int myYear = 2024;
+    int myMonth = 8;
+    int myDay = 18;
+    private TextView button_picker_date, holder_picker_date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +72,9 @@ public class Schedule extends AppCompatActivity implements NavigationView.OnNavi
                 }
         );
 
+        button_picker_date = findViewById(R.id.button_picker_date);
+        holder_picker_date = findViewById(R.id.holder_picker_date);
+
         // контроллы управления и видимости
         areaSignupRepairs = findViewById(R.id.areaSignupRepairs);
         context = areaSignupRepairs.getContext();
@@ -61,6 +89,71 @@ public class Schedule extends AppCompatActivity implements NavigationView.OnNavi
         linkToSmetaDetails = findViewById(R.id.linkToSmetaDetails);
         linkToSmetaRepairs = findViewById(R.id.linkToSmetaRepairs);
 
+        String [] data = {"Выберите автосервис", "Автосервис 1", "Автосервис 2"};
+        service_name =  findViewById(R.id.select_autoservice);
+        ArrayAdapter<String> adapter = new SpinnerAdapter(this, android.R.layout.simple_spinner_item, data);
+        service_name.setAdapter(adapter);
+        service_name.setSelection(0);
+
+        Spinner service_time = findViewById(R.id.select_time);
+
+        button_picker_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+                // on below line we are getting our day, month and year.
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int day = c.get(Calendar.DAY_OF_MONTH);
+
+                // on below line we are creating a variable for date picker dialog.
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        // on below line we are passing context.
+                        Schedule.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+//                                check date values
+                                LocalDate today = LocalDate.now();
+                                String month_str = String.valueOf(monthOfYear+1);
+                                if(monthOfYear+1 < 10) month_str = '0'+ month_str;
+                                String day_str = String.valueOf(dayOfMonth);
+                                if(dayOfMonth < 10) day_str = '0'+ day_str;
+                                LocalDate date = LocalDate.parse(String.valueOf(year)+"-"+ month_str +"-"+ day_str);
+                                System.out.println(date);
+
+                                if (date.compareTo(today) <= 0) {
+                                    AlertDialog.Builder alert = new AlertDialog.Builder(Schedule.this);
+                                    alert.setMessage("На эту дату записи нет. Выберите, пожалуйста, дату начиная с завтрашнего дня");
+                                    alert.setPositiveButton(android.R.string.ok, null);
+                                    alert.show();
+                                } else{
+                                    String month_name = getMonthName(monthOfYear);
+                                    holder_picker_date.setText(dayOfMonth + " " + month_name + " " + year);
+                                }
+
+                                // on below line we are setting date to our text view.
+
+                            }
+                        },
+                        // on below line we are passing year, month and day for selected date in our date picker.
+                        year, month, day);
+                // at last we are calling show to display our date picker dialog.
+                datePickerDialog.show();
+            }
+
+        });
+
+        service_name.setOnItemSelectedListener( new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                spinnerChoise  = position;
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
         ico_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,12 +163,23 @@ public class Schedule extends AppCompatActivity implements NavigationView.OnNavi
         button_signup_service.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                после нажатия на кнопку записаться выдать сообщение с выбранными параметрами записи на сервис: Сервис, Время
-                openDialog();
+//                после нажатия на кнопку записаться выдать сообщение с выбранными параметрами записи на сервис: Сервис, Дата, Время
+                String selected_service_name = ((Spinner) findViewById(R.id.select_autoservice)).getSelectedItem().toString();
+                String selected_service_date =((TextView) findViewById(R.id.holder_picker_date)).getText().toString();
 
+                AlertDialog.Builder alert = new AlertDialog.Builder(Schedule.this);
+                alert.setMessage("Вы выбрали: \n"+ selected_service_name +" \nДата визита: "+ selected_service_date +"\nВремя: ");
+                alert.setPositiveButton(android.R.string.ok, null);
+                alert.show();
             }
         });
 
+    }
+
+    public String getMonthName(int mn_nmb){
+        String [] months = {"Января","Февраля","Марта","Апреля","Мая","Июня","Июля","Августа","Сентября","Октября","Ноября","Декабря"};
+        if(mn_nmb < 0 || mn_nmb > 11) mn_nmb = 0;
+        return months[mn_nmb];
     }
 
     public void openDialog() {
