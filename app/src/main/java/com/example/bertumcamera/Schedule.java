@@ -92,7 +92,7 @@ public class Schedule extends AppCompatActivity implements NavigationView.OnNavi
         linkToSmetaDetails = findViewById(R.id.linkToSmetaDetails);
         linkToSmetaRepairs = findViewById(R.id.linkToSmetaRepairs);
 
-        String [] autoservise_list = {"Выберите автосервис", "Автосервис #1", "Автосервис #2"};
+        String [] autoservise_list = {"Выберите автосервис", "1. Зил сервис", "2. Хрипань СТО"};
         service_name =  findViewById(R.id.select_autoservice);
         ArrayAdapter<String> adapter = new SpinnerAdapter(this, android.R.layout.simple_spinner_item, autoservise_list);
         service_name.setAdapter(adapter);
@@ -108,7 +108,7 @@ public class Schedule extends AppCompatActivity implements NavigationView.OnNavi
         webView.getSettings().setDatabaseEnabled(true);
         webView.setWebViewClient(new WebViewClient());
 //        Uri data = getIntent().getData();
-        String url = "https://static-maps.yandex.ru/v1?ll=37.620070,55.68&lang=ru_RU&size=350,250&z=11&pt=37.64,55.665,pmwtm1~37.55,55.675,pmwtm2&apikey=0acfb25e-faa6-4004-a078-68affe953c4e";
+        String url = "https://static-maps.yandex.ru/v1?ll=37.9,55.65&lang=ru_RU&size=350,200&z=9&pt=37.66,55.71,pmwtm1~38.15,55.62,pmwtm2&apikey=0acfb25e-faa6-4004-a078-68affe953c4e";
         webView.loadUrl(url);
         button_picker_date.setOnClickListener(new View.OnClickListener() {
             @Override
