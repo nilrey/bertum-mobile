@@ -6,7 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/drawer_layout"
-    tools:context=".SmetaActivity">
+    tools:context=".SmetaActivity"
+    android:networkSecurityConfig="@xml/network_security_config"
+    >
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="wrap_content"
@@ -271,51 +273,50 @@
 
                         </LinearLayout>
 
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginLeft="20dp"-->
+<!--                            android:layout_marginTop="15dp"-->
+<!--                            android:layout_marginRight="20dp"-->
+<!--                            android:gravity="center"-->
+<!--                            android:orientation="horizontal"-->
+<!--                            android:textAlignment="center">-->
+
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:text="Дата и время ремонта:"-->
+<!--                                android:textColor="#374957"-->
+<!--                                android:textSize="14dp"-->
+<!--                                android:textStyle="bold" />-->
+
+<!--                        </LinearLayout>-->
+
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginLeft="20dp"-->
+<!--                            android:layout_marginRight="20dp"-->
+<!--                            android:layout_marginBottom="5dp"-->
+<!--                            android:gravity="center"-->
+<!--                            android:orientation="horizontal"-->
+<!--                            android:textAlignment="center">-->
+
+<!--                            <TextView-->
+<!--                                android:layout_width="wrap_content"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:text="25 ноября 2023 с 10-00 до 15-00 "-->
+<!--                                android:textColor="#374957"-->
+<!--                                android:textSize="14dp"-->
+<!--                                android:textStyle="normal" />-->
+
+<!--                        </LinearLayout>-->
+
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginRight="20dp"
-                            android:gravity="center"
-                            android:orientation="horizontal"
-                            android:textAlignment="center">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Дата и время ремонта:"
-                                android:textColor="#374957"
-                                android:textSize="14dp"
-                                android:textStyle="bold" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"
-                            android:layout_marginBottom="5dp"
-                            android:gravity="center"
-                            android:orientation="horizontal"
-                            android:textAlignment="center">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="25 ноября 2023 с 10-00 до 15-00 "
-                                android:textColor="#374957"
-                                android:textSize="14dp"
-                                android:textStyle="normal" />
-
-                        </LinearLayout>
-
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="20dp"
                             android:gravity="center"
                             android:visibility="visible"
                             android:orientation="vertical"
@@ -326,7 +327,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                app:srcCompat="@drawable/map_service_place" />
+                                app:srcCompat="@drawable/btn_link_autoservice" />
 
                         </LinearLayout>
 

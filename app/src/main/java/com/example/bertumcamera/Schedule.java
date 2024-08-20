@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -101,6 +104,12 @@ public class Schedule extends AppCompatActivity implements NavigationView.OnNavi
         service_time.setAdapter(adapter);
         service_time.setSelection(0);
 
+        WebView webView = (WebView) findViewById(R.id.webView);
+        webView.getSettings().setDatabaseEnabled(true);
+        webView.setWebViewClient(new WebViewClient());
+//        Uri data = getIntent().getData();
+        String url = "https://static-maps.yandex.ru/v1?ll=37.620070,55.68&lang=ru_RU&size=350,250&z=11&pt=37.64,55.665,pmwtm1~37.55,55.675,pmwtm2&apikey=0acfb25e-faa6-4004-a078-68affe953c4e";
+        webView.loadUrl(url);
         button_picker_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,22 +190,18 @@ public class Schedule extends AppCompatActivity implements NavigationView.OnNavi
                 String selected_service_name = String.valueOf(((Spinner)findViewById(R.id.select_autoservice)).getSelectedItem());
                 String selected_service_date =((TextView) findViewById(R.id.holder_picker_date)).getText().toString();
                 String selected_service_time = String.valueOf(((Spinner)findViewById(R.id.select_time)).getSelectedItem());
-                String alert_message = "Вы выбрали: \n\n"+ selected_service_name +" \n\nДата визита: "+ selected_service_date +"\n\nВремя: " + selected_service_time;
-                String alert_btn_title = "Отправить заявку";
+                String alert_message = "Ваша заявка получена. \n\nВаш автосервис: "+ selected_service_name +" \n\nДата визита: "+ selected_service_date +"\n\nВремя: " + selected_service_time;
                 if(selected_service == 0){
                     alert_message = "Пожалуйста, выберите автосервис для обращения";
-                    alert_btn_title = "Ok";
                 }else if(selected_service_date.equals("") ){
                     alert_message = "Пожалуйста, выберите дату записи";
-                    alert_btn_title = "Ok";
                 }else if(selected_time == 0){
                     alert_message = "Пожалуйста, выберите время записи";
-                    alert_btn_title = "Ok";
                 }
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(Schedule.this);
                 alert.setMessage(alert_message);
-                alert.setPositiveButton(alert_btn_title, null);
+                alert.setPositiveButton("Ок", null);
                 alert.show();
             }
         });

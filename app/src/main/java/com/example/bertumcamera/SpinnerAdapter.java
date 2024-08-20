@@ -33,6 +33,7 @@ public class SpinnerAdapter extends ArrayAdapter<String> {
         tv.setText(items[position]);
         tv.setTextSize(18);
         tv.setTextColor(0xFF333333);
+        tv.setPadding(20,20, 25,25);
         return convertView;
     }
 
@@ -52,6 +53,7 @@ public class SpinnerAdapter extends ArrayAdapter<String> {
         tv.setText(items[position]);
 //        tv.setTextColor(Color.BLUE);
         tv.setTextSize(18);
+        tv.setTextColor(0xFF333333);
         return convertView;
     }
 }

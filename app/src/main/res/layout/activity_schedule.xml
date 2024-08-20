@@ -136,6 +136,24 @@
 
                                 </LinearLayout>
 
+<!--                                <LinearLayout-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:layout_margin="20dp"-->
+<!--                                    android:gravity="center"-->
+<!--                                    android:visibility="visible"-->
+<!--                                    android:orientation="vertical"-->
+<!--                                    android:textAlignment="center">-->
+
+<!--                                    <ImageView-->
+<!--                                        android:id="@+id/map_service_place"-->
+<!--                                        android:layout_width="wrap_content"-->
+<!--                                        android:layout_height="wrap_content"-->
+<!--                                        android:layout_weight="1"-->
+<!--                                        app:srcCompat="@drawable/map_service_place" />-->
+
+<!--                                </LinearLayout>-->
+
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -145,12 +163,12 @@
                                     android:orientation="vertical"
                                     android:textAlignment="center">
 
-                                    <ImageView
-                                        android:id="@+id/map_service_place"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        app:srcCompat="@drawable/map_service_place" />
+                                    <WebView
+                                        android:id="@+id/webView"
+                                        android:layout_width="350dp"
+                                        android:layout_height="250dp"
+                                        android:gravity="center"
+                                        />
 
                                 </LinearLayout>
 
@@ -186,7 +204,7 @@
                                         android:clickable="true"
                                         android:gravity="left"
                                         android:onClick="onclick"
-                                        android:paddingLeft="10dp"
+                                        android:paddingLeft="8dp"
                                         android:text="Выберите дату визита"
                                         android:textColor="#333333"
                                         android:textSize="18sp" />
@@ -250,6 +268,7 @@
 
                         </LinearLayout>
                     </ScrollView>
+
 
 
                 </LinearLayout>
