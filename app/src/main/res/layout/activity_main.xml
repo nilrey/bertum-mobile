@@ -102,19 +102,41 @@
                     app:layout_constraintTop_toTopOf="@+id/block_add_photo"
                     app:lineHeight="28dp" />
 
-                <Button
-                    android:id="@+id/selectCamera"
-                    android:layout_width="145dp"
-                    android:layout_height="61dp"
-                    android:layout_marginStart="88dp"
-                    android:layout_marginTop="168dp"
-                    android:autoText="false"
-                    android:background="#FE605C"
-                    android:capitalize="none"
-                    android:text="Сделать фото"
-                    android:textColor="#FFFFFF"
+
+                <LinearLayout
+                    android:id="@+id/linearLayout4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:textAlignment="center"
+                    app:layout_constraintBottom_toBottomOf="@+id/block_add_photo"
+                    app:layout_constraintEnd_toEndOf="@+id/block_add_photo"
                     app:layout_constraintStart_toStartOf="@+id/block_add_photo"
-                    app:layout_constraintTop_toTopOf="@+id/block_add_photo" />
+                    android:layout_marginBottom="40dp">
+
+                    <Button
+                        android:id="@+id/selectCamera"
+                        android:layout_width="145dp"
+                        android:layout_height="61dp"
+                        android:autoText="false"
+                        android:background="#FE605C"
+                        android:capitalize="none"
+                        android:text="Сделать фото"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginRight="7dp"/>
+
+                    <Button
+                        android:id="@+id/selectVideo"
+                        android:layout_width="145dp"
+                        android:layout_height="61dp"
+                        android:autoText="false"
+                        android:background="#FE605C"
+                        android:capitalize="none"
+                        android:text="Сделать видео"
+                        android:textColor="#FFFFFF"
+                        android:layout_marginLeft="7dp" />
+                </LinearLayout>
 
                 <ImageButton
                     android:id="@+id/btnStartDisbld"
@@ -154,12 +176,11 @@
                     android:id="@+id/m3d_car_front_right"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/clBottomPrices"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
+                    android:layout_marginTop="130dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/selectCamera"
-                    app:layout_constraintVertical_bias="0.549"
+                    app:layout_constraintTop_toBottomOf="@+id/block_add_photo"
                     app:srcCompat="@drawable/car_on_main" />
 
                 <TextView
@@ -200,6 +221,7 @@
             <!-- \ CONTENT -->
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/clBottomPrices"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

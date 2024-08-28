@@ -1,10 +1,10 @@
 package com.example.bertumcamera;
 
 public class Const {
-//    public static final String URL_AIAPI = "http://h304809427.nichost.ru/api/get_segments_test_base.php";
-    public static final String URL_AIAPI = "http://h304809427.nichost.ru/api/get_segments.php";
-    public static final String URL_DETAILS_PRICES = "http://h304809427.nichost.ru/api/get_detail_prices.php";
-    public static final String URL_PAYMENT = "http://h304809427.nichost.ru/api/get_payment_url.php";
+//    public static final String URL_AIAPI = "http://bertum.site/api/get_segments_test_base.php";
+    public static final String URL_AIAPI = "http://bertum.site/api/get_segments.php";
+    public static final String URL_DETAILS_PRICES = "http://bertum.site/api/get_detail_prices.php";
+    public static final String URL_PAYMENT = "http://bertum.site/api/get_payment_url.php";
     // Variable names
     public static final String IMG_PREFIX_033 = "m3d_vw6_sed_x033_";
     public static final String IMG_PREFIX_050 = "m3d_vw6_sed_x050_";

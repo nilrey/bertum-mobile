@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ImageView clIcoDtp, m3dCarFrontRight, ico_menu;
     private ImageButton startBlockDisbld, startBlockEnbld, bottomPrices;
     private TextView cntPhoto, cntTotalItems, sumRepairs, sumRepairsWork, selectFileMedia, linkToSmetaRepairs , linkToSmetaDetails;
-    private Button selectCamera;
+    private Button selectCamera, selectVideo;
     private String msgDetailSelected, currentPhotoPath;
     private DrawerLayout drawerLayout;
 
@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         linkToSmetaDetails = findViewById(R.id.linkToSmetaDetails);
         linkToSmetaRepairs = findViewById(R.id.linkToSmetaRepairs);
         // Top block actions - Media Gallery, Camera
+        selectVideo = findViewById(R.id.selectVideo);
         selectCamera = findViewById(R.id.selectCamera);
         clIcoDtp = findViewById(R.id.ico_dtp2);
         selectFileMedia = findViewById(R.id.selectFileMedia);
@@ -142,6 +143,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        selectVideo.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(intent, CAMERA_REQ_CODE);
+
+                //Request for camera runtime permission
+//                if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.CAMERA)
+//                        != PackageManager.PERMISSION_GRANTED){
+//                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{
+//                            Manifest.permission.CAMERA
+//                    }, 100);
+//                }
+
+//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(intent, 1);
+                try {
+                    Uri imageUri = FileProvider.getUriForFile(MainActivity.this,
+                            "com.example.bertumcamera.fileprovider", finalFileImage);
+                    Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    startActivityForResult(intent, 101);
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+        });
         clIcoDtp.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){

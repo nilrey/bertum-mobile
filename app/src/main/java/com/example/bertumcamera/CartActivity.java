@@ -1,5 +1,6 @@
 package com.example.bertumcamera;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -456,7 +457,12 @@ public class CartActivity extends AppCompatActivity implements NavigationView.On
             button_buy.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v){
-                    postDataUsingVolley("123456789", "");
+
+                    AlertDialog.Builder alert = new AlertDialog.Builder(CartActivity.this);
+                    alert.setMessage("Данный функционал будет добавлен в следующей версии приложения.");
+                    alert.setPositiveButton("Ок", null);
+                    alert.show();
+//                    postDataUsingVolley("123456789", "");
                 }
             });
 
